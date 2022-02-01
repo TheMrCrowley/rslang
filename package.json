@@ -4,7 +4,9 @@
   "description": "rs-lang app",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "cross-env SERVE=true webpack serve --open",
+    "dev": "webpack --config ./webpack.config.js --env mode=dev",
+    "build": "webpack --config ./webpack.config.js --env mode=prod"
   },
   "repository": {
     "type": "git",
@@ -63,9 +65,15 @@
     "webpack-dev-server": "^4.7.3"
   },
   "dependencies": {
+    "@emotion/react": "^11.7.1",
+    "@emotion/styled": "^11.6.0",
+    "@mui/icons-material": "^5.3.1",
+    "@mui/material": "^5.3.1",
     "axios": "^0.25.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-redux": "^7.2.6",
+    "redux": "^4.1.2",
     "styled-components": "^5.3.3"
   }
 }
