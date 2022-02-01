@@ -1,17 +1,16 @@
 import { Box, Container, TextField, FormGroup, Button } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import React, { useState } from 'react';
-import AuthService from './services/authService';
+import { useDispatch } from 'react-redux';
+import { registrationAction } from './store/reducers/authReducer';
+import { UserFormData } from './services/types';
 
 const App = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
-  const sandHandler = async () => {
-    const { data } = await AuthService.registration(name, email, password);
-    console.log(data);
-  };
+  const dispatch = useDispatch();
+  const createFormData = (): UserFormData => ({ name, email, password });
   return (
     <Container maxWidth="sm">
       <Box sx={{ bgcolor: '#cfe8fc', height: '100vh' }}>
@@ -43,7 +42,10 @@ const App = () => {
             required
           />
           <Button
-            onClick={() => sandHandler()}
+            onClick={() => {
+              const user = createFormData();
+              dispatch(registrationAction(user));
+            }}
             variant="contained"
             endIcon={<SendIcon />}
           >
