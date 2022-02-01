@@ -1,5 +1,5 @@
-import { UserFormData, AuthorizationResponse } from '../../services/types';
 /* eslint-disable @typescript-eslint/default-param-last */
+import { UserFormData, AuthorizationResponse } from '../../../services/types';
 
 enum AuthActions {
   REGISTRATION = 'REGISTRATION',
@@ -17,6 +17,16 @@ interface UserAction {
   payload?: unknown;
 }
 
+export type RegistrationAction = {
+  type: string;
+  payload: UserFormData;
+};
+
+export type SigninAction = {
+  type: string;
+  payload: AuthorizationResponse;
+};
+
 const initialState: UserState = {
   isAuth: false,
   userData: {} as AuthorizationResponse,
@@ -28,9 +38,13 @@ export const authReducer = (
 ): UserState => {
   switch (action.type) {
     case AuthActions.REGISTRATION:
-      return { ...state, userData: action.payload as AuthorizationResponse };
+      return state;
     case AuthActions.SIGNIN:
-      return { ...state, isAuth: true };
+      return {
+        ...state,
+        isAuth: true,
+        userData: { ...(action as SigninAction).payload },
+      };
     case AuthActions.LOGOUT:
       return { ...state, isAuth: false };
     default:
@@ -40,5 +54,10 @@ export const authReducer = (
 
 export const registrationAction = (payload: UserFormData): UserAction => ({
   type: AuthActions.REGISTRATION,
+  payload,
+});
+
+export const signinAction = (payload: AuthorizationResponse) => ({
+  type: AuthActions.SIGNIN,
   payload,
 });
