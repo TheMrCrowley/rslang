@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { Button, ButtonGroup } from '@mui/material';
 import Toolbar from '@mui/material/Toolbar';
 import React, { useState } from 'react';
@@ -70,6 +71,7 @@ const Header = () => {
         </ButtonGroup>
       </Toolbar>
     </AppBar>
+
   );
 };
 
