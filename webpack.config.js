@@ -54,7 +54,11 @@ module.exports = {
         use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader']
       },
       {
-        test: /\.(png|jpe?g|gif|svg|webp|ico)$/i,
+        test: /\.svg$/,
+        use: ['@svgr/webpack'],
+      },
+      {
+        test: /\.(png|jpe?g|gif|webp|ico)$/i,
         type: mode === 'production' ? 'asset' : 'asset/resource',
       },
       {
