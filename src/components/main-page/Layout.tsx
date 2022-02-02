@@ -1,8 +1,10 @@
 import React from 'react';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
+import { Outlet } from 'react-router-dom';
 import Header from './Header';
 import Footer from './Footer';
+import Main from './Main';
 
 const LayoutWrapper = styled(Box)({
   minHeight: '100vh',
@@ -24,6 +26,9 @@ const Layout = () => {
     <LayoutWrapper>
       <TopContentWrapper>
         <Header />
+        <Main>
+          <Outlet />
+        </Main>
       </TopContentWrapper>
       <Footer />
     </LayoutWrapper>
