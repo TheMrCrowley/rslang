@@ -7,13 +7,16 @@ import IconButton from '@mui/material/IconButton';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
+import HomeIcon from '@mui/icons-material/Home';
 import MenuIcon from '@mui/icons-material/Menu';
+import MenuBookIcon from '@mui/icons-material/MenuBook';
+import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
+import GroupIcon from '@mui/icons-material/Group';
+import BarChartIcon from '@mui/icons-material/BarChart';
+import { ListItemText } from '@mui/material';
 
 const openedMixin = (theme: Theme): CSSObject => ({
-  width: '10%',
+  width: '200px',
   transition: theme.transitions.create('width', {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.enteringScreen,
@@ -28,9 +31,6 @@ const closedMixin = (theme: Theme): CSSObject => ({
   }),
   overflowX: 'hidden',
   width: `calc(${theme.spacing(7)} + 1px)`,
-  [theme.breakpoints.up('sm')]: {
-    width: `calc(${theme.spacing(9)} + 1px)`,
-  },
 });
 
 const DrawerHeader = styled('div')(({ theme }) => ({
@@ -44,7 +44,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 const Drawer = styled(MuiDrawer, {
   shouldForwardProp: prop => prop !== 'open',
 })(({ theme, open }) => ({
-  width: '10%',
+  width: '200px',
   flexShrink: 0,
   whiteSpace: 'nowrap',
   boxSizing: 'border-box',
@@ -64,7 +64,7 @@ type DrawerProps = {
   open: () => void;
 };
 
-const MiniDrawer: FC<DrawerProps> = ({ isOpen, close, open }) => {
+const Nav: FC<DrawerProps> = ({ isOpen, close, open }) => {
   return (
     <Drawer variant="permanent" open={isOpen}>
       <DrawerHeader>
@@ -80,17 +80,40 @@ const MiniDrawer: FC<DrawerProps> = ({ isOpen, close, open }) => {
       </DrawerHeader>
       <Divider />
       <List>
-        {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>
-              {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-            </ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
+        <ListItem button>
+          <ListItemIcon>
+            <HomeIcon />
+          </ListItemIcon>
+          <ListItemText>Home</ListItemText>
+        </ListItem>
+        <ListItem button>
+          <ListItemIcon>
+            <MenuBookIcon />
+          </ListItemIcon>
+          <ListItemText>Book</ListItemText>
+        </ListItem>
+        <ListItem button>
+          <ListItemIcon>
+            <SportsEsportsIcon />
+          </ListItemIcon>
+          <ListItemText>Games</ListItemText>
+        </ListItem>
+        <ListItem button>
+          <ListItemIcon>
+            <BarChartIcon />
+          </ListItemIcon>
+          <ListItemText>Statistics</ListItemText>
+        </ListItem>
+        <Divider />
+        <ListItem button>
+          <ListItemIcon>
+            <GroupIcon />
+          </ListItemIcon>
+          <ListItemText>Team</ListItemText>
+        </ListItem>
       </List>
     </Drawer>
   );
 };
 
-export default MiniDrawer;
+export default Nav;
