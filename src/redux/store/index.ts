@@ -12,5 +12,5 @@ const rootReducer = combineReducers({
 const store = createStore(rootReducer, applyMiddleware(sagaMiddleware));
 
 sagaMiddleware.run(authWatcher);
-
+export type RootState = ReturnType<typeof rootReducer>;
 export default store;

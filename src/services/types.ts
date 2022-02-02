@@ -4,8 +4,13 @@ export type UserResponse = {
   email: string;
 };
 
-export type UserFormData = {
+export type UserRegistrationData = {
   name: string;
+  email: string;
+  password: string;
+};
+
+export type UserLoginData = {
   email: string;
   password: string;
 };
