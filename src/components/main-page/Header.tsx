@@ -4,19 +4,17 @@ import React, { useState } from 'react';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
-import MiniDrawer from './Nav';
+import Nav from './Nav';
 
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: prop => prop !== 'open',
 })<AppBarProps>(({ theme, open }) => ({
-  zIndex: theme.zIndex.drawer + 1,
+  backgroundColor: '#202026',
   transition: theme.transitions.create(['width', 'margin'], {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
   ...(open && {
-    marginLeft: '10%',
-    width: '90%',
     transition: theme.transitions.create(['width', 'margin'], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
@@ -39,16 +37,36 @@ const Header = () => {
   };
   return (
     <AppBar position="fixed" open={navState}>
-      <Toolbar>
-        <MiniDrawer
+      <Toolbar sx={{ justifyContent: 'flex-end' }}>
+        <Nav
           isOpen={navState}
           close={handleDrawerClose}
           open={handleDrawerOpen}
         />
-        <Typography variant="h3">RS-LANG</Typography>
+        <Typography
+          variant="h3"
+          sx={{
+            position: 'fixed',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            color: '#fecb00',
+          }}
+        >
+          RS-LANG
+        </Typography>
         <ButtonGroup sx={{ columnGap: '1rem' }}>
-          <Button variant="contained">SIGN UP</Button>
-          <Button variant="outlined">LOGIN</Button>
+          <Button
+            variant="contained"
+            sx={{ color: '#202026', backgroundColor: '#fecb00' }}
+          >
+            SIGN UP
+          </Button>
+          <Button
+            variant="outlined"
+            sx={{ color: '#fecb00', borderColor: '#fecb00' }}
+          >
+            LOGIN
+          </Button>
         </ButtonGroup>
       </Toolbar>
     </AppBar>
