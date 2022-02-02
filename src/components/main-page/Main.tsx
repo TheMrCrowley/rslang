@@ -5,10 +5,7 @@ const StyledMain = styled('main')`
   padding: 1rem 0;
 `;
 
-type MainProps = {
-  children: React.ReactElement | React.ReactNode;
-};
-const Main: FC<MainProps> = ({ children }) => {
+const Main: FC = ({ children }) => {
   return <StyledMain>{children}</StyledMain>;
 };
 export default Main;
