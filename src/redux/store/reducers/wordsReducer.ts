@@ -1,35 +1,58 @@
-import { IWord } from '../../../services/types';
 /* eslint-disable @typescript-eslint/default-param-last */
+import {
+  WordsQueryParams,
+  WordsResponse,
+  IWord,
+  WordById,
+} from '../../../services/types';
 
-enum WrodsActions {
-  GET_WORDS = 'GET_WRODS',
-  GET_WROD = 'GET_WORD',
-}
+import {
+  WordsState,
+  WordsAction,
+  WordsActionTypes,
+  SetWordsAction,
+  SetWordAction,
+} from '../../types/wordsTypes';
 
-interface WordsState {
-  words: IWord[];
-}
-
-interface UserAction {
-  type: string;
-  payload?: unknown;
-}
-
-interface GetWordsAction extends UserAction {
-  payload: IWord[];
-}
-
-type GetWordAction = UserAction;
-
-const initialState: WordsState = {
-  words: [] as IWord[],
+const wordsInitialState: WordsState = {
+  words: [] as WordsResponse,
+  word: {} as IWord,
 };
 
-const wrodsReducer = (state = initialState, action: UserAction): WordsState => {
+export const wordsReducer = (
+  state = wordsInitialState,
+  action: WordsAction
+): WordsState => {
   switch (action.type) {
-    case WrodsActions.GET_WORDS:
-      return { ...state, words: [...(action as GetWordsAction).payload] };
+    case WordsActionTypes.REQUEST_WORDS:
+      return state;
+    case WordsActionTypes.REQUEST_WORD:
+      return state;
+    case WordsActionTypes.SET_WORDS:
+      return { ...state, words: [...(action as SetWordsAction).payload] };
+    case WordsActionTypes.SET_WORD:
+      return { ...state, word: (action as SetWordAction).payload };
     default:
       return state;
   }
 };
+
+export const requestWordsAction = (payload: WordsQueryParams): WordsAction => ({
+  type: WordsActionTypes.REQUEST_WORDS,
+  payload,
+});
+
+export const requestWordAction = (payload: WordById): WordsAction => ({
+  type: WordsActionTypes.REQUEST_WORD,
+  payload,
+});
+
+export const setWordsAction = (payload: WordsResponse): WordsAction => ({
+  type: WordsActionTypes.SET_WORDS,
+  payload,
+});
+
+export const setWordAction = (payload: IWord): WordsAction => ({
+  type: WordsActionTypes.SET_WORD,
+  payload,
+});

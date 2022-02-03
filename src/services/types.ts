@@ -41,3 +41,12 @@ export interface IWord {
   textMeaningTranslate: string;
   textExampleTranslate: string;
 }
+
+export interface WordsQueryParams {
+  group: number;
+  page: number;
+}
+
+export type WordById = {
+  wordId: string;
+};
