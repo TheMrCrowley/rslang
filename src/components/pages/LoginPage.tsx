@@ -3,31 +3,20 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import SendIcon from '@mui/icons-material/Send';
 import { styled } from '@mui/material/styles';
-import { registrationAction } from '../../redux/store/reducers/authReducer';
-import { UserRegistrationData } from '../../services/types';
+import { signinAction } from '../../redux/store/reducers/authReducer';
+import { UserLoginData } from '../../services/types';
 
 const StyledFormGroup = styled(FormGroup)`
   width: 50%;
   row-gap: 1rem;
 `;
 
-const RegistrationPage = () => {
-  const [name, setName] = useState('');
+const LoginPage = () => {
+  const dispatch = useDispatch();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const dispatch = useDispatch();
-
-  const [invalidName, setInvalidName] = useState(false);
   const [invalidEmail, setInvalidEmail] = useState(false);
   const [invalidPassword, setInvalidPassword] = useState(false);
-
-  const validateName = () => {
-    if (!name.length || name.length > 10) {
-      setInvalidName(true);
-    } else {
-      setInvalidName(false);
-    }
-  };
 
   const validateEmail = () => {
     if (!email.length) {
@@ -45,26 +34,12 @@ const RegistrationPage = () => {
     }
   };
 
-  const createFormData = (): UserRegistrationData => ({
-    name,
+  const createUserData = (): UserLoginData => ({
     email,
     password,
   });
   return (
     <StyledFormGroup>
-      <TextField
-        error={invalidName}
-        helperText={invalidName && 'Please, enter the name!'}
-        onBlur={validateName}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          setName(e.target.value)
-        }
-        value={name}
-        label="Name"
-        variant="outlined"
-        type="text"
-        required
-      />
       <TextField
         error={invalidEmail}
         helperText={invalidEmail && 'Please, enter your e-mail'}
@@ -93,19 +68,18 @@ const RegistrationPage = () => {
       />
       <Button
         onClick={() => {
-          const user = createFormData();
-          if (!invalidName && !invalidEmail && !invalidPassword) {
-            console.log(user);
-            dispatch(registrationAction(user));
+          const user = createUserData();
+          if (!invalidEmail && !invalidPassword) {
+            dispatch(signinAction(user));
           }
         }}
         variant="contained"
         endIcon={<SendIcon />}
       >
-        Registration
+        Login
       </Button>
     </StyledFormGroup>
   );
 };
 
-export default RegistrationPage;
+export default LoginPage;

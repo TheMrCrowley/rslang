@@ -4,7 +4,11 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import Nav from './Nav';
+import { RootState } from '../../redux/store';
+import { logoutAction } from '../../redux/store/reducers/authReducer';
 
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: prop => prop !== 'open',
@@ -26,6 +30,9 @@ interface AppBarProps extends MuiAppBarProps {
 }
 
 const Header = () => {
+  const navigate = useNavigate();
+  const authState = useSelector((store: RootState) => store.auth);
+  const dispatch = useDispatch();
   const [navState, setNavState] = useState<boolean>(false);
   const handleDrawerOpen = () => {
     setNavState(true);
@@ -34,6 +41,7 @@ const Header = () => {
   const handleDrawerClose = () => {
     setNavState(false);
   };
+  console.log(authState);
   return (
     <AppBar position="fixed" open={navState}>
       <Toolbar sx={{ justifyContent: 'flex-end' }}>
@@ -53,12 +61,23 @@ const Header = () => {
         >
           RS-LANG
         </Typography>
-        <Button
-          variant="outlined"
-          sx={{ color: '#fecb00', borderColor: '#fecb00' }}
-        >
-          LOGIN
-        </Button>
+        {!authState.isAuth ? (
+          <Button
+            variant="outlined"
+            sx={{ color: '#fecb00', borderColor: '#fecb00' }}
+            onClick={() => navigate('/login')}
+          >
+            LOGIN
+          </Button>
+        ) : (
+          <Button
+            variant="outlined"
+            sx={{ color: '#fecb00', borderColor: '#fecb00' }}
+            onClick={() => dispatch(logoutAction())}
+          >
+            LOG OUT
+          </Button>
+        )}
       </Toolbar>
     </AppBar>
   );
