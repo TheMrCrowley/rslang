@@ -1,6 +1,6 @@
-import { Button, ButtonGroup } from '@mui/material';
-import Toolbar from '@mui/material/Toolbar';
 import React, { useState } from 'react';
+import { Button } from '@mui/material';
+import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
@@ -9,7 +9,6 @@ import Nav from './Nav';
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: prop => prop !== 'open',
 })<AppBarProps>(({ theme, open }) => ({
-  backgroundColor: '#202026',
   transition: theme.transitions.create(['width', 'margin'], {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
@@ -54,20 +53,12 @@ const Header = () => {
         >
           RS-LANG
         </Typography>
-        <ButtonGroup sx={{ columnGap: '1rem' }}>
-          <Button
-            variant="contained"
-            sx={{ color: '#202026', backgroundColor: '#fecb00' }}
-          >
-            SIGN UP
-          </Button>
-          <Button
-            variant="outlined"
-            sx={{ color: '#fecb00', borderColor: '#fecb00' }}
-          >
-            LOGIN
-          </Button>
-        </ButtonGroup>
+        <Button
+          variant="outlined"
+          sx={{ color: '#fecb00', borderColor: '#fecb00' }}
+        >
+          LOGIN
+        </Button>
       </Toolbar>
     </AppBar>
   );

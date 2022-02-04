@@ -5,15 +5,13 @@ import List from '@mui/material/List';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ListItem from '@mui/material/ListItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
 import HomeIcon from '@mui/icons-material/Home';
 import MenuIcon from '@mui/icons-material/Menu';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
 import GroupIcon from '@mui/icons-material/Group';
 import BarChartIcon from '@mui/icons-material/BarChart';
-import { ListItemText } from '@mui/material';
+import NavItem from './NavItem';
 
 const openedMixin = (theme: Theme): CSSObject => ({
   width: '200px',
@@ -80,37 +78,22 @@ const Nav: FC<DrawerProps> = ({ isOpen, close, open }) => {
       </DrawerHeader>
       <Divider />
       <List>
-        <ListItem button>
-          <ListItemIcon>
-            <HomeIcon />
-          </ListItemIcon>
-          <ListItemText>Home</ListItemText>
-        </ListItem>
-        <ListItem button>
-          <ListItemIcon>
-            <MenuBookIcon />
-          </ListItemIcon>
-          <ListItemText>Book</ListItemText>
-        </ListItem>
-        <ListItem button>
-          <ListItemIcon>
-            <SportsEsportsIcon />
-          </ListItemIcon>
-          <ListItemText>Games</ListItemText>
-        </ListItem>
-        <ListItem button>
-          <ListItemIcon>
-            <BarChartIcon />
-          </ListItemIcon>
-          <ListItemText>Statistics</ListItemText>
-        </ListItem>
+        <NavItem innerText="Home" onClick={close}>
+          <HomeIcon />
+        </NavItem>
+        <NavItem innerText="Book" onClick={close}>
+          <MenuBookIcon />
+        </NavItem>
+        <NavItem innerText="Games" onClick={close}>
+          <SportsEsportsIcon />
+        </NavItem>
+        <NavItem innerText="Statistics" onClick={close}>
+          <BarChartIcon />
+        </NavItem>
         <Divider />
-        <ListItem button>
-          <ListItemIcon>
-            <GroupIcon />
-          </ListItemIcon>
-          <ListItemText>Team</ListItemText>
-        </ListItem>
+        <NavItem innerText="Team" onClick={close}>
+          <GroupIcon />
+        </NavItem>
       </List>
     </Drawer>
   );
