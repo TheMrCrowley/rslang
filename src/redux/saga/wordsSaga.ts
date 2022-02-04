@@ -7,17 +7,34 @@ import {
   RequestWordsAction,
 } from '../types/wordsTypes';
 import WordsService from '../../services/wordsService';
+import { requestActionCreator } from '../store/reducers/requestReducer';
+import { RequestActionTypes } from '../types/requestTypes';
 
 function* requestWordsWorker(data: RequestWordsAction) {
-  const { group, page } = data.payload;
-  const wordsResponse: WordsResponse = yield WordsService.getWords(group, page);
-  yield put(setWordsAction(wordsResponse));
+  try {
+    yield put(requestActionCreator(RequestActionTypes.REQUEST_START));
+    const { group, page } = data.payload;
+    const wordsResponse: WordsResponse = yield WordsService.getWords(
+      group,
+      page
+    );
+    yield put(setWordsAction(wordsResponse));
+    yield put(requestActionCreator(RequestActionTypes.REQUEST_SUCCESS));
+  } catch (e) {
+    yield put(requestActionCreator(RequestActionTypes.REQUEST_ERROR));
+  }
 }
 
 function* requestWordWorker(data: RequestWordAction) {
-  const { wordId } = data.payload;
-  const getWordResponse: IWord = yield WordsService.getWord(wordId);
-  yield put(setWordAction(getWordResponse));
+  try {
+    yield put(requestActionCreator(RequestActionTypes.REQUEST_START));
+    const { wordId } = data.payload;
+    const getWordResponse: IWord = yield WordsService.getWord(wordId);
+    yield put(setWordAction(getWordResponse));
+    yield put(requestActionCreator(RequestActionTypes.REQUEST_SUCCESS));
+  } catch (e) {
+    yield put(requestActionCreator(RequestActionTypes.REQUEST_ERROR));
+  }
 }
 
 function* wordsWatcher() {
