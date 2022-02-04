@@ -4,6 +4,7 @@ import { Route, Routes } from 'react-router-dom';
 import { signinAfterRegistration } from '../redux/store/reducers/authReducer';
 import Layout from './main-page/Layout';
 import HomePage from './pages/HomePage';
+import LoginPage from './pages/LoginPage';
 import RegistrationPage from './pages/RegistrationPage';
 
 const AppRouter = () => {
@@ -18,6 +19,7 @@ const AppRouter = () => {
       <Route path="/" element={<Layout />}>
         <Route path="home" element={<HomePage />} />
         <Route path="registration" element={<RegistrationPage />} />
+        <Route path="login" element={<LoginPage />} />
         {/* <Route path="book" element={<Ebook />} />
         <Route path="games" element={<GamesPage />} />
         <Route path="statistics" element={<StatisticsPage />} />

@@ -40,8 +40,7 @@ const StyledButton = styled(Button)`
 
 const HomePage = () => {
   const navigate = useNavigate();
-  const authData = useSelector((store: RootState) => store.auth);
-  console.log(authData);
+  const { isAuth } = useSelector((store: RootState) => store.auth);
   return (
     <StyledBox>
       <HomeTitle>Rs Lang</HomeTitle>
@@ -52,7 +51,7 @@ const HomePage = () => {
         illo architecto.
       </HomeDescription>
       <StyledButtonGroup>
-        {!authData.isAuth && (
+        {!isAuth && (
           <StyledButton onClick={() => navigate('/registration')}>
             Registration
           </StyledButton>
