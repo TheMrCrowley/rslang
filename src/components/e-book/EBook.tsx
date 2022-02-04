@@ -1,20 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { red } from '@mui/material/colors';
-import { Grid } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
+import { Box } from '@mui/material';
 import BookBar from './ui/menu/BookBar';
 import CardList from './CardList';
 import { RootState } from '../../redux/store';
 import { requestWordsAction } from '../../redux/store/reducers/wordsReducer';
-
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: red.A700,
-    },
-  },
-});
+import { colors } from './cosnstants';
 
 const EBook = () => {
   const [group, setGroup] = useState<number>(0);
@@ -27,16 +18,10 @@ const EBook = () => {
   }, [page, group]);
 
   return (
-    <ThemeProvider theme={theme}>
-      <Grid container spacing={0.5}>
-        <Grid item xs={12}>
-          <BookBar setPage={setPage} setGroup={setGroup} group={group} />
-        </Grid>
-        <Grid item xs={10} style={{ margin: '0 auto' }}>
-          <CardList words={wordsState.words} />
-        </Grid>
-      </Grid>
-    </ThemeProvider>
+    <Box sx={{ backgroundColor: colors[group] }}>
+      <BookBar setPage={setPage} setGroup={setGroup} group={group} />
+      <CardList words={wordsState.words} />
+    </Box>
   );
 };
 

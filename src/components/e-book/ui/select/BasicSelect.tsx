@@ -4,6 +4,8 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
+// **** TO DO ***** join isAuth to original source
+import { isAuth } from '../../cosnstants';
 
 interface BasicSelectProps {
   setGroup: (val: number) => void;
@@ -16,8 +18,8 @@ const BasicSelect: React.FC<BasicSelectProps> = ({ setGroup, group }) => {
   };
 
   return (
-    <Box sx={{ minWidth: 120 }}>
-      <FormControl fullWidth>
+    <Box sx={{ minWidth: 100 }}>
+      <FormControl fullWidth variant="standard">
         <InputLabel id="demo-simple-select-label">Difficulty</InputLabel>
         <Select
           labelId="demo-simple-select-label"
@@ -32,6 +34,7 @@ const BasicSelect: React.FC<BasicSelectProps> = ({ setGroup, group }) => {
           <MenuItem value={3}>4</MenuItem>
           <MenuItem value={4}>5</MenuItem>
           <MenuItem value={5}>6</MenuItem>
+          {isAuth ? <MenuItem value={6}>7</MenuItem> : null}
         </Select>
       </FormControl>
     </Box>

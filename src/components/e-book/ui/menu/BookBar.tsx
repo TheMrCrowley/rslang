@@ -1,6 +1,6 @@
 import * as React from 'react';
-import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import BasicSelect from '../select/BasicSelect';
 import PaginationRanges from '../pagination/PaginationRanges';
 
@@ -9,6 +9,14 @@ interface ResponsiveAppBarProps {
   setGroup: (val: number) => void;
   group: number;
 }
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#ffffff',
+    },
+  },
+});
 
 const BookBar: React.FC<ResponsiveAppBarProps> = ({
   setPage,
@@ -25,12 +33,10 @@ const BookBar: React.FC<ResponsiveAppBarProps> = ({
         height: '5em',
       }}
     >
-      <Box>
+      <ThemeProvider theme={theme}>
         <PaginationRanges setPage={setPage} />
-      </Box>
-      <Box>
         <BasicSelect setGroup={setGroup} group={group} />
-      </Box>
+      </ThemeProvider>
     </Container>
   );
 };

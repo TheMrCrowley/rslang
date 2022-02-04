@@ -7,6 +7,8 @@ export interface PaginationRangesProps {
 }
 
 const PaginationRanges: React.FC<PaginationRangesProps> = ({ setPage }) => {
+  // **** TO DO ******
+  // join  page numbers to original source
   const TOTAL_PAGES = 30;
   const START_PAGE = 1;
   const enum PageNumberSize {
@@ -22,7 +24,9 @@ const PaginationRanges: React.FC<PaginationRangesProps> = ({ setPage }) => {
         count={TOTAL_PAGES}
         defaultPage={START_PAGE}
         siblingCount={0}
-        size={PageNumberSize.small}
+        size={
+          window.innerWidth < 780 ? PageNumberSize.small : PageNumberSize.large
+        }
         color="primary"
         onChange={(e, page) => setPage(page - 1)}
       />
