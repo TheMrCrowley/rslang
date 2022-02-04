@@ -40,7 +40,8 @@ module.exports = {
   },
   devtool: 'source-map',
   devServer: {
-    hot: true
+    hot: true,
+    historyApiFallback: true
   },
   module: {
   	rules: [
