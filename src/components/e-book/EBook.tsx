@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import axios, { AxiosResponse } from 'axios';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { red } from '@mui/material/colors';
 import { Grid } from '@mui/material';
+import { useSelector, useDispatch } from 'react-redux';
 import BookBar from './ui/menu/BookBar';
 import CardList from './CardList';
-import { CardProp } from './interface';
+import { RootState } from '../../redux/store';
+import { requestWordsAction } from '../../redux/store/reducers/wordsReducer';
 
 const theme = createTheme({
   palette: {
@@ -16,21 +17,13 @@ const theme = createTheme({
 });
 
 const EBook = () => {
-  const [words, setWords] = useState<CardProp[]>([]);
   const [group, setGroup] = useState<number>(0);
   const [page, setPage] = useState<number>(0);
+  const wordsState = useSelector((state: RootState) => state.words);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    axios
-      .get<AxiosResponse<CardProp[]>>('http://localhost:7000/words', {
-        params: {
-          group,
-          page,
-        },
-      })
-      .then(resp => {
-        setWords(resp.data as unknown as CardProp[]);
-      });
+    dispatch(requestWordsAction({ group, page }));
   }, [page, group]);
 
   return (
@@ -40,7 +33,7 @@ const EBook = () => {
           <BookBar setPage={setPage} setGroup={setGroup} group={group} />
         </Grid>
         <Grid item xs={10} style={{ margin: '0 auto' }}>
-          <CardList words={words} />
+          <CardList words={wordsState.words} />
         </Grid>
       </Grid>
     </ThemeProvider>

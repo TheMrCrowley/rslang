@@ -1,3 +1,5 @@
+import { IWord } from '../../services/types';
+
 export interface CardProp {
   id: string;
   group: 0;
@@ -16,7 +18,7 @@ export interface CardProp {
 }
 
 export interface CardListProps {
-  words: CardProp[];
+  words: IWord[];
 }
 
 export interface CardProps {
