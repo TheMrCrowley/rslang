@@ -11,7 +11,6 @@ const LayoutWrapper = styled(Box)({
   display: 'flex',
   justifyContent: 'stretch',
   flexDirection: 'column',
-  backgroundColor: '#202026',
 });
 
 const TopContentWrapper = styled(Box)({
