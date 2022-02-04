@@ -9,6 +9,9 @@ import RecordVoiceOverIcon from '@mui/icons-material/RecordVoiceOver';
 import { API_URL } from '../../services/api';
 import { IWord } from '../../services/types';
 import handleTagInText from './utils';
+import AuthorizedCardContent from './ui/authorized-content/AuthorizedCardContent';
+// **** TO DO ***** join isAuth to original source
+import { colors, isAuth } from './cosnstants';
 
 export interface BasicCardProps {
   cardData: IWord;
@@ -16,6 +19,7 @@ export interface BasicCardProps {
 
 const BasicCard: FC<BasicCardProps> = ({ cardData }) => {
   const {
+    group,
     image,
     word,
     audio,
@@ -31,13 +35,23 @@ const BasicCard: FC<BasicCardProps> = ({ cardData }) => {
   const handledTextMeaning = handleTagInText(textMeaning);
   const handledTextExample = handleTagInText(textExample);
 
+  // **** TO DO ***** join progress to original source
+  const progress = Math.floor(Math.random() * 5);
+
   function runAudio() {
     const wordAudio = new Audio(`${API_URL}/${audio}`);
     wordAudio.play();
   }
 
   return (
-    <Card sx={{ width: 380, height: 'auto' }}>
+    <Card
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        width: 380,
+        height: 'auto',
+      }}
+    >
       <CardMedia component="img" height="140" image={`${API_URL}/${image}`} />
       <CardContent sx={{ textAlign: 'right' }}>
         <Typography
@@ -58,35 +72,48 @@ const BasicCard: FC<BasicCardProps> = ({ cardData }) => {
           <RecordVoiceOverIcon onClick={runAudio} />
         </Typography>
         <Box>
-          <Typography gutterBottom variant="body2" component="span">
-            {handledTextExample.head}
+          <Typography gutterBottom variant="subtitle1" component="span">
+            {handledTextMeaning.head}
           </Typography>
-          <Typography gutterBottom variant="body2" component="span">
-            {handledTextExample.target}
+          <Typography
+            sx={{ fontWeight: 'bold' }}
+            gutterBottom
+            variant="subtitle1"
+            component="span"
+          >
+            {handledTextMeaning.target}
           </Typography>
-          <Typography gutterBottom variant="body2" component="span">
-            {handledTextExample.tail}
+          <Typography gutterBottom variant="subtitle1" component="span">
+            {handledTextMeaning.tail}.
           </Typography>
         </Box>
         <Box>
-          <Typography gutterBottom variant="body1" component="span">
-            {handledTextMeaning.head}
+          <Typography gutterBottom variant="body2" component="span">
+            {handledTextExample.head}
           </Typography>
-          <Typography gutterBottom variant="body1" component="span">
-            {handledTextMeaning.target}
+          <Typography
+            sx={{ fontStyle: 'italic' }}
+            gutterBottom
+            variant="body2"
+            component="span"
+          >
+            {handledTextExample.target}
           </Typography>
-          <Typography gutterBottom variant="body1" component="span">
-            {handledTextMeaning.tail}
+          <Typography gutterBottom variant="body2" component="span">
+            {handledTextExample.tail}.
           </Typography>
-        </Box>
+        </Box>{' '}
         <Divider variant="middle" />
         <Typography variant="body2" color="text.secondary">
-          {textMeaningTranslate}
+          {textMeaningTranslate}.
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          {textExampleTranslate}
+          {textExampleTranslate}.
         </Typography>
       </CardContent>
+      {isAuth ? (
+        <AuthorizedCardContent color={colors[group]} progress={progress} />
+      ) : null}
     </Card>
   );
 };
