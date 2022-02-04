@@ -1,7 +1,8 @@
 import React from 'react';
+import EBook from './components/e-book/EBook';
 
-const App = () => {
-  return <div />;
-};
+function App() {
+  return <EBook />;
+}
 
 export default App;
