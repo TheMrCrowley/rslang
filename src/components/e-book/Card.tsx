@@ -5,12 +5,14 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { Divider } from '@mui/material';
-import RecordVoiceOverIcon from '@mui/icons-material/RecordVoiceOver';
-import { IWord } from '../../services/types';
-import handleTagInText from './utils';
+import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
+import SelfImprovementIcon from '@mui/icons-material/SelfImprovement';
 import AuthorizedCardContent from './ui/authorized-content/AuthorizedCardContent';
+import handleTagInText from './utils';
+import { IWord } from '../../services/types';
 // **** TO DO ***** join isAuth to original source
-import { colors, isAuth } from './cosnstants';
+import { colors, isAuth, isDifficult, isStudied } from './cosnstants';
+import Player from './Player';
 
 export interface BasicCardProps {
   cardData: IWord;
@@ -22,8 +24,8 @@ const BasicCard: FC<BasicCardProps> = ({ cardData }) => {
     image,
     word,
     audio,
-    // audioMeaning,
-    // audioExample,
+    audioMeaning,
+    audioExample,
     textMeaning,
     textExample,
     transcription,
@@ -38,13 +40,6 @@ const BasicCard: FC<BasicCardProps> = ({ cardData }) => {
   const progress = Math.floor(Math.random() * 5);
   const BASE_CONTENT_URL =
     'https://github.com/rolling-scopes-school/react-rslang-be/blob/main/';
-
-  function runAudio() {
-    console.log(`${BASE_CONTENT_URL}/${audio}?raw=true`);
-    const wordAudio = new Audio(`${BASE_CONTENT_URL}/${audio}?raw=true`);
-
-    wordAudio.play();
-  }
 
   return (
     <Card
@@ -61,14 +56,43 @@ const BasicCard: FC<BasicCardProps> = ({ cardData }) => {
         image={`${BASE_CONTENT_URL}/${image}?raw=true`}
       />
       <CardContent sx={{ textAlign: 'right' }}>
-        <Typography
-          gutterBottom
-          variant="h5"
-          component="h4"
-          sx={{ textTransform: 'capitalize' }}
-        >
-          {word}
-        </Typography>
+        {isAuth ? (
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              width: '100%',
+            }}
+          >
+            {isDifficult && (
+              <FitnessCenterIcon htmlColor={colors[group]} fontSize="large" />
+            )}
+            {isStudied && (
+              <SelfImprovementIcon
+                fontSize="large"
+                htmlColor={colors[group]}
+                sx={{ mr: 'auto' }}
+              />
+            )}
+            <Typography
+              gutterBottom
+              variant="h4"
+              component="h4"
+              sx={{ textTransform: 'capitalize', mb: '0' }}
+            >
+              {word}
+            </Typography>
+          </Box>
+        ) : (
+          <Typography
+            gutterBottom
+            variant="h4"
+            component="h4"
+            sx={{ textTransform: 'capitalize' }}
+          >
+            {word}
+          </Typography>
+        )}
         <Typography
           gutterBottom
           variant="h6"
@@ -76,25 +100,29 @@ const BasicCard: FC<BasicCardProps> = ({ cardData }) => {
           sx={{ textTransform: 'capitalize' }}
         >
           {wordTranslate} {transcription}
-          <RecordVoiceOverIcon onClick={runAudio} />
+          <Player
+            urls={[audio, audioMeaning, audioExample].map(
+              url => `${BASE_CONTENT_URL}/${url}?raw=true`
+            )}
+          />
         </Typography>
-        <Box>
-          <Typography gutterBottom variant="subtitle1" component="span">
+        <Box sx={{ mt: '0.5em' }}>
+          <Typography gutterBottom variant="body2" component="span">
             {handledTextMeaning.head}
           </Typography>
           <Typography
             sx={{ fontWeight: 'bold' }}
             gutterBottom
-            variant="subtitle1"
+            variant="body2"
             component="span"
           >
             {handledTextMeaning.target}
           </Typography>
-          <Typography gutterBottom variant="subtitle1" component="span">
+          <Typography gutterBottom variant="body2" component="span">
             {handledTextMeaning.tail}.
           </Typography>
         </Box>
-        <Box>
+        <Box sx={{ mt: '0.5em' }}>
           <Typography gutterBottom variant="body2" component="span">
             {handledTextExample.head}
           </Typography>
@@ -110,7 +138,7 @@ const BasicCard: FC<BasicCardProps> = ({ cardData }) => {
             {handledTextExample.tail}.
           </Typography>
         </Box>{' '}
-        <Divider variant="middle" />
+        <Divider variant="middle" sx={{ mt: '0.5em', mb: '0.5em' }} />
         <Typography variant="body2" color="text.secondary">
           {textMeaningTranslate}.
         </Typography>

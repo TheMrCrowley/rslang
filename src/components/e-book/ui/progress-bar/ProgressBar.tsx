@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
 import { Box } from '@mui/material';
+import { MAX_PROGRESS_ITEMS, EMPTY_ITEM_COLOR } from '../../cosnstants';
 
 interface ProgressBarProps {
   color: string;
@@ -7,9 +8,6 @@ interface ProgressBarProps {
 }
 
 const ProgressBar: FC<ProgressBarProps> = ({ color, progress }) => {
-  const MAX_PROGRESS_ITEMS = 5;
-  const EMPTY_ITEM_COLOR = '#d7ccc8';
-
   const progressItems = () => {
     const items: JSX.Element[] = [];
 
