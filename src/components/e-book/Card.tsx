@@ -6,7 +6,6 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { Divider } from '@mui/material';
 import RecordVoiceOverIcon from '@mui/icons-material/RecordVoiceOver';
-import { API_URL } from '../../services/api';
 import { IWord } from '../../services/types';
 import handleTagInText from './utils';
 import AuthorizedCardContent from './ui/authorized-content/AuthorizedCardContent';
@@ -37,9 +36,13 @@ const BasicCard: FC<BasicCardProps> = ({ cardData }) => {
 
   // **** TO DO ***** join progress to original source
   const progress = Math.floor(Math.random() * 5);
+  const BASE_CONTENT_URL =
+    'https://github.com/rolling-scopes-school/react-rslang-be/blob/main/';
 
   function runAudio() {
-    const wordAudio = new Audio(`${API_URL}/${audio}`);
+    console.log(`${BASE_CONTENT_URL}/${audio}?raw=true`);
+    const wordAudio = new Audio(`${BASE_CONTENT_URL}/${audio}?raw=true`);
+
     wordAudio.play();
   }
 
@@ -52,7 +55,11 @@ const BasicCard: FC<BasicCardProps> = ({ cardData }) => {
         height: 'auto',
       }}
     >
-      <CardMedia component="img" height="140" image={`${API_URL}/${image}`} />
+      <CardMedia
+        component="img"
+        height="140"
+        image={`${BASE_CONTENT_URL}/${image}?raw=true`}
+      />
       <CardContent sx={{ textAlign: 'right' }}>
         <Typography
           gutterBottom

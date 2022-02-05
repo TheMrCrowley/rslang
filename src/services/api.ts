@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const API_URL = 'http://localhost:5000';
+export const API_URL = 'https://react-rslang-test.herokuapp.com/';
 const TOKEN_LOCAL_STORAGE_KEY = 'access-token';
 
 const $api = axios.create({
