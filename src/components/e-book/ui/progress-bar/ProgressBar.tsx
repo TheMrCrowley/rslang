@@ -1,17 +1,27 @@
 import React, { FC } from 'react';
 import { Box } from '@mui/material';
-import { MAX_PROGRESS_ITEMS, EMPTY_ITEM_COLOR } from '../../cosnstants';
+import {
+  MAX_PROGRESS_ITEMS,
+  EMPTY_ITEM_COLOR,
+  MIN_PROGRESS_ITEMS,
+} from '../../cosnstants';
 
 interface ProgressBarProps {
   color: string;
   progress: number;
+  isDifficult: boolean;
 }
 
-const ProgressBar: FC<ProgressBarProps> = ({ color, progress }) => {
+const ProgressBar: FC<ProgressBarProps> = ({
+  color,
+  progress,
+  isDifficult,
+}) => {
   const progressItems = () => {
     const items: JSX.Element[] = [];
+    const itemsNum = isDifficult ? MAX_PROGRESS_ITEMS : MIN_PROGRESS_ITEMS;
 
-    for (let i = 0; i < MAX_PROGRESS_ITEMS; i += 1) {
+    for (let i = 0; i < itemsNum; i += 1) {
       items.push(
         <Box
           sx={{

@@ -6,11 +6,15 @@ import CardButton from '../button/CardButton';
 interface AuthorizedCardContentProps {
   color: string;
   progress: number;
+  isDifficult: boolean;
+  isStudied: boolean;
 }
 
 const AuthorizedCardContent: FC<AuthorizedCardContentProps> = ({
   color,
   progress,
+  isDifficult,
+  isStudied,
 }) => {
   return (
     <Box
@@ -22,7 +26,13 @@ const AuthorizedCardContent: FC<AuthorizedCardContentProps> = ({
     >
       <CardButton color={color}>Difficult</CardButton>
       <CardButton color={color}>Studied</CardButton>
-      <ProgressBar color={color} progress={progress} />
+      {!isStudied && (
+        <ProgressBar
+          color={color}
+          progress={progress}
+          isDifficult={isDifficult}
+        />
+      )}
     </Box>
   );
 };

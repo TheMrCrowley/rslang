@@ -95,7 +95,12 @@ const BasicCard: FC<BasicCardProps> = ({ cardData }) => {
         </Typography>
       </CardContent>
       {isAuth && (
-        <AuthorizedCardContent color={colors[group]} progress={progress} />
+        <AuthorizedCardContent
+          color={colors[group]}
+          progress={progress}
+          isDifficult={isDifficult}
+          isStudied={isStudied}
+        />
       )}
     </Card>
   );
