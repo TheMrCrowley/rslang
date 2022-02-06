@@ -2,12 +2,14 @@ import React, { FC } from 'react';
 import { Box } from '@mui/material';
 import ProgressBar from '../progress-bar/ProgressBar';
 import CardButton from '../button/CardButton';
+import { DIFFICULT_GROUP } from '../../cosnstants';
 
 interface AuthorizedCardContentProps {
   color: string;
   progress: number;
   isDifficult: boolean;
   isStudied: boolean;
+  group: number;
 }
 
 const AuthorizedCardContent: FC<AuthorizedCardContentProps> = ({
@@ -15,6 +17,7 @@ const AuthorizedCardContent: FC<AuthorizedCardContentProps> = ({
   progress,
   isDifficult,
   isStudied,
+  group,
 }) => {
   return (
     <Box
@@ -24,8 +27,13 @@ const AuthorizedCardContent: FC<AuthorizedCardContentProps> = ({
         p: '0 1em 1em 1em',
       }}
     >
-      <CardButton color={color}>Difficult</CardButton>
-      <CardButton color={color}>Studied</CardButton>
+      {group === DIFFICULT_GROUP ? (
+        <CardButton color={color}>Not difficult</CardButton>
+      ) : (
+        !isStudied &&
+        !isDifficult && <CardButton color={color}>Difficult</CardButton>
+      )}
+      {!isStudied && <CardButton color={color}>Studied</CardButton>}
       {!isStudied && (
         <ProgressBar
           color={color}

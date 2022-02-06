@@ -8,11 +8,13 @@ import AuthorizedCardContent from './ui/authorized-content/AuthorizedCardContent
 import handleTagInText from './utils';
 import { IWord } from '../../services/types';
 // **** TO DO ***** join isAuth to original source
-import { colors, isAuth, isDifficult, isStudied } from './cosnstants';
+import { colors, isAuth } from './cosnstants';
+// import {isDifficult, isStudied} from './cosnstants';
 import Player from './Player';
 import Word from './Word';
 import Meaning from './Meaning';
 import Example from './Example';
+import test from './test';
 
 export interface BasicCardProps {
   cardData: IWord;
@@ -33,11 +35,13 @@ const BasicCard: FC<BasicCardProps> = ({ cardData }) => {
     textExampleTranslate,
     textMeaningTranslate,
   } = cardData;
+
+  // **** TO DO ***** join progress to original source
+  const { isDifficult, isStudied, progress } = test();
+
   const handledTextMeaning = handleTagInText(textMeaning);
   const handledTextExample = handleTagInText(textExample);
 
-  // **** TO DO ***** join progress to original source
-  const progress = Math.floor(Math.random() * 5);
   const BASE_CONTENT_URL =
     'https://github.com/rolling-scopes-school/react-rslang-be/blob/main/';
 
@@ -100,6 +104,7 @@ const BasicCard: FC<BasicCardProps> = ({ cardData }) => {
           progress={progress}
           isDifficult={isDifficult}
           isStudied={isStudied}
+          group={group}
         />
       )}
     </Card>
