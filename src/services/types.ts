@@ -23,8 +23,6 @@ export type AuthorizationResponse = {
   name: string;
 };
 
-export type WordsResponse = IWord[];
-
 export interface IWord {
   id: string;
   group: number;
@@ -42,11 +40,35 @@ export interface IWord {
   textExampleTranslate: string;
 }
 
+export interface IWordWithUserProps extends IWord {
+  userWord?: UserWord;
+}
+
 export interface WordsQueryParams {
   group: number;
   page: number;
 }
 
+export interface WordsQueryWithProps extends WordsQueryParams {
+  userId: string;
+}
+
 export type WordById = {
   wordId: string;
 };
+
+export interface UserOptionalObject {
+  totalAnswers: number;
+  totalCorrectAnswers: number;
+  correctStreak: number;
+}
+
+export interface UserWord {
+  difficulty: string;
+  optional: UserOptionalObject;
+}
+
+export interface AggregatedWordsItem {
+  paginatedResults: IWordWithUserProps[];
+  totalCount: string[];
+}

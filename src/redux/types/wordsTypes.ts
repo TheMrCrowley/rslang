@@ -1,25 +1,33 @@
 import {
+  AggregatedWordsItem,
   IWord,
   WordById,
   WordsQueryParams,
-  WordsResponse,
+  WordsQueryWithProps,
 } from '../../services/types';
 
 export enum WordsActionTypes {
   REQUEST_WORDS = 'REQUEST_WORDS',
+  REQUEST_WORDS_PROPS = 'REQUEST_WORDS_PROPS',
   REQUEST_WORD = 'REQUEST_WORD',
   SET_WORDS = 'SET_WORDS',
   SET_WORD = 'SET_WORD',
+  SET_WORDS_WITH_PROPS = 'SET_WORDS_WITH_PROPS',
 }
 
 export interface WordsState {
-  words: WordsResponse;
+  words: IWord[];
   word: IWord;
 }
 
 export interface RequestWordsAction {
   type: WordsActionTypes.REQUEST_WORDS;
   payload: WordsQueryParams;
+}
+
+export interface RequestWordsWithPropsAction {
+  type: WordsActionTypes.REQUEST_WORDS_PROPS;
+  payload: WordsQueryWithProps;
 }
 
 export interface RequestWordAction {
@@ -29,7 +37,12 @@ export interface RequestWordAction {
 
 export interface SetWordsAction {
   type: WordsActionTypes.SET_WORDS;
-  payload: WordsResponse;
+  payload: IWord[];
+}
+
+export interface SetWordsWithProps {
+  type: WordsActionTypes.SET_WORDS_WITH_PROPS;
+  payload: AggregatedWordsItem[];
 }
 
 export interface SetWordAction {
@@ -38,6 +51,8 @@ export interface SetWordAction {
 }
 
 export type WordsAction =
+  | SetWordsWithProps
+  | RequestWordsWithPropsAction
   | RequestWordsAction
   | RequestWordAction
   | SetWordsAction

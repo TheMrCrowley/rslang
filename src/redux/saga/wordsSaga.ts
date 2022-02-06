@@ -1,10 +1,11 @@
-import { put, takeEvery } from 'redux-saga/effects';
+import { call, put, takeEvery } from 'redux-saga/effects';
 import { setWordAction, setWordsAction } from '../store/reducers/wordsReducer';
-import { IWord, WordsResponse } from '../../services/types';
+import { IWord, IWordWithUserProps } from '../../services/types';
 import {
   RequestWordAction,
   WordsActionTypes,
   RequestWordsAction,
+  RequestWordsWithPropsAction,
 } from '../types/wordsTypes';
 import WordsService from '../../services/wordsService';
 import { requestActionCreator } from '../store/reducers/requestReducer';
@@ -14,7 +15,25 @@ function* requestWordsWorker(data: RequestWordsAction) {
   try {
     yield put(requestActionCreator(RequestActionTypes.REQUEST_START));
     const { group, page } = data.payload;
-    const wordsResponse: WordsResponse = yield WordsService.getWords(
+    const wordsResponse: IWord[] = yield call(
+      WordsService.getWords,
+      group,
+      page
+    );
+    yield put(setWordsAction(wordsResponse));
+    yield put(requestActionCreator(RequestActionTypes.REQUEST_SUCCESS));
+  } catch (e) {
+    yield put(requestActionCreator(RequestActionTypes.REQUEST_ERROR));
+  }
+}
+
+function* requestWordsWithUserProps(data: RequestWordsWithPropsAction) {
+  try {
+    yield put(requestActionCreator(RequestActionTypes.REQUEST_START));
+    const { userId, group, page } = data.payload;
+    const wordsResponse: IWordWithUserProps[] = yield call(
+      WordsService.getWordsWithUserProps,
+      userId,
       group,
       page
     );
@@ -40,6 +59,10 @@ function* requestWordWorker(data: RequestWordAction) {
 function* wordsWatcher() {
   yield takeEvery(WordsActionTypes.REQUEST_WORDS, requestWordsWorker);
   yield takeEvery(WordsActionTypes.REQUEST_WORD, requestWordWorker);
+  yield takeEvery(
+    WordsActionTypes.REQUEST_WORDS_PROPS,
+    requestWordsWithUserProps
+  );
 }
 
 export default wordsWatcher;
