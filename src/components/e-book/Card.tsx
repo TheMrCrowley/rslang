@@ -3,16 +3,16 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
 import { Divider } from '@mui/material';
-import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
-import SelfImprovementIcon from '@mui/icons-material/SelfImprovement';
 import AuthorizedCardContent from './ui/authorized-content/AuthorizedCardContent';
 import handleTagInText from './utils';
 import { IWord } from '../../services/types';
 // **** TO DO ***** join isAuth to original source
 import { colors, isAuth, isDifficult, isStudied } from './cosnstants';
 import Player from './Player';
+import Word from './Word';
+import Meaning from './Meaning';
+import Example from './Example';
 
 export interface BasicCardProps {
   cardData: IWord;
@@ -56,43 +56,13 @@ const BasicCard: FC<BasicCardProps> = ({ cardData }) => {
         image={`${BASE_CONTENT_URL}/${image}?raw=true`}
       />
       <CardContent sx={{ textAlign: 'right' }}>
-        {isAuth ? (
-          <Box
-            sx={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              width: '100%',
-            }}
-          >
-            {isDifficult && (
-              <FitnessCenterIcon htmlColor={colors[group]} fontSize="large" />
-            )}
-            {isStudied && (
-              <SelfImprovementIcon
-                fontSize="large"
-                htmlColor={colors[group]}
-                sx={{ mr: 'auto' }}
-              />
-            )}
-            <Typography
-              gutterBottom
-              variant="h4"
-              component="h4"
-              sx={{ textTransform: 'capitalize', mb: '0' }}
-            >
-              {word}
-            </Typography>
-          </Box>
-        ) : (
-          <Typography
-            gutterBottom
-            variant="h4"
-            component="h4"
-            sx={{ textTransform: 'capitalize' }}
-          >
-            {word}
-          </Typography>
-        )}
+        <Word
+          word={word}
+          color={colors[group]}
+          isAuth={isAuth}
+          isDifficult={isDifficult}
+          isStudied={isStudied}
+        />
         <Typography
           gutterBottom
           variant="h6"
@@ -106,38 +76,16 @@ const BasicCard: FC<BasicCardProps> = ({ cardData }) => {
             )}
           />
         </Typography>
-        <Box sx={{ mt: '0.5em' }}>
-          <Typography gutterBottom variant="body2" component="span">
-            {handledTextMeaning.head}
-          </Typography>
-          <Typography
-            sx={{ fontWeight: 'bold' }}
-            gutterBottom
-            variant="body2"
-            component="span"
-          >
-            {handledTextMeaning.target}
-          </Typography>
-          <Typography gutterBottom variant="body2" component="span">
-            {handledTextMeaning.tail}.
-          </Typography>
-        </Box>
-        <Box sx={{ mt: '0.5em' }}>
-          <Typography gutterBottom variant="body2" component="span">
-            {handledTextExample.head}
-          </Typography>
-          <Typography
-            sx={{ fontStyle: 'italic' }}
-            gutterBottom
-            variant="body2"
-            component="span"
-          >
-            {handledTextExample.target}
-          </Typography>
-          <Typography gutterBottom variant="body2" component="span">
-            {handledTextExample.tail}.
-          </Typography>
-        </Box>{' '}
+        <Meaning
+          head={handledTextMeaning.head}
+          target={handledTextMeaning.target}
+          tail={handledTextMeaning.tail}
+        />
+        <Example
+          head={handledTextExample.head}
+          target={handledTextExample.target}
+          tail={handledTextExample.tail}
+        />
         <Divider variant="middle" sx={{ mt: '0.5em', mb: '0.5em' }} />
         <Typography variant="body2" color="text.secondary">
           {textMeaningTranslate}.
@@ -146,9 +94,9 @@ const BasicCard: FC<BasicCardProps> = ({ cardData }) => {
           {textExampleTranslate}.
         </Typography>
       </CardContent>
-      {isAuth ? (
+      {isAuth && (
         <AuthorizedCardContent color={colors[group]} progress={progress} />
-      ) : null}
+      )}
     </Card>
   );
 };
