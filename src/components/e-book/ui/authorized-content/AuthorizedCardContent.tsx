@@ -10,6 +10,7 @@ interface AuthorizedCardContentProps {
   isDifficult: boolean;
   isStudied: boolean;
   group: number;
+  isInLearning: boolean;
 }
 
 const AuthorizedCardContent: FC<AuthorizedCardContentProps> = ({
@@ -18,7 +19,9 @@ const AuthorizedCardContent: FC<AuthorizedCardContentProps> = ({
   isDifficult,
   isStudied,
   group,
+  isInLearning,
 }) => {
+  // console.log(isInLearning && !isStudied);
   return (
     <Box
       sx={{
@@ -34,7 +37,7 @@ const AuthorizedCardContent: FC<AuthorizedCardContentProps> = ({
         !isDifficult && <CardButton color={color}>Difficult</CardButton>
       )}
       {!isStudied && <CardButton color={color}>Studied</CardButton>}
-      {!isStudied && (
+      {isInLearning && !isStudied && (
         <ProgressBar
           color={color}
           progress={progress}

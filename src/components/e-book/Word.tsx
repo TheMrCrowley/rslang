@@ -15,6 +15,7 @@ interface WordProps {
   isDifficult: boolean;
   isStudied: boolean;
   attempts: Attempts;
+  isInLearning: boolean;
 }
 
 const Word: FC<WordProps> = ({
@@ -24,6 +25,7 @@ const Word: FC<WordProps> = ({
   isDifficult,
   isStudied,
   attempts,
+  isInLearning,
 }) => {
   return (
     // eslint-disable-next-line react/jsx-no-useless-fragment
@@ -41,9 +43,11 @@ const Word: FC<WordProps> = ({
           {isStudied && (
             <SelfImprovementIcon fontSize="large" htmlColor={color} />
           )}
-          <Typography color={color} variant="h5">
-            {attempts.successful}/{attempts.total}
-          </Typography>
+          {isInLearning && (
+            <Typography color={color} variant="h5">
+              {attempts.successful}/{attempts.total}
+            </Typography>
+          )}
           <Typography
             gutterBottom
             variant="h4"
