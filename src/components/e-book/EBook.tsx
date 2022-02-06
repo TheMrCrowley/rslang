@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Box } from '@mui/material';
-import BookBar from './ui/menu/BookBar';
+import BookBar from './ui/bookbar/BookBar';
 import CardList from './CardList';
 import { RootState } from '../../redux/store';
 import { requestWordsAction } from '../../redux/store/reducers/wordsReducer';
