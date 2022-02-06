@@ -6,6 +6,7 @@ import {
 } from '../store/reducers/authReducer';
 import {
   AuthActionsTypes,
+  CheckAuthAction,
   RegistrationAction,
   SigninAction,
 } from '../types/authTypes';
@@ -58,12 +59,15 @@ function* signInWorker(data: SigninAction) {
   yield put(requestActionCreator(RequestActionTypes.REQUEST_RESET));
 }
 
-function* checkAuth() {
+function* checkAuth(data: CheckAuthAction) {
   try {
-    const { userId } = LocalStorageService.getParsedItem<LoginResponseData>(
-      StorageKeys.USER_DATA
-    );
+    const { userId } = data.payload;
     yield call(AuthService.refreshTokens, userId);
+    const userData: LoginResponseData =
+      yield LocalStorageService.getParsedItem<LoginResponseData>(
+        StorageKeys.USER_DATA
+      );
+    yield put(setUserDataAction(userData));
     yield put(setIsAuthAction());
   } catch (e) {
     console.log(e);

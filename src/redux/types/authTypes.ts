@@ -6,7 +6,6 @@ import {
 
 export enum AuthActionsTypes {
   REGISTRATION = 'REGISTRATION',
-  SIGNIN_AFTER_REG = 'SIGNIN_AFTER_REG',
   SIGNIN = 'SIGNIN',
   LOGOUT = 'LOGOUT',
   SET_USER_DATA = 'SET_DATA',
@@ -38,8 +37,9 @@ interface LogoutAction {
   type: AuthActionsTypes.LOGOUT;
 }
 
-interface CheckAuthAction {
+export interface CheckAuthAction {
   type: AuthActionsTypes.CHECK_AUTH;
+  payload: { userId: string };
 }
 
 interface SetIsAuthAction {
