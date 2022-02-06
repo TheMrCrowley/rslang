@@ -1,8 +1,8 @@
 import React from 'react';
-import EBook from './components/e-book/EBook';
+import AppRouter from './components/AppRouter';
 
-function App() {
-  return <EBook />;
-}
+const App = () => {
+  return <AppRouter />;
+};
 
 export default App;
