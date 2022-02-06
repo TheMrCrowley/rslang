@@ -24,6 +24,7 @@ const ProgressBar: FC<ProgressBarProps> = ({
     for (let i = 0; i < itemsNum; i += 1) {
       items.push(
         <Box
+          key={i}
           sx={{
             backgroundColor: i <= progress ? color : EMPTY_ITEM_COLOR,
             width: '1em',
