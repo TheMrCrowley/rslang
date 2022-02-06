@@ -1,9 +1,8 @@
 import { put, takeEvery, call } from 'redux-saga/effects';
-import AuthService from '../../services/authService';
-import { AuthorizationResponse } from '../../services/types';
+import AuthService from '../../services/auth/authService';
 import {
+  setIsAuthAction,
   setUserDataAction,
-  signinAfterRegistration,
 } from '../store/reducers/authReducer';
 import {
   AuthActionsTypes,
@@ -12,21 +11,25 @@ import {
 } from '../types/authTypes';
 import { RequestActionTypes } from '../types/requestTypes';
 import { requestActionCreator } from '../store/reducers/requestReducer';
+import LocalStorageService from '../../services/localStorageService';
+import { StorageKeys } from '../../services/enum';
+import { LoginResponseData } from '../../services/auth/authServiceTypes';
 
 function* registrationWorker(data: RegistrationAction) {
   try {
     yield put(requestActionCreator(RequestActionTypes.REQUEST_START));
     const { name, email, password } = data.payload;
-    yield call(AuthService.registration, name, email, password);
-    const signinResponse: AuthorizationResponse = yield call(
-      AuthService.login,
+    yield AuthService.registration({ name, email, password });
+    const signinResponse: LoginResponseData = yield call(AuthService.login, {
       email,
-      password
+      password,
+    });
+    LocalStorageService.setItemToStorage<LoginResponseData>(
+      StorageKeys.USER_DATA,
+      signinResponse
     );
-    localStorage.setItem('userData', JSON.stringify(signinResponse));
-    localStorage.setItem('access-token', JSON.stringify(signinResponse.token));
-    yield put(signinAfterRegistration());
     yield put(setUserDataAction(signinResponse));
+    yield put(setIsAuthAction());
     yield put(requestActionCreator(RequestActionTypes.REQUEST_SUCCESS));
   } catch (e) {
     yield put(requestActionCreator(RequestActionTypes.REQUEST_ERROR));
@@ -38,14 +41,16 @@ function* signInWorker(data: SigninAction) {
   try {
     yield put(requestActionCreator(RequestActionTypes.REQUEST_START));
     const { email, password } = data.payload;
-    const signinResponse: AuthorizationResponse = yield call(
-      AuthService.login,
+    const signinResponse: LoginResponseData = yield call(AuthService.login, {
       email,
-      password
+      password,
+    });
+    LocalStorageService.setItemToStorage<LoginResponseData>(
+      StorageKeys.USER_DATA,
+      signinResponse
     );
-    localStorage.setItem('userData', JSON.stringify(signinResponse));
-    localStorage.setItem('access-token', JSON.stringify(signinResponse.token));
     yield put(setUserDataAction(signinResponse));
+    yield put(setIsAuthAction());
     yield put(requestActionCreator(RequestActionTypes.REQUEST_SUCCESS));
   } catch (e) {
     yield put(requestActionCreator(RequestActionTypes.REQUEST_ERROR));
@@ -53,9 +58,27 @@ function* signInWorker(data: SigninAction) {
   yield put(requestActionCreator(RequestActionTypes.REQUEST_RESET));
 }
 
+function* checkAuth() {
+  try {
+    const { userId } = LocalStorageService.getParsedItem<LoginResponseData>(
+      StorageKeys.USER_DATA
+    );
+    yield call(AuthService.refreshTokens, userId);
+    yield put(setIsAuthAction());
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+function* logoutWorker() {
+  yield call(LocalStorageService.remove, StorageKeys.USER_DATA);
+}
+
 function* authWatcher() {
   yield takeEvery(AuthActionsTypes.REGISTRATION, registrationWorker);
   yield takeEvery(AuthActionsTypes.SIGNIN, signInWorker);
+  yield takeEvery(AuthActionsTypes.CHECK_AUTH, checkAuth);
+  yield takeEvery(AuthActionsTypes.LOGOUT, logoutWorker);
 }
 
 export default authWatcher;

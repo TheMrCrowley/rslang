@@ -1,21 +1,23 @@
 import { call, put, takeEvery } from 'redux-saga/effects';
-import { setWordAction, setWordsAction } from '../store/reducers/wordsReducer';
-import { IWord, IWordWithUserProps } from '../../services/types';
 import {
-  RequestWordAction,
   WordsActionTypes,
   RequestWordsAction,
   RequestWordsWithPropsAction,
 } from '../types/wordsTypes';
-import WordsService from '../../services/wordsService';
+import WordsService from '../../services/words/wordsService';
 import { requestActionCreator } from '../store/reducers/requestReducer';
 import { RequestActionTypes } from '../types/requestTypes';
+import { setWordsAction } from '../store/reducers/wordsReducer';
+import {
+  Word,
+  WordWithCustomProps,
+} from '../../services/words/wordsServiceTypes';
 
 function* requestWordsWorker(data: RequestWordsAction) {
   try {
     yield put(requestActionCreator(RequestActionTypes.REQUEST_START));
     const { group, page } = data.payload;
-    const wordsResponse: IWord[] = yield call(
+    const wordsResponse: Word[] = yield call(
       WordsService.getWords,
       group,
       page
@@ -27,12 +29,12 @@ function* requestWordsWorker(data: RequestWordsAction) {
   }
 }
 
-function* requestWordsWithUserProps(data: RequestWordsWithPropsAction) {
+function* requestWordsWithCustomProps(data: RequestWordsWithPropsAction) {
   try {
     yield put(requestActionCreator(RequestActionTypes.REQUEST_START));
     const { userId, group, page } = data.payload;
-    const wordsResponse: IWordWithUserProps[] = yield call(
-      WordsService.getWordsWithUserProps,
+    const wordsResponse: WordWithCustomProps[] = yield call(
+      WordsService.getWordsWithCustomProps,
       userId,
       group,
       page
@@ -44,24 +46,11 @@ function* requestWordsWithUserProps(data: RequestWordsWithPropsAction) {
   }
 }
 
-function* requestWordWorker(data: RequestWordAction) {
-  try {
-    yield put(requestActionCreator(RequestActionTypes.REQUEST_START));
-    const { wordId } = data.payload;
-    const getWordResponse: IWord = yield WordsService.getWord(wordId);
-    yield put(setWordAction(getWordResponse));
-    yield put(requestActionCreator(RequestActionTypes.REQUEST_SUCCESS));
-  } catch (e) {
-    yield put(requestActionCreator(RequestActionTypes.REQUEST_ERROR));
-  }
-}
-
 function* wordsWatcher() {
   yield takeEvery(WordsActionTypes.REQUEST_WORDS, requestWordsWorker);
-  yield takeEvery(WordsActionTypes.REQUEST_WORD, requestWordWorker);
   yield takeEvery(
     WordsActionTypes.REQUEST_WORDS_PROPS,
-    requestWordsWithUserProps
+    requestWordsWithCustomProps
   );
 }
 

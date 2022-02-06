@@ -1,19 +1,19 @@
 /* eslint-disable @typescript-eslint/default-param-last */
 import {
-  AuthorizationResponse,
-  UserLoginData,
-  UserRegistrationData,
-} from '../../../services/types';
-import {
   AuthAction,
   AuthActionsTypes,
   AuthState,
   SetDataAction,
 } from '../../types/authTypes';
+import {
+  LoginRequestData,
+  LoginResponseData,
+  RegistrationRequestData,
+} from '../../../services/auth/authServiceTypes';
 
 const authInitialState: AuthState = {
   isAuth: false,
-  userData: {} as AuthorizationResponse,
+  userData: {} as LoginResponseData,
 };
 
 export const authReducer = (
@@ -23,20 +23,14 @@ export const authReducer = (
   switch (action.type) {
     case AuthActionsTypes.REGISTRATION:
       return state;
-    case AuthActionsTypes.SIGNIN_AFTER_REG:
-      return { ...state, isAuth: true };
     case AuthActionsTypes.SIGNIN:
-      return {
-        ...state,
-        isAuth: true,
-      };
-    case AuthActionsTypes.CHECK_AUTH:
-      return {
-        ...state,
-        isAuth: true,
-      };
+      return state;
     case AuthActionsTypes.LOGOUT:
-      return { ...state, isAuth: false, userData: {} as AuthorizationResponse };
+      return { ...state, isAuth: false, userData: {} as LoginResponseData };
+    case AuthActionsTypes.CHECK_AUTH:
+      return state;
+    case AuthActionsTypes.SET_IS_AUTH:
+      return { ...state, isAuth: true };
     case AuthActionsTypes.SET_USER_DATA:
       return { ...state, userData: { ...(action as SetDataAction).payload } };
     default:
@@ -45,17 +39,13 @@ export const authReducer = (
 };
 
 export const registrationAction = (
-  payload: UserRegistrationData
+  payload: RegistrationRequestData
 ): AuthAction => ({
   type: AuthActionsTypes.REGISTRATION,
   payload,
 });
 
-export const signinAfterRegistration = (): AuthAction => ({
-  type: AuthActionsTypes.SIGNIN_AFTER_REG,
-});
-
-export const signinAction = (payload: UserLoginData): AuthAction => ({
+export const signinAction = (payload: LoginRequestData): AuthAction => ({
   type: AuthActionsTypes.SIGNIN,
   payload,
 });
@@ -64,16 +54,15 @@ export const logoutAction = (): AuthAction => ({
   type: AuthActionsTypes.LOGOUT,
 });
 
-export const checkAuthAction = (
-  payload: AuthorizationResponse
-): AuthAction => ({
+export const checkAuthAction = (): AuthAction => ({
   type: AuthActionsTypes.CHECK_AUTH,
-  payload,
 });
 
-export const setUserDataAction = (
-  payload: AuthorizationResponse
-): AuthAction => ({
+export const setIsAuthAction = (): AuthAction => ({
+  type: AuthActionsTypes.SET_IS_AUTH,
+});
+
+export const setUserDataAction = (payload: LoginResponseData): AuthAction => ({
   type: AuthActionsTypes.SET_USER_DATA,
   payload,
 });

@@ -1,55 +1,55 @@
 import {
-  AuthorizationResponse,
-  UserLoginData,
-  UserRegistrationData,
-} from '../../services/types';
+  LoginRequestData,
+  LoginResponseData,
+  RegistrationRequestData,
+} from '../../services/auth/authServiceTypes';
 
 export enum AuthActionsTypes {
   REGISTRATION = 'REGISTRATION',
-  CHECK_AUTH = 'CHECK_AUTH',
   SIGNIN_AFTER_REG = 'SIGNIN_AFTER_REG',
   SIGNIN = 'SIGNIN',
   LOGOUT = 'LOGOUT',
   SET_USER_DATA = 'SET_DATA',
+  CHECK_AUTH = 'CHECK_AUTH',
+  SET_IS_AUTH = 'SET_IS_AUTH',
 }
 
 export interface AuthState {
   isAuth: boolean;
-  userData: AuthorizationResponse;
+  userData: LoginResponseData;
 }
 
 export interface RegistrationAction {
   type: AuthActionsTypes.REGISTRATION;
-  payload: UserRegistrationData;
-}
-
-export interface SigninAfterRegistration {
-  type: AuthActionsTypes.SIGNIN_AFTER_REG;
+  payload: RegistrationRequestData;
 }
 
 export interface SigninAction {
   type: AuthActionsTypes.SIGNIN;
-  payload: UserLoginData;
-}
-
-export interface CheckAuthAction {
-  type: AuthActionsTypes.CHECK_AUTH;
-  payload: AuthorizationResponse;
+  payload: LoginRequestData;
 }
 
 export interface SetDataAction {
   type: AuthActionsTypes.SET_USER_DATA;
-  payload: AuthorizationResponse;
+  payload: LoginResponseData;
 }
 
 interface LogoutAction {
   type: AuthActionsTypes.LOGOUT;
 }
 
+interface CheckAuthAction {
+  type: AuthActionsTypes.CHECK_AUTH;
+}
+
+interface SetIsAuthAction {
+  type: AuthActionsTypes.SET_IS_AUTH;
+}
+
 export type AuthAction =
   | RegistrationAction
-  | SigninAfterRegistration
   | SigninAction
   | LogoutAction
+  | SetDataAction
   | CheckAuthAction
-  | SetDataAction;
+  | SetIsAuthAction;

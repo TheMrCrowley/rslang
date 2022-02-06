@@ -1,49 +1,142 @@
 import { call, put, takeEvery } from 'redux-saga/effects';
 import {
+  CorrectAnswerAction,
   GetUserWordsAction,
-  SetHardWordAction,
+  InCorrectAnswerAction,
+  SetWordDifficulty,
   UserWordsActionTypes,
 } from '../types/userWordsTypes';
-import { requestActionCreator } from '../store/reducers/requestReducer';
-import { RequestActionTypes } from '../types/requestTypes';
-import { UserWord } from '../../services/types';
-import UserWordsService from '../../services/userWordsService';
-import { setUserWordsAction } from '../store/reducers/userWordsReducer';
+import UserWordsService from '../../services/user-words/userWordsService';
+import {
+  UserWord,
+  UserWordResponse,
+} from '../../services/user-words/userWordsServiceTypes';
+import {
+  getUserWordsAction,
+  setUserWordsAction,
+} from '../store/reducers/userWordsReducer';
 
-function* getUserWords(data: GetUserWordsAction) {
+function* getUserWordsWorker(data: GetUserWordsAction) {
   try {
-    yield put(requestActionCreator(RequestActionTypes.REQUEST_START));
     const { userId } = data.payload;
-    const userWordsResponse: UserWord[] = yield UserWordsService.getUserWords(
+    const userWords: UserWordResponse[] = yield call(
+      UserWordsService.getUserWords,
       userId
     );
-    yield put(setUserWordsAction(userWordsResponse));
-    yield put(requestActionCreator(RequestActionTypes.REQUEST_SUCCESS));
+    yield put(setUserWordsAction(userWords));
   } catch (e) {
-    yield put(requestActionCreator(RequestActionTypes.REQUEST_ERROR));
+    console.log(e);
   }
 }
 
-function* setHardWord(data: SetHardWordAction) {
+function* setWordDifficultyWorker(data: SetWordDifficulty) {
   try {
-    const { userId, wordId } = data.payload;
-    const optional: UserWord = {
-      difficulty: 'hard',
-      optional: {
-        totalCorrectAnswers: 0,
-        totalAnswers: 0,
-        correctStreak: 0,
-      },
-    };
-    yield call(UserWordsService.setUserWord, userId, wordId, optional);
+    const { userId, wordId, method, difficulty } = data.payload;
+    if (method === 'POST') {
+      const wordBody: UserWord = {
+        difficulty,
+        optional: {
+          totalAnswers: 0,
+          correctStreak: 0,
+          totalCorrectAnswers: 0,
+        },
+      };
+      yield call(UserWordsService.setUserWord, userId, wordId, wordBody);
+    } else {
+      const wordBody: UserWordResponse = yield call(
+        UserWordsService.getOneUserWord,
+        userId,
+        wordId
+      );
+      const newWordBody: UserWord = {
+        difficulty,
+        optional: { ...wordBody.optional },
+      };
+      yield call(UserWordsService.updateUserWord, userId, wordId, newWordBody);
+    }
+    yield put(getUserWordsAction({ userId }));
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+function* correctAnswerWorker(data: CorrectAnswerAction) {
+  try {
+    const { userId, wordId, method } = data.payload;
+    if (method === 'POST') {
+      const wordBody: UserWord = {
+        difficulty: 'learning',
+        optional: {
+          totalAnswers: 1,
+          totalCorrectAnswers: 1,
+          correctStreak: 1,
+        },
+      };
+      yield call(UserWordsService.setUserWord, userId, wordId, wordBody);
+    } else {
+      const userWord: UserWordResponse = yield call(
+        UserWordsService.getOneUserWord,
+        userId,
+        wordId
+      );
+      const newWordBody: UserWord = {
+        difficulty: userWord.difficulty,
+        optional: {
+          totalAnswers: userWord.optional.totalAnswers + 1,
+          totalCorrectAnswers: userWord.optional.totalCorrectAnswers + 1,
+          correctStreak: userWord.optional.correctStreak + 1,
+        },
+      };
+      yield call(UserWordsService.updateUserWord, userId, wordId, newWordBody);
+    }
+    yield put(getUserWordsAction({ userId }));
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+function* incorrectAnswerWorker(data: InCorrectAnswerAction) {
+  try {
+    const { userId, wordId, method } = data.payload;
+    if (method === 'POST') {
+      const wordBody: UserWord = {
+        difficulty: 'learning',
+        optional: {
+          totalAnswers: 1,
+          correctStreak: 0,
+          totalCorrectAnswers: 0,
+        },
+      };
+      yield call(UserWordsService.setUserWord, userId, wordId, wordBody);
+    } else {
+      const { difficulty, optional }: UserWordResponse = yield call(
+        UserWordsService.getOneUserWord,
+        userId,
+        wordId
+      );
+      const newWordBody: UserWord = {
+        difficulty,
+        optional: {
+          totalAnswers: optional.totalAnswers + 1,
+          totalCorrectAnswers: optional.totalCorrectAnswers,
+          correctStreak: 0,
+        },
+      };
+      yield call(UserWordsService.updateUserWord, userId, wordId, newWordBody);
+    }
   } catch (e) {
     console.log(e);
   }
 }
 
 function* userWordsWatcher() {
-  yield takeEvery(UserWordsActionTypes.GET_USER_WORDS, getUserWords);
-  yield takeEvery(UserWordsActionTypes.SET_HARD_WORD, setHardWord);
+  yield takeEvery(UserWordsActionTypes.GET_USER_WORDS, getUserWordsWorker);
+  yield takeEvery(
+    UserWordsActionTypes.SET_WORD_DIFFICULTY,
+    setWordDifficultyWorker
+  );
+  yield takeEvery(UserWordsActionTypes.CORRECT_ANSWER, correctAnswerWorker);
+  yield takeEvery(UserWordsActionTypes.INCORRECT_ANSWER, incorrectAnswerWorker);
 }
 
 export default userWordsWatcher;
