@@ -1,8 +1,10 @@
 import * as React from 'react';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { Typography } from '@mui/material';
 import BasicSelect from '../select/BasicSelect';
 import PaginationRanges from '../pagination/PaginationRanges';
+import { DIFFICULT_GROUP } from '../../cosnstants';
 
 interface ResponsiveAppBarProps {
   setPage: (val: number) => void;
@@ -34,7 +36,13 @@ const BookBar: React.FC<ResponsiveAppBarProps> = ({
       }}
     >
       <ThemeProvider theme={theme}>
-        <PaginationRanges setPage={setPage} />
+        {group !== DIFFICULT_GROUP ? (
+          <PaginationRanges setPage={setPage} />
+        ) : (
+          <Typography variant="h2" component="h2">
+            Difficult words
+          </Typography>
+        )}
         <BasicSelect setGroup={setGroup} group={group} />
       </ThemeProvider>
     </Container>

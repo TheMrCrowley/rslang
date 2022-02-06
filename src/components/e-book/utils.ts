@@ -1,4 +1,4 @@
-type HandledText = {
+export type HandledText = {
   head: string;
   target: string;
   tail: string;
