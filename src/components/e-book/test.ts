@@ -1,27 +1,32 @@
 import { MAX_PROGRESS_ITEMS, MIN_PROGRESS_ITEMS } from './cosnstants';
 
+type Attempst = {
+  total: number;
+  successful: number;
+};
+
 type Test = {
   isDifficult: boolean;
   isStudied: boolean;
   progress: number;
+  attempts: Attempst;
 };
 
 export default function test(): Test {
-  const isStudied = Math.random() > 0.5;
-  let isDifficult = Math.random() > 0.5;
-  if (isStudied) {
-    isDifficult = false;
+  const total = Math.floor(Math.random() * 20);
+  const successful = Math.ceil(Math.random() * total);
+  const attempts = { total, successful };
+  const isDifficult = Math.random() > 0.5;
+  let isStudied = false;
+
+  if (successful > 2 && !isDifficult) {
+    isStudied = Math.random() > 0.5;
   }
 
-  let progress = Math.floor(
-    Math.random() * (isDifficult ? MAX_PROGRESS_ITEMS : MIN_PROGRESS_ITEMS)
+  const progress = Math.floor(
+    Math.random() *
+      (isDifficult ? MAX_PROGRESS_ITEMS - 1 : MIN_PROGRESS_ITEMS - 1)
   );
-  if (
-    (isDifficult && progress === MAX_PROGRESS_ITEMS) ||
-    (!isDifficult && progress === MIN_PROGRESS_ITEMS)
-  ) {
-    progress = 0;
-  }
 
-  return { isDifficult, isStudied, progress };
+  return { isDifficult, isStudied, progress, attempts };
 }

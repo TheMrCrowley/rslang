@@ -37,7 +37,7 @@ const BasicCard: FC<BasicCardProps> = ({ cardData }) => {
   } = cardData;
 
   // **** TO DO ***** join progress to original source
-  const { isDifficult, isStudied, progress } = test();
+  const { isDifficult, isStudied, progress, attempts } = test();
 
   const handledTextMeaning = handleTagInText(textMeaning);
   const handledTextExample = handleTagInText(textExample);
@@ -66,6 +66,7 @@ const BasicCard: FC<BasicCardProps> = ({ cardData }) => {
           isAuth={isAuth}
           isDifficult={isDifficult}
           isStudied={isStudied}
+          attempts={attempts}
         />
         <Typography
           gutterBottom
