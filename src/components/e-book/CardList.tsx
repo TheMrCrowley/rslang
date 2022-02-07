@@ -13,6 +13,7 @@ const CardList: FC<CardListProps> = ({ words }) => {
         alignItems: 'stretch',
         alignContent: 'stretch',
         gap: '1em 1em',
+        pb: '1em',
       }}
     >
       {words.map(word => {
