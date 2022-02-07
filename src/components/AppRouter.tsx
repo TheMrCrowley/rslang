@@ -8,9 +8,9 @@ import { StorageKeys } from '../services/enum';
 import LocalStorageService from '../services/localStorageService';
 import EBook from './e-book/EBook';
 import Layout from './main-page/Layout';
-import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import RegistrationPage from './pages/RegistrationPage';
+import DemoHomePage from './pages/DemoHomePage';
 
 const AppRouter = () => {
   const dispatch = useDispatch();
@@ -28,7 +28,7 @@ const AppRouter = () => {
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
-        <Route path="home" element={<HomePage />} />
+        <Route path="home" element={<DemoHomePage />} />
         <Route path="registration" element={<RegistrationPage />} />
         <Route path="login" element={<LoginPage />} />
         <Route

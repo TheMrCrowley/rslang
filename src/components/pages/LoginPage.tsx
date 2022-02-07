@@ -1,15 +1,21 @@
-import { Button, FormGroup, TextField } from '@mui/material';
+import { Button, Container, FormGroup, TextField, Box } from '@mui/material';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import SendIcon from '@mui/icons-material/Send';
-import { styled } from '@mui/material/styles';
+// import { styled } from '@mui/material/styles';
 import { signinAction } from '../../redux/store/reducers/authReducer';
 import { UserLoginData } from '../../services/types';
 
-const StyledFormGroup = styled(FormGroup)`
-  width: 50%;
-  row-gap: 1rem;
-`;
+// const StyledFormGroup = styled(FormGroup)`
+//   width: 50%;
+//   row-gap: 1rem;
+// `;
+
+// const StyledContainer = styled(Container)`
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+// `;
 
 const LoginPage = () => {
   const dispatch = useDispatch();
@@ -39,7 +45,7 @@ const LoginPage = () => {
     password,
   });
   return (
-    <StyledFormGroup>
+    <Box sx={{ display: 'flex', flexDirection: 'column', rowGap: '1em' }}>
       <TextField
         error={invalidEmail}
         helperText={invalidEmail && 'Please, enter your e-mail'}
@@ -78,7 +84,7 @@ const LoginPage = () => {
       >
         Login
       </Button>
-    </StyledFormGroup>
+    </Box>
   );
 };
 
