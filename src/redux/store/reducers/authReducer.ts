@@ -54,9 +54,8 @@ export const logoutAction = (): AuthAction => ({
   type: AuthActionsTypes.LOGOUT,
 });
 
-export const checkAuthAction = (payload: { userId: string }): AuthAction => ({
+export const checkAuthAction = (): AuthAction => ({
   type: AuthActionsTypes.CHECK_AUTH,
-  payload,
 });
 
 export const setIsAuthAction = (): AuthAction => ({

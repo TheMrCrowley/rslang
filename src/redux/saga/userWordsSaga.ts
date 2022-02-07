@@ -15,6 +15,9 @@ import {
   getUserWordsAction,
   setUserWordsAction,
 } from '../store/reducers/userWordsReducer';
+import createUserWordBody from '../../helpers/createUserWordBody';
+import CreateUserWordMode from '../../helpers/helpersTypes';
+import updateUserWordBody from '../../helpers/updateUserWordBody';
 
 function* getUserWordsWorker(data: GetUserWordsAction) {
   try {
@@ -33,25 +36,20 @@ function* setWordDifficultyWorker(data: SetWordDifficulty) {
   try {
     const { userId, wordId, method, difficulty } = data.payload;
     if (method === 'POST') {
-      const wordBody: UserWord = {
-        difficulty,
-        optional: {
-          totalAnswers: 0,
-          correctStreak: 0,
-          totalCorrectAnswers: 0,
-        },
-      };
+      const wordBody: UserWord = yield call(
+        createUserWordBody,
+        CreateUserWordMode.CHANGE_DIFFICULTY,
+        difficulty
+      );
       yield call(UserWordsService.setUserWord, userId, wordId, wordBody);
     } else {
-      const wordBody: UserWordResponse = yield call(
-        UserWordsService.getOneUserWord,
+      const newWordBody: UserWord = yield call(
+        updateUserWordBody,
         userId,
-        wordId
+        wordId,
+        CreateUserWordMode.CHANGE_DIFFICULTY,
+        difficulty
       );
-      const newWordBody: UserWord = {
-        difficulty,
-        optional: { ...wordBody.optional },
-      };
       yield call(UserWordsService.updateUserWord, userId, wordId, newWordBody);
     }
     yield put(getUserWordsAction({ userId }));
@@ -64,29 +62,18 @@ function* correctAnswerWorker(data: CorrectAnswerAction) {
   try {
     const { userId, wordId, method } = data.payload;
     if (method === 'POST') {
-      const wordBody: UserWord = {
-        difficulty: 'learning',
-        optional: {
-          totalAnswers: 1,
-          totalCorrectAnswers: 1,
-          correctStreak: 1,
-        },
-      };
+      const wordBody: UserWord = yield call(
+        createUserWordBody,
+        CreateUserWordMode.CORRECT_ANSWER
+      );
       yield call(UserWordsService.setUserWord, userId, wordId, wordBody);
     } else {
-      const userWord: UserWordResponse = yield call(
-        UserWordsService.getOneUserWord,
+      const newWordBody: UserWord = yield call(
+        updateUserWordBody,
         userId,
-        wordId
+        wordId,
+        CreateUserWordMode.CORRECT_ANSWER
       );
-      const newWordBody: UserWord = {
-        difficulty: userWord.difficulty,
-        optional: {
-          totalAnswers: userWord.optional.totalAnswers + 1,
-          totalCorrectAnswers: userWord.optional.totalCorrectAnswers + 1,
-          correctStreak: userWord.optional.correctStreak + 1,
-        },
-      };
       yield call(UserWordsService.updateUserWord, userId, wordId, newWordBody);
     }
     yield put(getUserWordsAction({ userId }));
@@ -99,29 +86,18 @@ function* incorrectAnswerWorker(data: InCorrectAnswerAction) {
   try {
     const { userId, wordId, method } = data.payload;
     if (method === 'POST') {
-      const wordBody: UserWord = {
-        difficulty: 'learning',
-        optional: {
-          totalAnswers: 1,
-          correctStreak: 0,
-          totalCorrectAnswers: 0,
-        },
-      };
+      const wordBody: UserWord = yield call(
+        createUserWordBody,
+        CreateUserWordMode.INCORRECT_ANSWER
+      );
       yield call(UserWordsService.setUserWord, userId, wordId, wordBody);
     } else {
-      const { difficulty, optional }: UserWordResponse = yield call(
-        UserWordsService.getOneUserWord,
+      const newWordBody: UserWord = yield call(
+        updateUserWordBody,
         userId,
-        wordId
+        wordId,
+        CreateUserWordMode.INCORRECT_ANSWER
       );
-      const newWordBody: UserWord = {
-        difficulty,
-        optional: {
-          totalAnswers: optional.totalAnswers + 1,
-          totalCorrectAnswers: optional.totalCorrectAnswers,
-          correctStreak: 0,
-        },
-      };
       yield call(UserWordsService.updateUserWord, userId, wordId, newWordBody);
     }
   } catch (e) {

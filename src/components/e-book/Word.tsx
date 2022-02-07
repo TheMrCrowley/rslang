@@ -2,31 +2,16 @@ import React, { FC } from 'react';
 import { Box, Typography } from '@mui/material';
 import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
 import SelfImprovementIcon from '@mui/icons-material/SelfImprovement';
-
-type Attempts = {
-  total: number;
-  successful: number;
-};
+import { UserWord } from '../../services/user-words/userWordsServiceTypes';
 
 interface WordProps {
   word: string;
   color: string;
   isAuth: boolean;
-  isDifficult: boolean;
-  isStudied: boolean;
-  attempts: Attempts;
-  isInLearning: boolean;
+  userWord?: UserWord;
 }
 
-const Word: FC<WordProps> = ({
-  word,
-  color,
-  isAuth,
-  isDifficult,
-  isStudied,
-  attempts,
-  isInLearning,
-}) => {
+const Word: FC<WordProps> = ({ word, color, isAuth, userWord }) => {
   return (
     // eslint-disable-next-line react/jsx-no-useless-fragment
     <>
@@ -37,15 +22,16 @@ const Word: FC<WordProps> = ({
             width: '100%',
           }}
         >
-          {isDifficult && (
+          {userWord?.difficulty === 'hard' && (
             <FitnessCenterIcon htmlColor={color} fontSize="large" />
           )}
-          {isStudied && (
+          {userWord?.difficulty === 'studied' && (
             <SelfImprovementIcon fontSize="large" htmlColor={color} />
           )}
-          {isInLearning && (
+          {userWord?.difficulty === 'learning' && (
             <Typography color={color} variant="h5">
-              {attempts.successful}/{attempts.total}
+              {userWord.optional.totalCorrectAnswers}/
+              {userWord.optional.totalAnswers}
             </Typography>
           )}
           <Typography

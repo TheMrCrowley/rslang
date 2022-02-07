@@ -27,6 +27,7 @@ export interface WordWithCustomPropsRequest extends WordsRequestData {
 }
 
 export interface WordWithCustomProps extends Word {
+  _id: string;
   userWord?: UserWord;
 }
 

@@ -1,4 +1,5 @@
 import { put, takeEvery, call } from 'redux-saga/effects';
+import { StorageKeys } from '../../services/enum';
 import AuthService from '../../services/auth/authService';
 import {
   setIsAuthAction,
@@ -6,14 +7,13 @@ import {
 } from '../store/reducers/authReducer';
 import {
   AuthActionsTypes,
-  CheckAuthAction,
   RegistrationAction,
   SigninAction,
 } from '../types/authTypes';
 import { RequestActionTypes } from '../types/requestTypes';
 import { requestActionCreator } from '../store/reducers/requestReducer';
 import LocalStorageService from '../../services/localStorageService';
-import { StorageKeys } from '../../services/enum';
+
 import { LoginResponseData } from '../../services/auth/authServiceTypes';
 
 function* registrationWorker(data: RegistrationAction) {
@@ -59,9 +59,11 @@ function* signInWorker(data: SigninAction) {
   yield put(requestActionCreator(RequestActionTypes.REQUEST_RESET));
 }
 
-function* checkAuth(data: CheckAuthAction) {
+function* checkAuth() {
   try {
-    const { userId } = data.payload;
+    const { userId } = LocalStorageService.getParsedItem<LoginResponseData>(
+      StorageKeys.USER_DATA
+    );
     yield call(AuthService.refreshTokens, userId);
     const userData: LoginResponseData =
       yield LocalStorageService.getParsedItem<LoginResponseData>(

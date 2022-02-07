@@ -39,7 +39,6 @@ interface LogoutAction {
 
 export interface CheckAuthAction {
   type: AuthActionsTypes.CHECK_AUTH;
-  payload: { userId: string };
 }
 
 interface SetIsAuthAction {
