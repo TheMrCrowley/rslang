@@ -1,22 +1,19 @@
 /* eslint-disable @typescript-eslint/default-param-last */
 import {
-  WordsQueryParams,
-  WordsResponse,
-  IWord,
-  WordById,
-} from '../../../services/types';
-
-import {
-  WordsState,
+  SetWordsAction,
   WordsAction,
   WordsActionTypes,
-  SetWordsAction,
-  SetWordAction,
+  WordsState,
 } from '../../types/wordsTypes';
+import {
+  Word,
+  WordsRequestData,
+  WordWithCustomProps,
+  WordWithCustomPropsRequest,
+} from '../../../services/words/wordsServiceTypes';
 
 const wordsInitialState: WordsState = {
-  words: [] as WordsResponse,
-  word: {} as IWord,
+  words: [] as Word[],
 };
 
 export const wordsReducer = (
@@ -26,33 +23,27 @@ export const wordsReducer = (
   switch (action.type) {
     case WordsActionTypes.REQUEST_WORDS:
       return state;
-    case WordsActionTypes.REQUEST_WORD:
+    case WordsActionTypes.REQUEST_WORDS_PROPS:
       return state;
     case WordsActionTypes.SET_WORDS:
       return { ...state, words: [...(action as SetWordsAction).payload] };
-    case WordsActionTypes.SET_WORD:
-      return { ...state, word: (action as SetWordAction).payload };
     default:
       return state;
   }
 };
 
-export const requestWordsAction = (payload: WordsQueryParams): WordsAction => ({
+export const requestWordsAction = (payload: WordsRequestData): WordsAction => ({
   type: WordsActionTypes.REQUEST_WORDS,
   payload,
 });
 
-export const requestWordAction = (payload: WordById): WordsAction => ({
-  type: WordsActionTypes.REQUEST_WORD,
-  payload,
-});
+export const requestWordsWithPropsAction = (
+  payload: WordWithCustomPropsRequest
+): WordsAction => ({ type: WordsActionTypes.REQUEST_WORDS_PROPS, payload });
 
-export const setWordsAction = (payload: WordsResponse): WordsAction => ({
+export const setWordsAction = (
+  payload: WordWithCustomProps[] | Word[]
+): WordsAction => ({
   type: WordsActionTypes.SET_WORDS,
-  payload,
-});
-
-export const setWordAction = (payload: IWord): WordsAction => ({
-  type: WordsActionTypes.SET_WORD,
   payload,
 });

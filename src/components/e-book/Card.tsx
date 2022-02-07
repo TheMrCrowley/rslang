@@ -6,7 +6,6 @@ import Typography from '@mui/material/Typography';
 import { Divider } from '@mui/material';
 import AuthorizedCardContent from './ui/authorized-content/AuthorizedCardContent';
 import handleTagInText from './utils';
-import { IWord } from '../../services/types';
 // **** TO DO ***** join isAuth to original source
 import { colors, isAuth } from './cosnstants';
 // import {isDifficult, isStudied} from './cosnstants';
@@ -14,14 +13,15 @@ import Player from './Player';
 import Word from './Word';
 import Meaning from './Meaning';
 import Example from './Example';
-import test from './test';
+import { WordWithCustomProps } from '../../services/words/wordsServiceTypes';
 
 export interface BasicCardProps {
-  cardData: IWord;
+  cardData: WordWithCustomProps;
 }
 
 const BasicCard: FC<BasicCardProps> = ({ cardData }) => {
   const {
+    _id,
     group,
     image,
     word,
@@ -34,10 +34,8 @@ const BasicCard: FC<BasicCardProps> = ({ cardData }) => {
     wordTranslate,
     textExampleTranslate,
     textMeaningTranslate,
+    userWord,
   } = cardData;
-
-  // **** TO DO ***** join progress to original source
-  const { isDifficult, isStudied, progress, attempts, isInLearning } = test();
 
   const handledTextMeaning = handleTagInText(textMeaning);
   const handledTextExample = handleTagInText(textExample);
@@ -64,10 +62,7 @@ const BasicCard: FC<BasicCardProps> = ({ cardData }) => {
           word={word}
           color={colors[group]}
           isAuth={isAuth}
-          isDifficult={isDifficult}
-          isStudied={isStudied}
-          attempts={attempts}
-          isInLearning={isInLearning}
+          userWord={userWord}
         />
         <Typography
           gutterBottom
@@ -102,12 +97,12 @@ const BasicCard: FC<BasicCardProps> = ({ cardData }) => {
       </CardContent>
       {isAuth && (
         <AuthorizedCardContent
+          wordId={_id}
           color={colors[group]}
-          progress={progress}
-          isDifficult={isDifficult}
-          isStudied={isStudied}
+          progress={userWord?.optional.correctStreak as number}
+          isDifficult={userWord?.difficulty === 'hard'}
+          isStudied={userWord?.difficulty === 'studied'}
           group={group}
-          isInLearning={isInLearning}
         />
       )}
     </Card>
