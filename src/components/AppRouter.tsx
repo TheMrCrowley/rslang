@@ -44,7 +44,11 @@ const AppRouter = () => {
           }
         />
         <Route path="games" element={<GamesPage />} />
+<<<<<<< HEAD
         <Route path="sprint" element={<SprintPage />} />
+=======
+        <Route path="games/sprint" element={<SprintPage />} />
+>>>>>>> feat: start implement sprint game
         {/* <Route path="statistics" element={<StatisticsPage />} />
         <Route path="team" element={<TeamPage />} /> */}
         <Route path="*" element={<Typography align='center' variant='h2' sx={{ color: darkBgColor}}>Page not found</Typography>} />

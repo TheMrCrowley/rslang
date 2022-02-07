@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* eslint-disable jsx-a11y/media-has-caption */
 import { Box } from '@mui/material';
 import React, {
@@ -13,6 +14,19 @@ import React, {
 import { useDispatch } from 'react-redux';
 import { styled } from '@mui/material/styles';
 import CircularProgress from '@mui/material/CircularProgress';
+=======
+import { Box, Button } from '@mui/material';
+import React, { FC, useEffect, useMemo, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { styled } from '@mui/material/styles';
+import { RootState } from '../../redux/store';
+import { requestWordsAction } from '../../redux/store/reducers/wordsReducer';
+import BasicSelect from '../e-book/ui/select/BasicSelect';
+import {
+  Word,
+  WordWithCustomProps,
+} from '../../services/words/wordsServiceTypes';
+>>>>>>> feat: start implement sprint game
 import {
   correctAnswerAction,
   incorrectAnswerAction,
@@ -20,6 +34,7 @@ import {
 import requestMethodChoiser from '../../helpers/requestMethodChoiser';
 import useTypedSelector from '../../hooks/useTypedSelector';
 import getRandomNumber from '../../helpers/getRandomNumber';
+<<<<<<< HEAD
 import {
   compareAnswers,
   getQuestionItems,
@@ -36,6 +51,14 @@ import SprintMenu from './SprintMenu';
 import ResultLine from './ResultLine';
 import Results from './Results';
 import getAssetsUrl from '../../helpers/getAssetsUrl';
+=======
+import { compareAnswers, getQuestionItems } from './SprintModel';
+import SprintButton from './SprintButton';
+
+interface SprintPageProps {
+  words?: Word[] | WordWithCustomProps[];
+}
+>>>>>>> feat: start implement sprint game
 
 const StyledBox = styled(Box)`
   width: 100%;
@@ -45,6 +68,7 @@ const StyledBox = styled(Box)`
   align-items: center;
 `;
 
+<<<<<<< HEAD
 const StyledProgress = styled(CircularProgress)`
   color: #202026;
   width: 100px;
@@ -105,6 +129,32 @@ const SprintPage: FC = () => {
     if (authState.isAuth) {
       const { userId } = authState.userData;
       const { wordId } = currentQuestion;
+=======
+const SprintPage: FC<SprintPageProps> = ({ words }) => {
+  const [gameStatus, setGameStatus] = useState<'prepare' | 'run' | 'end'>(
+    'prepare'
+  );
+  const [group, setGroup] = useState(0);
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [correctAnswers, setCorrectAnswers] = useState(0);
+  const dispatch = useDispatch();
+  const { userWords } = useTypedSelector(store => store.userWords);
+  const authState = useTypedSelector(store => store.auth);
+  const wordsState = useSelector((store: RootState) => store.words);
+
+  const gameWords = useMemo(() => {
+    return getQuestionItems(wordsState.words);
+  }, [wordsState]);
+
+  const answerHandler = (answer: boolean) => {
+    const isCorrect = compareAnswers(
+      gameWords[currentQuestion].isCorrect,
+      answer
+    );
+    if (authState.isAuth) {
+      const { userId } = authState.userData;
+      const { wordId } = gameWords[currentQuestion];
+>>>>>>> feat: start implement sprint game
       const method = requestMethodChoiser(userWords, wordId);
       if (isCorrect) {
         dispatch(correctAnswerAction({ userId, wordId, method }));
@@ -113,6 +163,7 @@ const SprintPage: FC = () => {
       }
     }
     if (isCorrect) {
+<<<<<<< HEAD
       setCorrectAnswers(prev => [...prev, { ...currentQuestion }]);
       playHandler(correctAudio as MutableRefObject<HTMLAudioElement>);
     } else {
@@ -166,6 +217,42 @@ const SprintPage: FC = () => {
         <div>
           <div>{currentQuestion.word}</div>
           <div>{currentQuestion.answer}</div>
+=======
+      setCorrectAnswers(prev => prev + 1);
+    }
+    setCurrentQuestion(prev => prev + 1);
+  };
+
+  const startHandler = () => {
+    const randomPage = getRandomNumber(0, 29);
+    setCurrentQuestion(0);
+    dispatch(requestWordsAction({ group, page: randomPage }));
+  };
+
+  useEffect(() => {
+    if (gameWords.length) {
+      setGameStatus('run');
+    }
+  }, [gameWords]);
+
+  useMemo(() => {
+    if (currentQuestion >= gameWords.length - 1 && currentQuestion !== 0) {
+      setGameStatus('end');
+    }
+  }, [currentQuestion, gameWords]);
+  return (
+    <StyledBox>
+      {gameStatus === 'prepare' && (
+        <>
+          <BasicSelect setGroup={setGroup} group={group} />
+          <Button onClick={startHandler}>Start</Button>
+        </>
+      )}
+      {gameStatus === 'run' && (
+        <div>
+          <div>{gameWords[currentQuestion].word}</div>
+          <div>{gameWords[currentQuestion].answer}</div>
+>>>>>>> feat: start implement sprint game
           <SprintButton type="button" onClick={() => answerHandler(false)}>
             InCorrect
           </SprintButton>
@@ -174,6 +261,7 @@ const SprintPage: FC = () => {
           </SprintButton>
         </div>
       )}
+<<<<<<< HEAD
       {sprintGameState.gameStatus === SprintGameStatus.END && (
         <>
           <Results
@@ -198,6 +286,10 @@ const SprintPage: FC = () => {
             Restart
           </button>
         </>
+=======
+      {gameStatus === 'end' && (
+        <div>{`${correctAnswers}/${gameWords.length}`}</div>
+>>>>>>> feat: start implement sprint game
       )}
     </StyledBox>
   );
