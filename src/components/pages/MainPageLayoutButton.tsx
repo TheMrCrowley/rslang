@@ -3,8 +3,8 @@ import { Typography, Button, styled } from '@mui/material';
 import { darkBgColor } from '../e-book/cosnstants';
 
 interface MainPageLayoutButtonProps {
-  text: string;
-  onClick: () => void;
+  text?: string;
+  onClick?: () => void;
   color?: string;
 }
 

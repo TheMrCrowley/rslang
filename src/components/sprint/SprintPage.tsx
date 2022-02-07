@@ -25,7 +25,6 @@ import {
   getQuestionItems,
   SprintQuestionItem,
 } from './SprintModel';
-import SprintButton from './SprintButton';
 import {
   changeSprintStatusAction,
   requestSptintDataAction,
@@ -37,7 +36,7 @@ import ResultLine from './ResultLine';
 import Results from './Results';
 import getAssetsUrl from '../../helpers/getAssetsUrl';
 import MainPageLayoutButton from '../pages/MainPageLayoutButton';
-import { colors, darkColors } from '../e-book/cosnstants';
+import { colors } from '../e-book/cosnstants';
 
 const StyledBox = styled(Box)`
   width: 100%;
