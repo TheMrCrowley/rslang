@@ -100,6 +100,7 @@ function* incorrectAnswerWorker(data: InCorrectAnswerAction) {
       );
       yield call(UserWordsService.updateUserWord, userId, wordId, newWordBody);
     }
+    yield put(getUserWordsAction({ userId }));
   } catch (e) {
     console.log(e);
   }
