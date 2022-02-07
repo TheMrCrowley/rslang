@@ -1,0 +1,7 @@
+enum CreateUserWordMode {
+  CHANGE_DIFFICULTY = 'CHANGE_DIFFICULTY',
+  CORRECT_ANSWER = 'CORRECT_ANSWER',
+  INCORRECT_ANSWER = 'INCORRECT_ANSWER',
+}
+
+export default CreateUserWordMode;
