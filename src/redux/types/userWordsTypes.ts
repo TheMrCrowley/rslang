@@ -11,6 +11,7 @@ export interface UserWordsState {
 
 export enum UserWordsActionTypes {
   GET_USER_WORDS = 'GET_USER_WORDS',
+  GET_ALL_HARD_WORDS = 'GET_ALL_HARD_WORDS',
   SET_USER_WORDS = 'SET_USER_WORDS',
   SET_WORD_DIFFICULTY = 'SET_WORD_DIFFICULTY',
   CORRECT_ANSWER = 'CORRECT_ANSWER',
@@ -19,6 +20,11 @@ export enum UserWordsActionTypes {
 
 export interface GetUserWordsAction {
   type: UserWordsActionTypes.GET_USER_WORDS;
+  payload: RequestUserWordsData;
+}
+
+export interface GetHardWordsAction {
+  type: UserWordsActionTypes.GET_ALL_HARD_WORDS;
   payload: RequestUserWordsData;
 }
 
@@ -47,4 +53,5 @@ export type UserWordsAction =
   | SetUserWordsAction
   | SetWordDifficulty
   | CorrectAnswerAction
-  | InCorrectAnswerAction;
+  | InCorrectAnswerAction
+  | GetHardWordsAction;

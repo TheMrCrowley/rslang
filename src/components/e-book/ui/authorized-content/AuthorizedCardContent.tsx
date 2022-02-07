@@ -5,7 +5,11 @@ import ProgressBar from '../progress-bar/ProgressBar';
 import CardButton from '../button/CardButton';
 import { DIFFICULT_GROUP } from '../../cosnstants';
 import useTypedSelector from '../../../../hooks/useTypedSelector';
-import { setWordDifficultyAction } from '../../../../redux/store/reducers/userWordsReducer';
+import {
+  correctAnswerAction,
+  setWordDifficultyAction,
+} from '../../../../redux/store/reducers/userWordsReducer';
+import requestMethodChoiser from '../../../../helpers/requestMethodChoiser';
 
 interface AuthorizedCardContentProps {
   wordId: string;
@@ -14,7 +18,6 @@ interface AuthorizedCardContentProps {
   isDifficult: boolean;
   isStudied: boolean;
   group: number;
-  isInLearning: boolean;
 }
 
 const AuthorizedCardContent: FC<AuthorizedCardContentProps> = ({
@@ -23,17 +26,12 @@ const AuthorizedCardContent: FC<AuthorizedCardContentProps> = ({
   isDifficult,
   isStudied,
   group,
-  isInLearning,
   wordId,
 }) => {
   // console.log(isInLearning && !isStudied);
   const dispatch = useDispatch();
   const { userId } = useTypedSelector(store => store.auth.userData);
   const { userWords } = useTypedSelector(store => store.userWords);
-  const methodHandler = () => {
-    return userWords.find(word => word.wordId === wordId) ? 'PUT' : 'POST';
-  };
-  console.log(wordId);
   return (
     <Box
       sx={{
@@ -49,7 +47,7 @@ const AuthorizedCardContent: FC<AuthorizedCardContentProps> = ({
         !isDifficult && (
           <CardButton
             onClick={() => {
-              const method = methodHandler();
+              const method = requestMethodChoiser(userWords, wordId);
               dispatch(
                 setWordDifficultyAction({
                   difficulty: 'hard',
@@ -69,7 +67,7 @@ const AuthorizedCardContent: FC<AuthorizedCardContentProps> = ({
         <CardButton
           color={color}
           onClick={() => {
-            const method = methodHandler();
+            const method = requestMethodChoiser(userWords, wordId);
             dispatch(
               setWordDifficultyAction({
                 difficulty: 'studied',
@@ -83,7 +81,7 @@ const AuthorizedCardContent: FC<AuthorizedCardContentProps> = ({
           Studied
         </CardButton>
       )}
-      {isInLearning && !isStudied && (
+      {!isStudied && (
         <ProgressBar
           color={color}
           progress={progress}

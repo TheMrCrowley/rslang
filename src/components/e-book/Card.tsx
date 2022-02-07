@@ -103,7 +103,6 @@ const BasicCard: FC<BasicCardProps> = ({ cardData }) => {
           isDifficult={userWord?.difficulty === 'hard'}
           isStudied={userWord?.difficulty === 'studied'}
           group={group}
-          isInLearning={userWord?.difficulty === 'learning'}
         />
       )}
     </Card>

@@ -23,7 +23,7 @@ export interface RequestUserWordsData {
 export interface ChangeDifficultyRequest extends RequestUserWordsData {
   wordId: string;
   method: 'PUT' | 'POST';
-  difficulty: 'hard' | 'studied';
+  difficulty: 'hard' | 'studied' | 'learning';
 }
 
 export interface ChangeOptionalRequest extends RequestUserWordsData {

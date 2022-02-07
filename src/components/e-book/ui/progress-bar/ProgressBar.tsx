@@ -26,7 +26,7 @@ const ProgressBar: FC<ProgressBarProps> = ({
         <Box
           key={i}
           sx={{
-            backgroundColor: i <= progress ? color : EMPTY_ITEM_COLOR,
+            backgroundColor: i < progress ? color : EMPTY_ITEM_COLOR,
             width: '1em',
             height: '0.2em',
           }}
