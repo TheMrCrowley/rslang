@@ -37,7 +37,12 @@ const EBook: FC<EBookProps> = ({ isAuth, userId }) => {
   }, [page, group, isAuth, userWords]);
 
   return (
-    <Box sx={{ backgroundColor: colors[group] }}>
+    <Box
+      sx={{
+        backgroundColor: colors[group],
+        pt: '4.25em',
+      }}
+    >
       <BookBar setPage={setPage} setGroup={setGroup} group={group} />
       <CardList words={words} />
     </Box>

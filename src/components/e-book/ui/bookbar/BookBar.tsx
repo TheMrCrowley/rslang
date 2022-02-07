@@ -24,6 +24,7 @@ const BookBar: React.FC<ResponsiveAppBarProps> = ({
   setPage,
   setGroup,
   group,
+  children,
 }) => {
   return (
     <Container
@@ -32,7 +33,7 @@ const BookBar: React.FC<ResponsiveAppBarProps> = ({
         display: 'flex',
         justifyContent: 'space-evenly',
         alignItems: 'center',
-        height: '5em',
+        height: '4.5em',
       }}
     >
       <ThemeProvider theme={theme}>
@@ -44,6 +45,7 @@ const BookBar: React.FC<ResponsiveAppBarProps> = ({
           </Typography>
         )}
         <BasicSelect setGroup={setGroup} group={group} />
+        {children}
       </ThemeProvider>
     </Container>
   );
