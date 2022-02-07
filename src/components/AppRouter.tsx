@@ -12,6 +12,8 @@ import LoginPage from './pages/LoginPage';
 import RegistrationPage from './pages/RegistrationPage';
 import DemoHomePage, { darkBgColor } from './pages/DemoHomePage';
 import { Typography } from '@mui/material';
+import GamesPage from './main-page/GamesPage';
+import SprintPage from './sprint/SprintPage';
 
 const AppRouter = () => {
   const dispatch = useDispatch();
@@ -41,8 +43,9 @@ const AppRouter = () => {
             />
           }
         />
-        {/* <Route path="games" element={<GamesPage />} />
-        <Route path="statistics" element={<StatisticsPage />} />
+        <Route path="games" element={<GamesPage />} />
+        <Route path="games/sprint" element={<SprintPage />} />
+        {/* <Route path="statistics" element={<StatisticsPage />} />
         <Route path="team" element={<TeamPage />} /> */}
         <Route path="*" element={<Typography align='center' variant='h2' sx={{ color: darkBgColor}}>Page not found</Typography>} />
       </Route>
