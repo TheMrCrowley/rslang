@@ -11,6 +11,8 @@ import Layout from './main-page/Layout';
 import LoginPage from './pages/LoginPage';
 import RegistrationPage from './pages/RegistrationPage';
 import DemoHomePage from './pages/DemoHomePage';
+import GamesPage from './main-page/GamesPage';
+import SprintPage from './sprint/SprintPage';
 
 const AppRouter = () => {
   const dispatch = useDispatch();
@@ -40,8 +42,9 @@ const AppRouter = () => {
             />
           }
         />
-        {/* <Route path="games" element={<GamesPage />} />
-        <Route path="statistics" element={<StatisticsPage />} />
+        <Route path="games" element={<GamesPage />} />
+        <Route path="games/sprint" element={<SprintPage />} />
+        {/* <Route path="statistics" element={<StatisticsPage />} />
         <Route path="team" element={<TeamPage />} /> */}
         <Route path="*" element={<h1>Not found</h1>} />
       </Route>
