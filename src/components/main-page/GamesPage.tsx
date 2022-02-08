@@ -27,7 +27,7 @@ const GamesPage = () => {
       <StyledLink to="/sprint">
         <StyledButton>Sprint</StyledButton>
       </StyledLink>
-      <StyledLink to="sprint">
+      <StyledLink to="/audiocall">
         <StyledButton>Audiocall</StyledButton>
       </StyledLink>
     </StyledBox>

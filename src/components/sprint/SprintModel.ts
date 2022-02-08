@@ -56,6 +56,9 @@ export const getQuestionItems = (words: Word[]): SprintQuestionItem[] => {
   return shuffle<SprintQuestionItem>([...correct, ...incorrect]);
 };
 
-export const compareAnswers = (expect: boolean, actual: boolean): boolean => {
+export const compareAnswers = (
+  expect: boolean | string,
+  actual: boolean | string
+): boolean => {
   return expect === actual;
 };

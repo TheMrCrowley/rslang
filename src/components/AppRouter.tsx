@@ -14,6 +14,7 @@ import DemoHomePage from './pages/DemoHomePage';
 import GamesPage from './main-page/GamesPage';
 import SprintPage from './sprint/SprintPage';
 import { requestStatisticAction } from '../redux/store/reducers/statisticReducer';
+import AudioCallPage from './audiocall/AudioCallPage';
 
 const AppRouter = () => {
   const dispatch = useDispatch();
@@ -46,6 +47,7 @@ const AppRouter = () => {
         />
         <Route path="games" element={<GamesPage />} />
         <Route path="sprint" element={<SprintPage />} />
+        <Route path="audiocall" element={<AudioCallPage />} />
         {/* <Route path="statistics" element={<StatisticsPage />} />
         <Route path="team" element={<TeamPage />} /> */}
         <Route path="*" element={<h1>Not found</h1>} />
