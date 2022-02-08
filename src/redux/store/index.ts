@@ -5,6 +5,7 @@ import { authReducer } from './reducers/authReducer';
 import { requestReducer } from './reducers/requestReducer';
 import rootWatcher from '../saga';
 import { userWordsReducer } from './reducers/userWordsReducer';
+import { sprintGameReducer } from './reducers/sprintGameReducer';
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -13,6 +14,7 @@ const rootReducer = combineReducers({
   words: wordsReducer,
   request: requestReducer,
   userWords: userWordsReducer,
+  sprintGame: sprintGameReducer,
 });
 
 const store = createStore(rootReducer, applyMiddleware(sagaMiddleware));
