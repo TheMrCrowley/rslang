@@ -24,7 +24,7 @@ const StyledLink = styled(Link)`
 const GamesPage = () => {
   return (
     <StyledBox>
-      <StyledLink to="sprint">
+      <StyledLink to="/sprint">
         <StyledButton>Sprint</StyledButton>
       </StyledLink>
       <StyledLink to="sprint">
