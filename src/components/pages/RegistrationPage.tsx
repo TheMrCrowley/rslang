@@ -1,15 +1,10 @@
-import { Button, FormGroup, TextField } from '@mui/material';
+import { Button, TextField, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import SendIcon from '@mui/icons-material/Send';
-import { styled } from '@mui/material/styles';
 import { registrationAction } from '../../redux/store/reducers/authReducer';
 import { UserRegistrationData } from '../../services/types';
-
-const StyledFormGroup = styled(FormGroup)`
-  width: 50%;
-  row-gap: 1rem;
-`;
+import AuthPageContainer from '../ui/AuthPageContainer';
 
 const RegistrationPage = () => {
   const [name, setName] = useState('');
@@ -51,7 +46,9 @@ const RegistrationPage = () => {
     password,
   });
   return (
-    <StyledFormGroup>
+    <AuthPageContainer>
+      <Typography variant="h4">Sign up</Typography>
+      <Typography variant="h5">It&apos;s quick and easy</Typography>
       <TextField
         error={invalidName}
         helperText={invalidName && 'Please, enter the name!'}
@@ -104,7 +101,7 @@ const RegistrationPage = () => {
       >
         Registration
       </Button>
-    </StyledFormGroup>
+    </AuthPageContainer>
   );
 };
 

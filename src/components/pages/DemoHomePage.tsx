@@ -1,4 +1,4 @@
-import { Box, Container, Typography } from '@mui/material';
+import { Box, Typography, ButtonGroup, styled } from '@mui/material';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -8,6 +8,26 @@ import EmojiNatureIcon from '@mui/icons-material/EmojiNature';
 import { RootState } from '../../redux/store';
 import Bg from '../../assets/Untitled.png';
 import MainPageLayoutButton from './MainPageLayoutButton';
+
+// const StyledButton = styled(Button)`
+//   background-color: #fecb00;
+//   border: 2px solid transparent;
+//   font-size: 24px;
+//   &:hover {
+//     background-color: #202026;
+//     color: #fecb00;
+//     border: 2px solid #fecb00;
+//   }
+// `;
+
+// const SyledMainPageWrpper = styled(Box)`
+
+// `;
+
+const StyledButtonGroup = styled(ButtonGroup)`
+  display: flex;
+  column-gap: 1rem;
+`;
 
 const DemoHomePage = () => {
   const navigate = useNavigate();
@@ -115,6 +135,15 @@ const DemoHomePage = () => {
           Create account and get
           <br /> more options!
         </Typography>
+        <StyledButtonGroup>
+          {!isAuth && (
+            <MainPageLayoutButton
+              onClick={() => navigate('/registration')}
+              text="Registration"
+            />
+          )}
+          <MainPageLayoutButton text="About App" />
+        </StyledButtonGroup>
       </Box>
     </Box>
   );
