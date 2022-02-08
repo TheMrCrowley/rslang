@@ -7,11 +7,8 @@ export interface SprintQuestionItem {
   word: string;
   answer: string;
   isCorrect: boolean;
-<<<<<<< HEAD
   audio: string;
   translate: string;
-=======
->>>>>>> feat: start implement sprint game
 }
 
 const getCorrectQuestions = (words: Word[]): SprintQuestionItem[] => {
@@ -19,13 +16,9 @@ const getCorrectQuestions = (words: Word[]): SprintQuestionItem[] => {
     wordId: wordItem.id,
     word: wordItem.word,
     answer: wordItem.wordTranslate,
-<<<<<<< HEAD
     audio: wordItem.audio,
     isCorrect: true,
     translate: wordItem.wordTranslate,
-=======
-    isCorrect: true,
->>>>>>> feat: start implement sprint game
   }));
 };
 
@@ -45,13 +38,9 @@ const getIncorrectQuestions = (
       wordId: wordItem.id,
       word: wordItem.word,
       answer: fakeAnswer,
-<<<<<<< HEAD
       audio: wordItem.audio,
       isCorrect: false,
       translate: wordItem.wordTranslate,
-=======
-      isCorrect: false,
->>>>>>> feat: start implement sprint game
     };
   });
 };
@@ -67,6 +56,9 @@ export const getQuestionItems = (words: Word[]): SprintQuestionItem[] => {
   return shuffle<SprintQuestionItem>([...correct, ...incorrect]);
 };
 
-export const compareAnswers = (expect: boolean, actual: boolean): boolean => {
+export const compareAnswers = (
+  expect: boolean | string,
+  actual: boolean | string
+): boolean => {
   return expect === actual;
 };

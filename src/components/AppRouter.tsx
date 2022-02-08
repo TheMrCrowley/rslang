@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
 import useTypedSelector from '../hooks/useTypedSelector';
@@ -10,10 +10,11 @@ import EBook from './e-book/EBook';
 import Layout from './main-page/Layout';
 import LoginPage from './pages/LoginPage';
 import RegistrationPage from './pages/RegistrationPage';
-import DemoHomePage, { darkBgColor } from './pages/DemoHomePage';
-import { Typography } from '@mui/material';
+import DemoHomePage from './pages/DemoHomePage';
 import GamesPage from './main-page/GamesPage';
 import SprintPage from './sprint/SprintPage';
+import { requestStatisticAction } from '../redux/store/reducers/statisticReducer';
+import AudioCallPage from './audiocall/AudioCallPage';
 
 const AppRouter = () => {
   const dispatch = useDispatch();
@@ -23,9 +24,10 @@ const AppRouter = () => {
       dispatch(checkAuthAction());
     }
   }, []);
-  useEffect(() => {
+  useMemo(() => {
     if (authState.isAuth) {
       dispatch(getUserWordsAction({ userId: authState.userData.userId }));
+      dispatch(requestStatisticAction({ userId: authState.userData.userId }));
     }
   }, [authState.isAuth]);
   return (
@@ -44,14 +46,11 @@ const AppRouter = () => {
           }
         />
         <Route path="games" element={<GamesPage />} />
-<<<<<<< HEAD
         <Route path="sprint" element={<SprintPage />} />
-=======
-        <Route path="games/sprint" element={<SprintPage />} />
->>>>>>> feat: start implement sprint game
+        <Route path="audiocall" element={<AudioCallPage />} />
         {/* <Route path="statistics" element={<StatisticsPage />} />
         <Route path="team" element={<TeamPage />} /> */}
-        <Route path="*" element={<Typography align='center' variant='h2' sx={{ color: darkBgColor}}>Page not found</Typography>} />
+        <Route path="*" element={<h1>Not found</h1>} />
       </Route>
     </Routes>
   );

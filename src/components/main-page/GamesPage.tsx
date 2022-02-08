@@ -24,14 +24,10 @@ const StyledLink = styled(Link)`
 const GamesPage = () => {
   return (
     <StyledBox>
-<<<<<<< HEAD
       <StyledLink to="/sprint">
-=======
-      <StyledLink to="sprint">
->>>>>>> feat: start implement sprint game
         <StyledButton>Sprint</StyledButton>
       </StyledLink>
-      <StyledLink to="sprint">
+      <StyledLink to="/audiocall">
         <StyledButton>Audiocall</StyledButton>
       </StyledLink>
     </StyledBox>
