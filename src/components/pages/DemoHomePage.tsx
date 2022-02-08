@@ -19,7 +19,7 @@ const DemoHomePage = () => {
         display: 'flex',
         flexDirection: 'row',
         flexWrap: 'wrap',
-        minHeight: '100vh',
+        height: '100vh',
         backgroundImage: `url(${Bg})`,
         backgroundSize: 'cover',
       }}
@@ -30,7 +30,6 @@ const DemoHomePage = () => {
           flexDirection: 'column',
           justifyContent: 'space-around',
           alignItems: 'center',
-          // alignItems: 'flex-start',
           p: '5em 0 0 10em',
         }}
       >
