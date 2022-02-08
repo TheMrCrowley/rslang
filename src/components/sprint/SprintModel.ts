@@ -7,6 +7,8 @@ export interface SprintQuestionItem {
   word: string;
   answer: string;
   isCorrect: boolean;
+  audio: string;
+  translate: string;
 }
 
 const getCorrectQuestions = (words: Word[]): SprintQuestionItem[] => {
@@ -14,7 +16,9 @@ const getCorrectQuestions = (words: Word[]): SprintQuestionItem[] => {
     wordId: wordItem.id,
     word: wordItem.word,
     answer: wordItem.wordTranslate,
+    audio: wordItem.audio,
     isCorrect: true,
+    translate: wordItem.wordTranslate,
   }));
 };
 
@@ -34,7 +38,9 @@ const getIncorrectQuestions = (
       wordId: wordItem.id,
       word: wordItem.word,
       answer: fakeAnswer,
+      audio: wordItem.audio,
       isCorrect: false,
+      translate: wordItem.wordTranslate,
     };
   });
 };
