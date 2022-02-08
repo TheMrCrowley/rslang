@@ -136,11 +136,11 @@ const AudioCallPage = () => {
       playHandler(inCorrectAudio);
     }
     // setTimeout(() => {
-      if (gameQuestions.length) {
-        nextQuestion();
-      } else {
-        showResults();
-      }
+    if (gameQuestions.length) {
+      nextQuestion();
+    } else {
+      showResults();
+    }
     // }, 500);
   };
 
