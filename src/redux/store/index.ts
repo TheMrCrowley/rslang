@@ -7,6 +7,7 @@ import rootWatcher from '../saga';
 import { userWordsReducer } from './reducers/userWordsReducer';
 import { sprintGameReducer } from './reducers/sprintGameReducer';
 import { statisticReducer } from './reducers/statisticReducer';
+import { audioCallGameReducer } from './reducers/audioCallReducer';
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -17,6 +18,7 @@ const rootReducer = combineReducers({
   userWords: userWordsReducer,
   sprintGame: sprintGameReducer,
   statistic: statisticReducer,
+  audioCallGame: audioCallGameReducer,
 });
 
 const store = createStore(rootReducer, applyMiddleware(sagaMiddleware));
