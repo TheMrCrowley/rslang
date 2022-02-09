@@ -79,7 +79,7 @@ const DemoHomePage = () => {
           display: 'flex',
           flexFlow: 'row wrap',
           justifyContent: 'space-evenly',
-          rowGap: '1em',
+          gap: '1em',
         }}
       >
         <MainPageLayoutButton onClick={() => navigate('/book')} text="E-book">
