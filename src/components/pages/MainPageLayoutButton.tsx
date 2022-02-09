@@ -11,6 +11,7 @@ const StyledMainPageLayuotButton = styled(Button)`
   padding: 1em 1em;
   border-radius: 3em;
   background-color: #14cba8;
+  white-space: nowrap;
   &:hover {
     background-color: #ffffff;
     color: #14cba8;
