@@ -1,10 +1,21 @@
 import React, { FC } from 'react';
-import { Typography, Box } from '@mui/material';
+import { Typography, Button, styled } from '@mui/material';
 
 interface MainPageLayoutButtonProps {
   text: string;
   onClick: () => void;
 }
+
+const StyledMainPageLayuotButton = styled(Button)`
+  color: #ffffff;
+  padding: 1em 1em;
+  border-radius: 3em;
+  background-color: #14cba8;
+  &:hover {
+    background-color: #ffffff;
+    color: #14cba8;
+  }
+`;
 
 const MainPageLayoutButton: FC<MainPageLayoutButtonProps> = ({
   children,
@@ -12,18 +23,7 @@ const MainPageLayoutButton: FC<MainPageLayoutButtonProps> = ({
   onClick,
 }) => {
   return (
-    <Box
-      onClick={onClick}
-      sx={{
-        display: 'flex',
-        columnGap: '1em',
-        color: '#ffffff',
-        p: '1.5em 2em',
-        borderRadius: '3em',
-        backgroundColor: '#14cba8',
-        cursor: 'pointer',
-      }}
-    >
+    <StyledMainPageLayuotButton onClick={onClick}>
       {children}
       <Typography
         variant="h4"
@@ -33,7 +33,7 @@ const MainPageLayoutButton: FC<MainPageLayoutButtonProps> = ({
       >
         {text}
       </Typography>
-    </Box>
+    </StyledMainPageLayuotButton>
   );
 };
 

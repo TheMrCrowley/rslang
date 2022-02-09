@@ -3,6 +3,7 @@ import wordsWatcher from './wordsSaga';
 import authWatcher from './authSaga';
 import userWordsWatcher from './userWordsSaga';
 import sprintGameWatcher from './sprintSaga';
+import statisticWatcher from './statisticSaga';
 
 function* rootWatcher() {
   yield all([
@@ -10,6 +11,7 @@ function* rootWatcher() {
     authWatcher(),
     userWordsWatcher(),
     sprintGameWatcher(),
+    statisticWatcher(),
   ]);
 }
 

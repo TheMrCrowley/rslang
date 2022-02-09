@@ -20,12 +20,12 @@ const theme = createTheme({
 
 ReactDOM.render(
   <BrowserRouter>
-    <ThemeProvider theme={theme}>
+    {/* <ThemeProvider theme={theme}> */}
       <Provider store={store}>
         <CssBaseline />
         <App />
       </Provider>
-    </ThemeProvider>
+    {/* </ThemeProvider> */}
   </BrowserRouter>,
   document.getElementById('root')
 );

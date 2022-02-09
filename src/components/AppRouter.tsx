@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
 import useTypedSelector from '../hooks/useTypedSelector';
@@ -13,6 +13,7 @@ import RegistrationPage from './pages/RegistrationPage';
 import DemoHomePage from './pages/DemoHomePage';
 import GamesPage from './main-page/GamesPage';
 import SprintPage from './sprint/SprintPage';
+import { requestStatisticAction } from '../redux/store/reducers/statisticReducer';
 
 const AppRouter = () => {
   const dispatch = useDispatch();
@@ -22,9 +23,10 @@ const AppRouter = () => {
       dispatch(checkAuthAction());
     }
   }, []);
-  useEffect(() => {
+  useMemo(() => {
     if (authState.isAuth) {
       dispatch(getUserWordsAction({ userId: authState.userData.userId }));
+      dispatch(requestStatisticAction({ userId: authState.userData.userId }));
     }
   }, [authState.isAuth]);
   return (

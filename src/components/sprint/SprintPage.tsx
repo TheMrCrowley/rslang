@@ -107,9 +107,13 @@ const SprintPage: FC = () => {
       const { wordId } = currentQuestion;
       const method = requestMethodChoiser(userWords, wordId);
       if (isCorrect) {
-        dispatch(correctAnswerAction({ userId, wordId, method }));
+        dispatch(
+          correctAnswerAction({ userId, wordId, method, from: 'SPRINT' })
+        );
       } else {
-        dispatch(incorrectAnswerAction({ userId, wordId, method }));
+        dispatch(
+          incorrectAnswerAction({ userId, wordId, method, from: 'SPRINT' })
+        );
       }
     }
     if (isCorrect) {
