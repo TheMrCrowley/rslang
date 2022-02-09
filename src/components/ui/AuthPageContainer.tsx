@@ -1,24 +1,28 @@
 import { Box, FormGroup } from '@mui/material';
 import React from 'react';
+import { mainBgColor } from '../pages/DemoHomePage';
 
 const AuthPageContainer: React.FC = ({ children }) => {
   return (
     <Box
       sx={{
+        flex: '1',
         display: 'flex',
         justifyContent: 'space-around',
         alignItems: 'center',
-        height: '100%',
+        pl: '3.5em',
+        bgcolor: mainBgColor,
       }}
     >
       <FormGroup
         sx={{
+          flexBasis: '400px',
           display: 'flex',
           flexDirection: 'column',
           gap: '1em',
-          bgcolor: '#64ffda',
           p: '2em',
           borderRadius: '2em',
+          bgcolor: 'white',
         }}
       >
         {children}
