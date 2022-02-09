@@ -41,6 +41,7 @@ const EBook: FC<EBookProps> = ({ isAuth, userId }) => {
       sx={{
         backgroundColor: colors[group],
         pt: '4.25em',
+        pl: '3.5rem',
       }}
     >
       <BookBar setPage={setPage} setGroup={setGroup} group={group} />
