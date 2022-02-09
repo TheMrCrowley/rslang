@@ -11,6 +11,8 @@ const Layout = () => {
         sx={{
           display: 'flex',
           flexDirection: 'column',
+          alignItems: 'stretch',
+          justifyContent: 'space-around',
           minHeight: 'calc(100vh - 4em)',
         }}
       >

@@ -28,9 +28,9 @@ const Footer = () => {
         alignItems: 'center',
         justifyContent: 'space-evenly',
         height: '4em',
-        color: window.location.pathname === '/home' ? 'white' : 'black',
+        color: window.location.pathname !== '/book' ? 'black' : 'white',
         backgroundColor:
-          window.location.pathname === '/home' ? darkBgColor : 'white',
+          window.location.pathname !== '/book' ? darkBgColor : 'white',
         mb: 'auto',
       }}
     >
