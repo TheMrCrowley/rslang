@@ -1,78 +1,75 @@
-import UserWordsService from '../services/user-words/userWordsService';
-import { UserWord } from '../services/user-words/userWordsServiceTypes';
-import CreateUserWordMode from './helpersTypes';
+import {
+  UserWord,
+  UserWordResponse,
+} from '../services/user-words/userWordsServiceTypes';
 
-const updateUserWordBody = async (
-  userId: string,
-  wordId: string,
-  mode:
-    | CreateUserWordMode.CHANGE_DIFFICULTY
-    | CreateUserWordMode.CORRECT_ANSWER
-    | CreateUserWordMode.INCORRECT_ANSWER,
-  difficulty?: string,
-  from?: 'SPRINT' | 'AUDIOCALL'
-): Promise<UserWord> => {
-  const oldUserBody = await UserWordsService.getOneUserWord(userId, wordId);
-  if (mode === CreateUserWordMode.CHANGE_DIFFICULTY && difficulty) {
-    return {
-      difficulty,
-      optional: { ...oldUserBody.optional },
-    };
-  }
-  if (mode === CreateUserWordMode.CORRECT_ANSWER) {
-    const newUserWord: UserWord = {
-      difficulty: oldUserBody.difficulty,
-      optional: {
-        ...oldUserBody.optional,
-        totalAnswers: oldUserBody.optional.totalAnswers + 1,
-        totalCorrectAnswers: oldUserBody.optional.totalCorrectAnswers + 1,
-        correctStreak: oldUserBody.optional.correctStreak + 1,
-      },
-    };
-    // change difficulty if streak success
-    if (
-      newUserWord.difficulty === 'hard' &&
-      newUserWord.optional.correctStreak === 5
-    ) {
-      newUserWord.difficulty = 'studied';
-    }
-    if (
-      newUserWord.difficulty === 'learning' &&
-      newUserWord.optional.correctStreak === 3
-    ) {
-      newUserWord.difficulty = 'studied';
-    }
-    if (from === 'SPRINT') {
-      newUserWord.optional.sprint = true;
-    }
-    if (from === 'AUDIOCALL') {
-      newUserWord.optional.audiocall = true;
-    }
-    return newUserWord;
-  }
-  if (mode === CreateUserWordMode.INCORRECT_ANSWER) {
-    const newUserWord: UserWord = {
-      difficulty: oldUserBody.difficulty,
-      optional: {
-        ...oldUserBody.optional,
-        totalAnswers: oldUserBody.optional.totalAnswers + 1,
-        totalCorrectAnswers: oldUserBody.optional.totalCorrectAnswers,
-        correctStreak: 0,
-      },
-    };
-    // change difficulty if fuckup
-    if (newUserWord.difficulty === 'studied') {
-      newUserWord.difficulty = 'learning';
-    }
-    if (from === 'SPRINT') {
-      newUserWord.optional.sprint = true;
-    }
-    if (from === 'AUDIOCALL') {
-      newUserWord.optional.audiocall = true;
-    }
-    return newUserWord;
-  }
-  return oldUserBody;
+export const updateUserWordsState = (
+  words: UserWordResponse[],
+  word: UserWordResponse
+): UserWordResponse[] => {
+  const wordsWithoutWord = words.filter(
+    wordItem => wordItem.wordId !== word.wordId
+  );
+  return [...wordsWithoutWord, { ...word }];
 };
 
-export default updateUserWordBody;
+export const changeToHard = (word: UserWordResponse): UserWord => {
+  return {
+    difficulty: 'hard',
+    optional: {
+      ...word.optional,
+    },
+  };
+};
+
+export const changeToStudied = (word: UserWordResponse): UserWord => {
+  return {
+    difficulty: 'studied',
+    optional: {
+      ...word.optional,
+    },
+  };
+};
+
+export const updateAfterCorrectAnswer = (word: UserWordResponse): UserWord => {
+  const updatedUserWord = {
+    difficulty: word.difficulty,
+    optional: {
+      ...word.optional,
+      totalAnswers: word.optional.totalAnswers + 1,
+      totalCorrectAnswers: word.optional.totalCorrectAnswers + 1,
+      correctStreak: word.optional.correctStreak + 1,
+    },
+  };
+  if (
+    updatedUserWord.difficulty === 'hard' &&
+    updatedUserWord.optional.correctStreak === 5
+  ) {
+    updatedUserWord.difficulty = 'studied';
+  }
+  if (
+    updatedUserWord.difficulty === 'learning' &&
+    updatedUserWord.optional.correctStreak === 3
+  ) {
+    updatedUserWord.difficulty = 'studied';
+  }
+  return updatedUserWord;
+};
+
+export const updateAfterIncorrectAnswer = (
+  word: UserWordResponse
+): UserWord => {
+  const updatedUserWord: UserWord = {
+    difficulty: word.difficulty,
+    optional: {
+      ...word.optional,
+      totalAnswers: word.optional.totalAnswers + 1,
+      totalCorrectAnswers: word.optional.totalCorrectAnswers,
+      correctStreak: 0,
+    },
+  };
+  if (updatedUserWord.difficulty === 'studied') {
+    updatedUserWord.difficulty = 'learning';
+  }
+  return updatedUserWord;
+};

@@ -47,9 +47,9 @@ const AppRouter = () => {
             />
           }
         />
-        <Route path="games" element={<GamesPage />} />
-        <Route path="sprint" element={<SprintPage />} />
-        <Route path="audiocall" element={<AudioCallPage />} />
+        {/* <Route path="games" element={<GamesPage />} /> */}
+        {/* <Route path="sprint" element={<SprintPage />} /> */}
+        {/* <Route path="audiocall" element={<AudioCallPage />} /> */}
         {/* <Route path="statistics" element={<StatisticsPage />} />
         <Route path="team" element={<TeamPage />} /> */}
         <Route

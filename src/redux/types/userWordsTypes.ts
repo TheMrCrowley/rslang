@@ -1,6 +1,4 @@
 import {
-  ChangeDifficultyRequest,
-  ChangeOptionalRequest,
   RequestUserWordsData,
   UserWordResponse,
 } from '../../services/user-words/userWordsServiceTypes';
@@ -11,20 +9,16 @@ export interface UserWordsState {
 
 export enum UserWordsActionTypes {
   GET_USER_WORDS = 'GET_USER_WORDS',
-  GET_ALL_HARD_WORDS = 'GET_ALL_HARD_WORDS',
   SET_USER_WORDS = 'SET_USER_WORDS',
-  SET_WORD_DIFFICULTY = 'SET_WORD_DIFFICULTY',
-  CORRECT_ANSWER = 'CORRECT_ANSWER',
-  INCORRECT_ANSWER = 'INCORRECT_ANSWER',
+  CREATE_HARD_USER_WORD = 'CREATE_HARD_USER_WORD',
+  CREATE_STUDIED_USER_WORD = 'CREATE_STUDIED_USER_WORD',
+  SET_ONE_USER_WORD = 'SET_ONE_USER_WORD',
+  CHANGE_TO_HARD = 'CHANGE_TO_HARD',
+  CHANGE_TO_STUDIED = 'CHANGE_TO_STUDIED',
 }
 
 export interface GetUserWordsAction {
   type: UserWordsActionTypes.GET_USER_WORDS;
-  payload: RequestUserWordsData;
-}
-
-export interface GetHardWordsAction {
-  type: UserWordsActionTypes.GET_ALL_HARD_WORDS;
   payload: RequestUserWordsData;
 }
 
@@ -33,25 +27,44 @@ export interface SetUserWordsAction {
   payload: UserWordResponse[];
 }
 
-export interface SetWordDifficulty {
-  type: UserWordsActionTypes.SET_WORD_DIFFICULTY;
-  payload: ChangeDifficultyRequest;
+export interface CreateHardUserWordAction {
+  type: UserWordsActionTypes.CREATE_HARD_USER_WORD;
+  payload: { userId: string; wordId: string };
 }
 
-export interface CorrectAnswerAction {
-  type: UserWordsActionTypes.CORRECT_ANSWER;
-  payload: ChangeOptionalRequest;
+export interface CreateStudiedUserWordAction {
+  type: UserWordsActionTypes.CREATE_STUDIED_USER_WORD;
+  payload: { userId: string; wordId: string };
 }
 
-export interface InCorrectAnswerAction {
-  type: UserWordsActionTypes.INCORRECT_ANSWER;
-  payload: ChangeOptionalRequest;
+export interface SetOneUserWordAction {
+  type: UserWordsActionTypes.SET_ONE_USER_WORD;
+  payload: UserWordResponse;
+}
+
+export interface ChangeToHardAction {
+  type: UserWordsActionTypes.CHANGE_TO_HARD;
+  payload: {
+    userId: string;
+    wordId: string;
+    words: UserWordResponse[];
+  };
+}
+
+export interface ChangeToStudiedAction {
+  type: UserWordsActionTypes.CHANGE_TO_STUDIED;
+  payload: {
+    userId: string;
+    wordId: string;
+    words: UserWordResponse[];
+  };
 }
 
 export type UserWordsAction =
   | GetUserWordsAction
   | SetUserWordsAction
-  | SetWordDifficulty
-  | CorrectAnswerAction
-  | InCorrectAnswerAction
-  | GetHardWordsAction;
+  | ChangeToHardAction
+  | ChangeToStudiedAction
+  | SetOneUserWordAction
+  | CreateHardUserWordAction
+  | CreateStudiedUserWordAction;

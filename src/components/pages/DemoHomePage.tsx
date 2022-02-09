@@ -13,7 +13,6 @@ import { darkBgColor, lightBgColor } from '../e-book/cosnstants';
 const DemoHomePage = () => {
   const navigate = useNavigate();
   const { isAuth } = useSelector((store: RootState) => store.auth);
-
   return (
     <Box
       sx={{

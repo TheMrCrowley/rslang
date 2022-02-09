@@ -5,8 +5,6 @@ import {
   UserWordsState,
 } from '../../types/userWordsTypes';
 import {
-  ChangeDifficultyRequest,
-  ChangeOptionalRequest,
   RequestUserWordsData,
   UserWordResponse,
 } from '../../../services/user-words/userWordsServiceTypes';
@@ -22,12 +20,8 @@ export const userWordsReducer = (
   switch (action.type) {
     case UserWordsActionTypes.GET_USER_WORDS:
       return state;
-    case UserWordsActionTypes.SET_WORD_DIFFICULTY:
-      return state;
-    case UserWordsActionTypes.CORRECT_ANSWER:
-      return state;
-    case UserWordsActionTypes.INCORRECT_ANSWER:
-      return state;
+    case UserWordsActionTypes.SET_ONE_USER_WORD:
+      return { userWords: [...state.userWords, action.payload] };
     case UserWordsActionTypes.SET_USER_WORDS:
       return { userWords: [...action.payload] };
     default:
@@ -43,23 +37,43 @@ export const setUserWordsAction = (
   payload: UserWordResponse[]
 ): UserWordsAction => ({ type: UserWordsActionTypes.SET_USER_WORDS, payload });
 
-export const correctAnswerAction = (
-  payload: ChangeOptionalRequest
-): UserWordsAction => ({
-  type: UserWordsActionTypes.CORRECT_ANSWER,
+export const createHardUserWordAction = (payload: {
+  userId: string;
+  wordId: string;
+}): UserWordsAction => ({
+  type: UserWordsActionTypes.CREATE_HARD_USER_WORD,
   payload,
 });
 
-export const incorrectAnswerAction = (
-  payload: ChangeOptionalRequest
-): UserWordsAction => ({
-  type: UserWordsActionTypes.INCORRECT_ANSWER,
+export const createStudiedUserWordAction = (payload: {
+  userId: string;
+  wordId: string;
+}): UserWordsAction => ({
+  type: UserWordsActionTypes.CREATE_STUDIED_USER_WORD,
   payload,
 });
 
-export const setWordDifficultyAction = (
-  payload: ChangeDifficultyRequest
+export const setOneUserWordAction = (
+  payload: UserWordResponse
 ): UserWordsAction => ({
-  type: UserWordsActionTypes.SET_WORD_DIFFICULTY,
+  type: UserWordsActionTypes.SET_ONE_USER_WORD,
+  payload,
+});
+
+export const changeToHardAction = (payload: {
+  userId: string;
+  wordId: string;
+  words: UserWordResponse[];
+}): UserWordsAction => ({
+  type: UserWordsActionTypes.CHANGE_TO_HARD,
+  payload,
+});
+
+export const changeToStudiedAction = (payload: {
+  userId: string;
+  wordId: string;
+  words: UserWordResponse[];
+}): UserWordsAction => ({
+  type: UserWordsActionTypes.CHANGE_TO_STUDIED,
   payload,
 });

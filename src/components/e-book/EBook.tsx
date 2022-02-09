@@ -34,7 +34,7 @@ const EBook: FC<EBookProps> = ({ isAuth, userId }) => {
     } else {
       dispatch(requestWordsAction({ group, page }));
     }
-  }, [page, group, isAuth, userWords]);
+  }, [page, group, isAuth, userWords, dispatch, userId]);
 
   return (
     <Box

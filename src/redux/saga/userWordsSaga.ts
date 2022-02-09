@@ -1,9 +1,10 @@
 import { call, put, takeEvery } from 'redux-saga/effects';
 import {
-  CorrectAnswerAction,
+  ChangeToHardAction,
+  ChangeToStudiedAction,
+  CreateHardUserWordAction,
+  CreateStudiedUserWordAction,
   GetUserWordsAction,
-  InCorrectAnswerAction,
-  SetWordDifficulty,
   UserWordsActionTypes,
 } from '../types/userWordsTypes';
 import UserWordsService from '../../services/user-words/userWordsService';
@@ -13,11 +14,19 @@ import {
 } from '../../services/user-words/userWordsServiceTypes';
 import {
   getUserWordsAction,
+  setOneUserWordAction,
   setUserWordsAction,
 } from '../store/reducers/userWordsReducer';
-import createUserWordBody from '../../helpers/createUserWordBody';
 import CreateUserWordMode from '../../helpers/helpersTypes';
-import updateUserWordBody from '../../helpers/updateUserWordBody';
+import {
+  createHardUserWord,
+  createStudiedUserWord,
+} from '../../helpers/createUserWordBody';
+import {
+  changeToHard,
+  changeToStudied,
+  updateUserWordsState,
+} from '../../helpers/updateUserWordBody';
 
 function* getUserWordsWorker(data: GetUserWordsAction) {
   try {
@@ -32,83 +41,73 @@ function* getUserWordsWorker(data: GetUserWordsAction) {
   }
 }
 
-function* setWordDifficultyWorker(data: SetWordDifficulty) {
+function* createHardUserWordWorker(data: CreateHardUserWordAction) {
   try {
-    const { userId, wordId, method, difficulty } = data.payload;
-    if (method === 'POST') {
-      const wordBody: UserWord = yield call(
-        createUserWordBody,
-        CreateUserWordMode.CHANGE_DIFFICULTY,
-        difficulty
-      );
-      yield call(UserWordsService.setUserWord, userId, wordId, wordBody);
-    } else {
-      const newWordBody: UserWord = yield call(
-        updateUserWordBody,
-        userId,
-        wordId,
-        CreateUserWordMode.CHANGE_DIFFICULTY,
-        difficulty
-      );
-      yield call(UserWordsService.updateUserWord, userId, wordId, newWordBody);
-    }
-    yield put(getUserWordsAction({ userId }));
+    const { userId, wordId } = data.payload;
+    const hardUserWord = createHardUserWord();
+    const userWord: UserWordResponse = yield call(
+      UserWordsService.setUserWord,
+      userId,
+      wordId,
+      hardUserWord
+    );
+    yield put(setOneUserWordAction(userWord));
   } catch (e) {
     console.log(e);
   }
 }
 
-function* correctAnswerWorker(data: CorrectAnswerAction) {
+function* createStudiedUserWordWroker(data: CreateStudiedUserWordAction) {
   try {
-    const { userId, wordId, method, from } = data.payload;
-    if (method === 'POST') {
-      const wordBody: UserWord = yield call(
-        createUserWordBody,
-        CreateUserWordMode.CORRECT_ANSWER,
-        undefined,
-        from
-      );
-      yield call(UserWordsService.setUserWord, userId, wordId, wordBody);
-    } else {
-      const newWordBody: UserWord = yield call(
-        updateUserWordBody,
-        userId,
-        wordId,
-        CreateUserWordMode.CORRECT_ANSWER,
-        undefined,
-        from
-      );
-      yield call(UserWordsService.updateUserWord, userId, wordId, newWordBody);
-    }
-    yield put(getUserWordsAction({ userId }));
+    const { userId, wordId } = data.payload;
+    const studiedUserWord = createStudiedUserWord();
+    const userWord: UserWordResponse = yield call(
+      UserWordsService.setUserWord,
+      userId,
+      wordId,
+      studiedUserWord
+    );
+    yield put(setOneUserWordAction(userWord));
   } catch (e) {
     console.log(e);
   }
 }
 
-function* incorrectAnswerWorker(data: InCorrectAnswerAction) {
+function* changeToHardWorker(data: ChangeToHardAction) {
   try {
-    const { userId, wordId, method, from } = data.payload;
-    if (method === 'POST') {
-      const wordBody: UserWord = yield call(
-        createUserWordBody,
-        CreateUserWordMode.INCORRECT_ANSWER,
-        undefined,
-        from
-      );
-      yield call(UserWordsService.setUserWord, userId, wordId, wordBody);
-    } else {
-      const newWordBody: UserWord = yield call(
-        updateUserWordBody,
-        userId,
-        wordId,
-        CreateUserWordMode.INCORRECT_ANSWER,
-        undefined,
-        from
-      );
-      yield call(UserWordsService.updateUserWord, userId, wordId, newWordBody);
-    }
-    yield put(getUserWordsAction({ userId }));
+    const { userId, wordId, words } = data.payload;
+    const chosenWord = words.find(
+      wordItem => wordItem.wordId === wordId
+    ) as UserWordResponse;
+    const updatedUserWords = updateUserWordsState(words, chosenWord);
+    const updatedUserWord: UserWord = yield changeToHard(chosenWord);
+    yield call(
+      UserWordsService.updateUserWord,
+      userId,
+      wordId,
+      updatedUserWord
+    );
+    yield put(setUserWordsAction(updatedUserWords));
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+function* changeToStudiedWorker(data: ChangeToStudiedAction) {
+  try {
+    const { userId, wordId, words } = data.payload;
+    const chosenWord = words.find(
+      wordItem => wordItem.wordId === wordId
+    ) as UserWordResponse;
+    const updatedUserWords = updateUserWordsState(words, chosenWord);
+    const updatedUserWord: UserWord = yield changeToStudied(chosenWord);
+    yield call(
+      UserWordsService.updateUserWord,
+      userId,
+      wordId,
+      updatedUserWord
+    );
+    yield put(setUserWordsAction(updatedUserWords));
   } catch (e) {
     console.log(e);
   }
@@ -117,11 +116,18 @@ function* incorrectAnswerWorker(data: InCorrectAnswerAction) {
 function* userWordsWatcher() {
   yield takeEvery(UserWordsActionTypes.GET_USER_WORDS, getUserWordsWorker);
   yield takeEvery(
-    UserWordsActionTypes.SET_WORD_DIFFICULTY,
-    setWordDifficultyWorker
+    UserWordsActionTypes.CREATE_HARD_USER_WORD,
+    createHardUserWordWorker
   );
-  yield takeEvery(UserWordsActionTypes.CORRECT_ANSWER, correctAnswerWorker);
-  yield takeEvery(UserWordsActionTypes.INCORRECT_ANSWER, incorrectAnswerWorker);
+  yield takeEvery(
+    UserWordsActionTypes.CREATE_STUDIED_USER_WORD,
+    createStudiedUserWordWroker
+  );
+  yield takeEvery(UserWordsActionTypes.CHANGE_TO_HARD, changeToHardWorker);
+  yield takeEvery(
+    UserWordsActionTypes.CHANGE_TO_STUDIED,
+    changeToStudiedWorker
+  );
 }
 
 export default userWordsWatcher;
