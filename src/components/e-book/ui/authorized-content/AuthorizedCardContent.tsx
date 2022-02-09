@@ -5,10 +5,7 @@ import ProgressBar from '../progress-bar/ProgressBar';
 import CardButton from '../button/CardButton';
 import { DIFFICULT_GROUP } from '../../cosnstants';
 import useTypedSelector from '../../../../hooks/useTypedSelector';
-import {
-  correctAnswerAction,
-  setWordDifficultyAction,
-} from '../../../../redux/store/reducers/userWordsReducer';
+import { setWordDifficultyAction } from '../../../../redux/store/reducers/userWordsReducer';
 import requestMethodChoiser from '../../../../helpers/requestMethodChoiser';
 
 interface AuthorizedCardContentProps {
