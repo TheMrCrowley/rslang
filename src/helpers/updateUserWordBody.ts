@@ -31,8 +31,34 @@ export const changeToStudied = (word: UserWordResponse): UserWord => {
   };
 };
 
-export const updateAfterCorrectAnswer = (word: UserWordResponse): UserWord => {
-  const updatedUserWord = {
+const changeDifficultyAfterStreak = (word: UserWord) => {
+  if (word.difficulty === 'hard' && word.optional.correctStreak === 5) {
+    word.difficulty = 'studied';
+  }
+  if (word.difficulty === 'learning' && word.optional.correctStreak === 3) {
+    word.difficulty = 'studied';
+  }
+};
+
+const resetDifficultyByStreak = (word: UserWord) => {
+  if (word.difficulty === 'studied') {
+    word.difficulty = 'learning';
+  }
+};
+
+const setGame = (word: UserWord, game: 'sprint' | 'audiocall') => {
+  if (game === 'sprint') {
+    word.optional.sprint = true;
+  } else {
+    word.optional.audiocall = true;
+  }
+};
+
+export const updateAfterCorrectAnswer = (
+  word: UserWordResponse,
+  game: 'sprint' | 'audiocall'
+): UserWord => {
+  const updatedUserWord: UserWord = {
     difficulty: word.difficulty,
     optional: {
       ...word.optional,
@@ -41,23 +67,14 @@ export const updateAfterCorrectAnswer = (word: UserWordResponse): UserWord => {
       correctStreak: word.optional.correctStreak + 1,
     },
   };
-  if (
-    updatedUserWord.difficulty === 'hard' &&
-    updatedUserWord.optional.correctStreak === 5
-  ) {
-    updatedUserWord.difficulty = 'studied';
-  }
-  if (
-    updatedUserWord.difficulty === 'learning' &&
-    updatedUserWord.optional.correctStreak === 3
-  ) {
-    updatedUserWord.difficulty = 'studied';
-  }
+  changeDifficultyAfterStreak(updatedUserWord);
+  setGame(updatedUserWord, game);
   return updatedUserWord;
 };
 
 export const updateAfterIncorrectAnswer = (
-  word: UserWordResponse
+  word: UserWordResponse,
+  game: 'sprint' | 'audiocall'
 ): UserWord => {
   const updatedUserWord: UserWord = {
     difficulty: word.difficulty,
@@ -68,8 +85,7 @@ export const updateAfterIncorrectAnswer = (
       correctStreak: 0,
     },
   };
-  if (updatedUserWord.difficulty === 'studied') {
-    updatedUserWord.difficulty = 'learning';
-  }
+  resetDifficultyByStreak(updatedUserWord);
+  setGame(updatedUserWord, game);
   return updatedUserWord;
 };

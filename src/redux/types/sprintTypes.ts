@@ -3,6 +3,7 @@ import {
   Word,
   WordsRequestData,
 } from '../../services/words/wordsServiceTypes';
+import { UserWordResponse } from '../../services/user-words/userWordsServiceTypes';
 
 export enum SprintGameStatus {
   PREPARE = 'PREPARE',
@@ -29,10 +30,30 @@ export enum SprintGameActions {
   SET_SPRINT_DATA = 'SET_SPRINT_DATA',
   SPRINT_REQUEST_START = 'SPRINT_REQUEST_START',
   SPRINT_REQUEST_END = 'SPRINT_REQUEST_END',
-  INCREASE_CORRECT_ASWERS = 'INCREASE_CORRECT_ASWERS',
-  CHNAGE_SPRINT_STATUS = 'CHNAGE_SPRINT_STATUS',
+  INCREASE_CORRECT_ANSWERS = 'INCREASE_CORRECT_ANSWERS',
+  CHANGE_SPRINT_STATUS = 'CHANGE_SPRINT_STATUS',
   RESET_SPRINT_STATE = 'RESET_SPRINT_STATE',
   SET_WORDS_SECTION = 'SET_WORDS_SECTION',
+  SPRINT_CORRECT_ANSWER = 'SPRINT_CORRECT_ANSWER',
+  SPRINT_INCORRECT_ANSWER = 'SPRINT_INCORRECT_ANSWER',
+}
+
+export interface SprintCorrectAction {
+  type: SprintGameActions.SPRINT_CORRECT_ANSWER;
+  payload: {
+    userId: string;
+    wordId: string;
+    words: UserWordResponse[];
+  };
+}
+
+export interface SprintInCorrectAction {
+  type: SprintGameActions.SPRINT_INCORRECT_ANSWER;
+  payload: {
+    userId: string;
+    wordId: string;
+    words: UserWordResponse[];
+  };
 }
 
 export interface RequestSprintDataAction {
@@ -59,11 +80,11 @@ export interface SprintRequestEndAction {
 }
 
 export interface IncreaseCorrectAnswersAction {
-  type: SprintGameActions.INCREASE_CORRECT_ASWERS;
+  type: SprintGameActions.INCREASE_CORRECT_ANSWERS;
 }
 
 export interface ChangeGameStatusAction {
-  type: SprintGameActions.CHNAGE_SPRINT_STATUS;
+  type: SprintGameActions.CHANGE_SPRINT_STATUS;
   payload: SprintStatus;
 }
 
@@ -79,4 +100,6 @@ export type SprintGameAction =
   | IncreaseCorrectAnswersAction
   | ChangeGameStatusAction
   | ResetSprintStateAction
-  | SetWordsSectionAction;
+  | SetWordsSectionAction
+  | SprintCorrectAction
+  | SprintInCorrectAction;
