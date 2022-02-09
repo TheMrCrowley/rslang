@@ -1,12 +1,15 @@
-import * as React from 'react';
+import React from 'react';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
+import useWindowWidth from '../../../../hooks/useWindowWidth';
 
 export interface PaginationRangesProps {
   setPage: (val: number) => void;
 }
 
 const PaginationRanges: React.FC<PaginationRangesProps> = ({ setPage }) => {
+  const winWith = useWindowWidth();
+
   // **** TO DO ******
   // join  page numbers to original source
   const TOTAL_PAGES = 30;
@@ -24,9 +27,7 @@ const PaginationRanges: React.FC<PaginationRangesProps> = ({ setPage }) => {
         count={TOTAL_PAGES}
         defaultPage={START_PAGE}
         siblingCount={0}
-        size={
-          window.innerWidth < 780 ? PageNumberSize.small : PageNumberSize.large
-        }
+        size={winWith < 780 ? PageNumberSize.small : PageNumberSize.large}
         color="primary"
         onChange={(e, page) => setPage(page - 1)}
       />

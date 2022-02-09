@@ -6,11 +6,21 @@ import Footer from './Footer';
 
 const Layout = () => {
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
-      <Header />
-      <Outlet />
+    <>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'stretch',
+          justifyContent: 'space-around',
+          minHeight: 'calc(100vh - 4em)',
+        }}
+      >
+        <Header />
+        <Outlet />
+      </Box>
       <Footer />
-    </Box>
+    </>
   );
 };
 

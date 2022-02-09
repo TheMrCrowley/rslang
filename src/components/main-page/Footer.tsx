@@ -1,13 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { styled } from '@mui/material/styles';
 import { Box, Link, Typography } from '@mui/material';
+import { useLocation } from 'react-router-dom';
 import RsLogo from '../../assets/rs.svg';
+import { darkBgColor } from '../pages/DemoHomePage';
 
 const Footer = () => {
+  const location = useLocation();
+  useEffect(() => {}, [location]);
+
   const StyledRsLogo = styled(RsLogo)`
     width: 3.5em;
     height: 3.5em;
-    ${window.location.pathname === '/home' && 'filter:invert(1)'};
+    ${location.toString() === '/home' && 'filter:invert(1)'};
     transition: 0.2s filter ease-in-out;
     cursor: pointer;
     &:hover {
@@ -23,9 +28,9 @@ const Footer = () => {
         alignItems: 'center',
         justifyContent: 'space-evenly',
         height: '4em',
-        color: window.location.pathname === '/home' ? 'white' : 'black',
+        color: window.location.pathname !== '/book' ? 'black' : 'white',
         backgroundColor:
-          window.location.pathname === '/home' ? '#14cba8' : '#ffffff',
+          window.location.pathname !== '/book' ? darkBgColor : 'white',
         mb: 'auto',
       }}
     >
