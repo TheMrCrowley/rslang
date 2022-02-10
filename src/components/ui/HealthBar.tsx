@@ -18,10 +18,10 @@ const HealthBar: FC<HealthBarProps> = ({ color }) => {
       // eslint-disable-next-line @typescript-eslint/no-unused-expressions
       i <= healthPoints - 1
         ? hpElements.push(
-            <FavoriteIcon fontSize="large" sx={{ fill: color }} />
+            <FavoriteIcon key={i} fontSize="large" sx={{ fill: color }} />
           )
         : hpElements.push(
-            <FavoriteBorderIcon fontSize="large" sx={{ fill: color }} />
+            <FavoriteBorderIcon key={i} fontSize="large" sx={{ fill: color }} />
           );
     }
     return hpElements;
