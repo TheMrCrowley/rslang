@@ -40,6 +40,9 @@ const AppRouter = () => {
           userId: authState.userData.userId,
         })
       );
+      const { sprint } =
+        statisticState.completeStatistic.optional.gameStatistic;
+      console.log(sprint);
     }
   }, [statisticState]);
 
@@ -56,7 +59,7 @@ const AppRouter = () => {
         <Route path="registration" element={<RegistrationPage />} />
         <Route path="login" element={<LoginPage />} />
         <Route
-          path="book"
+          path="book/:group/:page"
           element={
             <EBook
               isAuth={authState.isAuth}

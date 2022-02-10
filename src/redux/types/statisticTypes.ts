@@ -90,4 +90,5 @@ export type StatisticAction =
   | SaveStatisticAction
   | ChangeAudioCallNewWordAction
   | ChangeAudioCallCorrectAnswerAction
-  | ChangeAudioCallInCorrectAnswerAction;
+  | ChangeAudioCallInCorrectAnswerAction
+  | ChangeSprintNewWord;
