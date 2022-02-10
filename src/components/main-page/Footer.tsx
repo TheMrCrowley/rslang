@@ -30,7 +30,11 @@ const Footer = () => {
         height: '4em',
         color: window.location.pathname !== '/book' ? 'black' : 'white',
         backgroundColor:
-          window.location.pathname !== '/book' ? darkBgColor : 'white',
+          window.location.pathname !== '/book' &&
+          window.location.pathname !== '/sprint' &&
+          window.location.pathname !== '/audiocall'
+            ? darkBgColor
+            : 'white',
         mb: 'auto',
       }}
     >

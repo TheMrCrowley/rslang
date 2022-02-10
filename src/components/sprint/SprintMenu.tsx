@@ -1,6 +1,9 @@
-import { Box, Button } from '@mui/material';
+import { Typography } from '@mui/material';
 import React, { FC, useState } from 'react';
 import BasicSelect from '../e-book/ui/select/BasicSelect';
+import { colors } from '../e-book/cosnstants';
+import MainPageLayoutButton from '../pages/MainPageLayoutButton';
+import LevelSelecContainer from '../ui/LevelSelectContainer';
 
 interface MenuProps {
   onClick: (group: number) => void;
@@ -12,15 +15,15 @@ const SprintMenu: FC<MenuProps> = ({ onClick }) => {
     onClick(group);
   };
   return (
-    <Box sx={{ display: 'flex', columnGap: '1rem' }}>
+    <LevelSelecContainer color={colors[group]}>
+      <Typography variant="h5">Please selec the difficulty</Typography>
       <BasicSelect setGroup={setGroup} group={group} />
-      <Button
-        sx={{ fontSize: '24px', color: '#202026' }}
+      <MainPageLayoutButton
         onClick={clickHandler}
-      >
-        Start
-      </Button>
-    </Box>
+        text="Start"
+        color={colors[group]}
+      />
+    </LevelSelecContainer>
   );
 };
 
