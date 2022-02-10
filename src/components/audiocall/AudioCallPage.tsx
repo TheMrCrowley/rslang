@@ -35,18 +35,25 @@ import {
 } from '../../redux/store/reducers/userWordsReducer';
 import MainPageLayoutButton from '../pages/MainPageLayoutButton';
 import { colors, darkColors } from '../e-book/cosnstants';
+import GameAssets from '../ui/GameAssets';
 
 const StyledBox = styled(Box)`
-  width: 100%;
   height: calc(100vh - 4rem);
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
   padding-left: 3.5rem;
 `;
 
 const StyledGameContainer = styled(Box)`
   display: flex;
+  flex-direction: column;
+`;
+
+const ButtonWrapper = styled(Box)`
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-evenly;
   gap: 1em;
 `;
 
@@ -182,14 +189,17 @@ const AudioCallPage = () => {
             autoPlay
           />
           <StyledGameContainer>
-            {currentQuestion.answers.map(answerItem => (
-              <MainPageLayoutButton
-                key={answerItem}
-                onClick={() => answerHandler(answerItem)}
-                color={darkColors[group]}
-                text={answerItem}
-              />
-            ))}
+            <GameAssets color={darkColors[group]} />
+            <ButtonWrapper>
+              {currentQuestion.answers.map(answerItem => (
+                <MainPageLayoutButton
+                  key={answerItem}
+                  onClick={() => answerHandler(answerItem)}
+                  color={darkColors[group]}
+                  text={answerItem}
+                />
+              ))}
+            </ButtonWrapper>
           </StyledGameContainer>
         </div>
       )}

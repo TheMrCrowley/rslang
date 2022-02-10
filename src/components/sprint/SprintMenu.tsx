@@ -16,7 +16,7 @@ const SprintMenu: FC<MenuProps> = ({ onClick }) => {
   };
   return (
     <LevelSelecContainer color={colors[group]}>
-      <Typography variant="h5">Please selec the difficulty</Typography>
+      <Typography variant="h5">Please select the difficulty</Typography>
       <BasicSelect setGroup={setGroup} group={group} />
       <MainPageLayoutButton
         onClick={clickHandler}
