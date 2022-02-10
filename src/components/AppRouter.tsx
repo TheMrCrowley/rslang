@@ -59,7 +59,7 @@ const AppRouter = () => {
         <Route path="registration" element={<RegistrationPage />} />
         <Route path="login" element={<LoginPage />} />
         <Route
-          path="book/:group/:page"
+          path="book/"
           element={
             <EBook
               isAuth={authState.isAuth}
