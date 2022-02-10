@@ -11,10 +11,7 @@ import {
   changeToStudiedAction,
   createHardUserWordAction,
   createStudiedUserWordAction,
-  setUserWordsAction,
 } from '../../../../redux/store/reducers/userWordsReducer';
-import { updateUserWordsState } from '../../../../helpers/updateUserWordBody';
-import { UserWordResponse } from '../../../../services/user-words/userWordsServiceTypes';
 
 interface AuthorizedCardContentProps {
   wordId: string;

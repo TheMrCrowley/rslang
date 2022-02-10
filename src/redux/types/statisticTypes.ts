@@ -23,7 +23,9 @@ export enum StatisticActionTypes {
   CHANGE_SPRINT_NEW_WORD = 'CHANGE_SPRINT_NEW_WORD',
   CHANGE_SPRINT_CORRECT_ANSWERS = 'CHANGE_SPRINT_CORRECT_ANSWERS',
   CHANGE_SPRINT_INCORRECT_ANSWER = 'CHANGE_SPRINT_INCORRECT_ANSWER',
-  CHANGE_SPRINT_LONGEST_STREAK = 'CHANGE_SPRINT_LONGEST_STREAK',
+  CHANGE_AUDIOCALL_NEW_WORD = 'CHANGE_AUDIOCALL_NEW_WORD',
+  CHANGE_AUDIOCALL_CORRECT_ANSWERS = 'CHANGE_AUDIOCALL_CORRECT_ANSWERS',
+  CHANGE_AUDIOCALL_INCORRECT_ANSWER = 'CHANGE_AUDIOCALL_INCORRECT_ANSWER',
 }
 
 export interface RequestStatisticAction {
@@ -65,6 +67,18 @@ export interface ChangeSprintIncorrectAnswersAction {
   type: StatisticActionTypes.CHANGE_SPRINT_INCORRECT_ANSWER;
 }
 
+export interface ChangeAudioCallNewWordAction {
+  type: StatisticActionTypes.CHANGE_AUDIOCALL_NEW_WORD;
+}
+
+export interface ChangeAudioCallCorrectAnswerAction {
+  type: StatisticActionTypes.CHANGE_AUDIOCALL_CORRECT_ANSWERS;
+}
+
+export interface ChangeAudioCallInCorrectAnswerAction {
+  type: StatisticActionTypes.CHANGE_AUDIOCALL_INCORRECT_ANSWER;
+}
+
 export type StatisticAction =
   | RequestStatisticAction
   | SetStatisticAction
@@ -73,4 +87,7 @@ export type StatisticAction =
   | ChangeSprintNewWordAction
   | ChangeSprintCorrectAnswersAction
   | ChangeSprintIncorrectAnswersAction
-  | SaveStatisticAction;
+  | SaveStatisticAction
+  | ChangeAudioCallNewWordAction
+  | ChangeAudioCallCorrectAnswerAction
+  | ChangeAudioCallInCorrectAnswerAction;

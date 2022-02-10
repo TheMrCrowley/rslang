@@ -226,3 +226,60 @@ export const changeSprintIncorrectAnswersHelper = (
     },
   };
 };
+
+export const changeAudioCallNewWordHelper = (
+  statistic: StatisticState
+): StatisticState => {
+  return {
+    ...statistic,
+    wordStatistic: {
+      ...statistic.wordStatistic,
+      newWords: statistic.wordStatistic.newWords + 1,
+    },
+    audiocallStatistic: {
+      ...statistic.audiocallStatistic,
+      newWords: statistic.audiocallStatistic.newWords + 1,
+    },
+  };
+};
+
+export const changeAudioCallCorrectAnswersHelper = (
+  statistic: StatisticState
+): StatisticState => {
+  return {
+    ...statistic,
+    audiocallCurrentStreak: statistic.audiocallCurrentStreak + 1,
+    wordStatistic: {
+      ...statistic.wordStatistic,
+      totalAnswers: statistic.wordStatistic.totalAnswers + 1,
+      correctAnswers: statistic.wordStatistic.correctAnswers + 1,
+    },
+    audiocallStatistic: {
+      ...statistic.audiocallStatistic,
+      correctAnswers: statistic.audiocallStatistic.correctAnswers + 1,
+      totalAnswers: statistic.audiocallStatistic.totalAnswers + 1,
+      longestStreak:
+        statistic.audiocallStatistic.longestStreak <
+        statistic.audiocallCurrentStreak
+          ? statistic.audiocallCurrentStreak + 1
+          : statistic.audiocallStatistic.longestStreak,
+    },
+  };
+};
+
+export const changeAudioCallIncorrectAnswersHelper = (
+  statistic: StatisticState
+): StatisticState => {
+  return {
+    ...statistic,
+    audiocallCurrentStreak: 0,
+    wordStatistic: {
+      ...statistic.wordStatistic,
+      totalAnswers: statistic.wordStatistic.totalAnswers + 1,
+    },
+    audiocallStatistic: {
+      ...statistic.audiocallStatistic,
+      totalAnswers: statistic.audiocallStatistic.totalAnswers + 1,
+    },
+  };
+};

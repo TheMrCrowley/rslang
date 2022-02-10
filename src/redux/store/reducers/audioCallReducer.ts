@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/default-param-last */
+import { UserWordResponse } from '../../../services/user-words/userWordsServiceTypes';
 import {
   Word,
   WordsRequestData,
@@ -11,7 +13,6 @@ import {
   AudioCallStatus,
 } from '../../types/audioCallTypes';
 
-/* eslint-disable @typescript-eslint/default-param-last */
 const audioCallInitialState: AudioCallState = {
   words: [] as Word[],
   correctAnswers: 0,
@@ -94,4 +95,22 @@ export const audioCallIncreaseAnswerAction = (): AudioCallGameAction => ({
 
 export const resetAudioCallStateAction = (): AudioCallGameAction => ({
   type: AudioCallGameActions.RESET_AUDIOCALL_STATE,
+});
+
+export const audiocallCorrectAction = (payload: {
+  userId: string;
+  wordId: string;
+  words: UserWordResponse[];
+}): AudioCallGameAction => ({
+  type: AudioCallGameActions.AUDIOCALL_CORRECT_ANSWER,
+  payload,
+});
+
+export const audiocallInCorrectAction = (payload: {
+  userId: string;
+  wordId: string;
+  words: UserWordResponse[];
+}): AudioCallGameAction => ({
+  type: AudioCallGameActions.AUDIOCALL_INCORRECT_ANSWER,
+  payload,
 });

@@ -1,5 +1,8 @@
 /* eslint-disable @typescript-eslint/default-param-last */
 import {
+  changeAudioCallCorrectAnswersHelper,
+  changeAudioCallIncorrectAnswersHelper,
+  changeAudioCallNewWordHelper,
   changeSprintCorrectAnswersHelper,
   changeSprintIncorrectAnswersHelper,
   changeSprintNewWordHelper,
@@ -53,6 +56,12 @@ export const statisticReducer = (
       return { ...changeSprintCorrectAnswersHelper(state) };
     case StatisticActionTypes.CHANGE_SPRINT_INCORRECT_ANSWER:
       return { ...changeSprintIncorrectAnswersHelper(state) };
+    case StatisticActionTypes.CHANGE_AUDIOCALL_NEW_WORD:
+      return { ...changeAudioCallNewWordHelper(state) };
+    case StatisticActionTypes.CHANGE_AUDIOCALL_CORRECT_ANSWERS:
+      return { ...changeAudioCallCorrectAnswersHelper(state) };
+    case StatisticActionTypes.CHANGE_AUDIOCALL_INCORRECT_ANSWER:
+      return { ...changeAudioCallIncorrectAnswersHelper(state) };
     default:
       return state;
   }
@@ -92,4 +101,16 @@ export const changeSprintCorrectAnswersAction = (): StatisticAction => ({
 
 export const changeSprintIncorrectAnswersAction = (): StatisticAction => ({
   type: StatisticActionTypes.CHANGE_SPRINT_INCORRECT_ANSWER,
+});
+
+export const changeAudioCallNewWordAction = (): StatisticAction => ({
+  type: StatisticActionTypes.CHANGE_AUDIOCALL_NEW_WORD,
+});
+
+export const changeAudioCallCorrectAnswerAction = (): StatisticAction => ({
+  type: StatisticActionTypes.CHANGE_AUDIOCALL_CORRECT_ANSWERS,
+});
+
+export const changeAudioCallIncorrectAnswerAction = (): StatisticAction => ({
+  type: StatisticActionTypes.CHANGE_AUDIOCALL_INCORRECT_ANSWER,
 });

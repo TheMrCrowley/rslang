@@ -13,27 +13,42 @@ import LoginPage from './pages/LoginPage';
 import RegistrationPage from './pages/RegistrationPage';
 import GamesPage from './main-page/GamesPage';
 import SprintPage from './sprint/SprintPage';
-import { requestStatisticAction } from '../redux/store/reducers/statisticReducer';
-import AudioCallPage from './audiocall/AudioCallPage';
 import DemoHomePage from './pages/DemoHomePage';
 import { darkBgColor } from './e-book/cosnstants';
+import {
+  requestStatisticAction,
+  saveStatisticAction,
+} from '../redux/store/reducers/statisticReducer';
+import AudioCallPage from './audiocall/AudioCallPage';
 
 const AppRouter = () => {
   const dispatch = useDispatch();
   const authState = useTypedSelector(store => store.auth);
+  const statisticState = useTypedSelector(store => store.statistic);
+
   useEffect(() => {
     if (LocalStorageService.hasItem(StorageKeys.USER_DATA)) {
       dispatch(checkAuthAction());
     }
   }, []);
-  const stat = useTypedSelector(store => store.statistic);
+
+  useEffect(() => {
+    if (authState.userData.userId && authState.isAuth) {
+      dispatch(
+        saveStatisticAction({
+          newStatistic: statisticState,
+          userId: authState.userData.userId,
+        })
+      );
+    }
+  }, [statisticState]);
+
   useMemo(() => {
     if (authState.isAuth) {
       dispatch(getUserWordsAction({ userId: authState.userData.userId }));
       dispatch(requestStatisticAction({ userId: authState.userData.userId }));
     }
   }, [authState.isAuth]);
-  console.log(stat);
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
@@ -49,9 +64,9 @@ const AppRouter = () => {
             />
           }
         />
-        {/* <Route path="games" element={<GamesPage />} /> */}
-        {/* <Route path="sprint" element={<SprintPage />} /> */}
-        {/* <Route path="audiocall" element={<AudioCallPage />} /> */}
+        <Route path="games" element={<GamesPage />} />
+        <Route path="sprint" element={<SprintPage />} />
+        <Route path="audiocall" element={<AudioCallPage />} />
         {/* <Route path="statistics" element={<StatisticsPage />} />
         <Route path="team" element={<TeamPage />} /> */}
         <Route

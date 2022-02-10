@@ -1,3 +1,4 @@
+import { UserWordResponse } from '../../services/user-words/userWordsServiceTypes';
 import {
   WordWithCustomProps,
   Word,
@@ -33,6 +34,26 @@ export enum AudioCallGameActions {
   CHNAGE_AUDIOCALL_STATUS = 'CHNAGE_AUDIOCALL_STATUS',
   RESET_AUDIOCALL_STATE = 'RESET_AUDIOCALL_STATE',
   SET_AUDIOCALL_WORDS_SECTION = 'SET_AUDIOCALL_WORDS_SECTION',
+  AUDIOCALL_CORRECT_ANSWER = 'AUDIOCALL_CORRECT_ANSWER',
+  AUDIOCALL_INCORRECT_ANSWER = 'AUDIOCALL_INCORRECT_ANSWER',
+}
+
+export interface AudioCallCorrectAction {
+  type: AudioCallGameActions.AUDIOCALL_CORRECT_ANSWER;
+  payload: {
+    userId: string;
+    wordId: string;
+    words: UserWordResponse[];
+  };
+}
+
+export interface AudioCallInCorrectAction {
+  type: AudioCallGameActions.AUDIOCALL_INCORRECT_ANSWER;
+  payload: {
+    userId: string;
+    wordId: string;
+    words: UserWordResponse[];
+  };
 }
 
 export interface RequestAucioCallDataAction {
@@ -79,4 +100,6 @@ export type AudioCallGameAction =
   | AucioCallRequestEndAction
   | IncreaseAucioCallCorrectAnswersAction
   | ChangeAucioCallGameStatusAction
-  | ResetAucioCallStateAction;
+  | ResetAucioCallStateAction
+  | AudioCallCorrectAction
+  | AudioCallInCorrectAction;
