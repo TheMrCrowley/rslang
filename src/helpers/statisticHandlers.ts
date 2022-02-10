@@ -6,6 +6,10 @@ import {
   GameStatisticItem,
   StatisticOptional,
 } from '../services/statistic/statisticServiceTypes';
+import {
+  UserWord,
+  UserWordResponse,
+} from '../services/user-words/userWordsServiceTypes';
 
 export const getDate = () => new Date().toLocaleDateString();
 
@@ -94,9 +98,131 @@ export const getStatisticState = (
   const audiocall = statistic.optional.gameStatistic.audiocall[dataKey];
   const word = statistic.optional.wordStatistic[dataKey];
   return {
+    completeStatistic: JSON.parse(JSON.stringify(statistic)),
     learnedWords,
     sprintStatistic: { ...sprint },
     audiocallStatistic: { ...audiocall },
     wordStatistic: { ...word },
+    sprintCurrentStreak: 0,
+    audiocallCurrentStreak: 0,
+  };
+};
+
+export const updateStatistic = (
+  statisticForUpdate: StatisticState
+): StatisticRequest => {
+  const dataKey = getDate();
+  const {
+    learnedWords,
+    audiocallStatistic,
+    sprintStatistic,
+    wordStatistic,
+    completeStatistic,
+  } = statisticForUpdate;
+  const statisticBody = getStatisticFromResponse(completeStatistic);
+  statisticBody.learnedWords = learnedWords;
+  statisticBody.optional.wordStatistic[dataKey] = wordStatistic;
+  statisticBody.optional.gameStatistic.sprint[dataKey] = sprintStatistic;
+  statisticBody.optional.gameStatistic.audiocall[dataKey] = audiocallStatistic;
+  return statisticBody;
+};
+
+export const isNewWord = (
+  words: UserWordResponse[],
+  wordId: string
+): boolean => {
+  const word = words.find(item => item.wordId === wordId);
+  if (word) {
+    return !word.optional.sprint && !word.optional.audiocall;
+  }
+  return true;
+};
+
+export const compareDiff = (
+  before: UserWordResponse,
+  after: UserWord
+): boolean => {
+  return before.difficulty === after.difficulty;
+};
+
+export const increaseLearnedWordsHelper = (
+  statistic: StatisticState
+): StatisticState => {
+  return {
+    ...statistic,
+    learnedWords: statistic.learnedWords + 1,
+    wordStatistic: {
+      ...statistic.wordStatistic,
+      learnedWords: statistic.wordStatistic.learnedWords + 1,
+    },
+  };
+};
+
+export const decreaseLearnedWordsHelper = (
+  statistic: StatisticState
+): StatisticState => {
+  return {
+    ...statistic,
+    learnedWords: statistic.learnedWords - 1,
+    wordStatistic: {
+      ...statistic.wordStatistic,
+      learnedWords: statistic.wordStatistic.learnedWords - 1,
+    },
+  };
+};
+
+export const changeSprintNewWordHelper = (
+  statistic: StatisticState
+): StatisticState => {
+  return {
+    ...statistic,
+    wordStatistic: {
+      ...statistic.wordStatistic,
+      newWords: statistic.wordStatistic.newWords + 1,
+    },
+    sprintStatistic: {
+      ...statistic.sprintStatistic,
+      newWords: statistic.sprintStatistic.newWords + 1,
+    },
+  };
+};
+
+export const changeSprintCorrectAnswersHelper = (
+  statistic: StatisticState
+): StatisticState => {
+  return {
+    ...statistic,
+    sprintCurrentStreak: statistic.sprintCurrentStreak + 1,
+    wordStatistic: {
+      ...statistic.wordStatistic,
+      totalAnswers: statistic.wordStatistic.totalAnswers + 1,
+      correctAnswers: statistic.wordStatistic.correctAnswers + 1,
+    },
+    sprintStatistic: {
+      ...statistic.sprintStatistic,
+      correctAnswers: statistic.sprintStatistic.correctAnswers + 1,
+      totalAnswers: statistic.sprintStatistic.totalAnswers + 1,
+      longestStreak:
+        statistic.sprintStatistic.longestStreak < statistic.sprintCurrentStreak
+          ? statistic.sprintCurrentStreak + 1
+          : statistic.sprintStatistic.longestStreak,
+    },
+  };
+};
+
+export const changeSprintIncorrectAnswersHelper = (
+  statistic: StatisticState
+): StatisticState => {
+  return {
+    ...statistic,
+    sprintCurrentStreak: 0,
+    wordStatistic: {
+      ...statistic.wordStatistic,
+      totalAnswers: statistic.wordStatistic.totalAnswers + 1,
+    },
+    sprintStatistic: {
+      ...statistic.sprintStatistic,
+      totalAnswers: statistic.sprintStatistic.totalAnswers + 1,
+    },
   };
 };

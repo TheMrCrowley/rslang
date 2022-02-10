@@ -35,6 +35,11 @@ import Results from './Results';
 import getAssetsUrl from '../../helpers/getAssetsUrl';
 import MainPageLayoutButton from '../pages/MainPageLayoutButton';
 import { colors } from '../e-book/cosnstants';
+import { isNewWord } from '../../helpers/statisticHandlers';
+import {
+  changeSprintNewWordAction,
+  saveStatisticAction,
+} from '../../redux/store/reducers/statisticReducer';
 
 const StyledBox = styled(Box)`
   width: 100%;
@@ -58,6 +63,7 @@ const SprintPage: FC = () => {
   const { userWords } = useTypedSelector(store => store.userWords);
   const authState = useTypedSelector(store => store.auth);
   const sprintGameState = useTypedSelector(store => store.sprintGame);
+  const statisticState = useTypedSelector(store => store.statistic);
   const dispatch = useDispatch();
   //
   const [currentQuestion, setCurrentQuestion] = useState<SprintQuestionItem>(
@@ -105,6 +111,9 @@ const SprintPage: FC = () => {
     if (authState.isAuth) {
       const { userId } = authState.userData;
       const { wordId } = currentQuestion;
+      if (isNewWord(userWords, wordId)) {
+        dispatch(changeSprintNewWordAction());
+      }
       if (isCorrect) {
         dispatch(sprintCorrectAction({ userId, wordId, words: userWords }));
       } else {
@@ -136,6 +145,15 @@ const SprintPage: FC = () => {
       dispatch(resetSprintStateAction());
     };
   }, []);
+
+  useEffect(() => {
+    dispatch(
+      saveStatisticAction({
+        newStatistic: statisticState,
+        userId: authState.userData.userId,
+      })
+    );
+  }, [statisticState]);
 
   useMemo(() => {
     setGameQuestions(getQuestionItems(sprintGameState.words));

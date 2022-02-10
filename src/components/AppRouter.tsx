@@ -26,12 +26,14 @@ const AppRouter = () => {
       dispatch(checkAuthAction());
     }
   }, []);
+  const stat = useTypedSelector(store => store.statistic);
   useMemo(() => {
     if (authState.isAuth) {
       dispatch(getUserWordsAction({ userId: authState.userData.userId }));
       dispatch(requestStatisticAction({ userId: authState.userData.userId }));
     }
   }, [authState.isAuth]);
+  console.log(stat);
   return (
     <Routes>
       <Route path="/" element={<Layout />}>

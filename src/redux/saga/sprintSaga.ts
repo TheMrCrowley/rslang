@@ -1,4 +1,5 @@
 import { call, put, takeEvery } from 'redux-saga/effects';
+import { compareDiff } from '../../helpers/statisticHandlers';
 import {
   setWordsSectionAction,
   sprintRequestEndAction,
@@ -28,6 +29,13 @@ import {
 } from '../../helpers/updateUserWordBody';
 import requestMethodChoiser from '../../helpers/requestMethodChoiser';
 
+import {
+  changeSprintCorrectAnswersAction,
+  changeSprintIncorrectAnswersAction,
+  decreaseLearnedWordsAtion,
+  increaseLearnedWordsAtion,
+} from '../store/reducers/statisticReducer';
+
 function* requestSprintDataWorker(data: RequestSprintDataAction) {
   try {
     yield put(sprintRequestStartAction());
@@ -49,6 +57,7 @@ function* sprintCorrectAnswerWorker(data: SprintCorrectAction) {
   try {
     const { words, userId, wordId } = data.payload;
     const method = requestMethodChoiser(words, wordId);
+    yield put(changeSprintCorrectAnswersAction());
     if (method === 'POST') {
       yield call(
         UserWordsService.setUserWord,
@@ -71,6 +80,9 @@ function* sprintCorrectAnswerWorker(data: SprintCorrectAction) {
         wordId,
         updatedUserWord
       );
+      if (!compareDiff(chosenWord, updatedUserWord)) {
+        yield put(increaseLearnedWordsAtion());
+      }
     }
   } catch (e) {
     console.log(e);
@@ -81,6 +93,7 @@ function* sprintInCorrectAnswerWorker(data: SprintInCorrectAction) {
   try {
     const { words, userId, wordId } = data.payload;
     const method = requestMethodChoiser(words, wordId);
+    yield put(changeSprintIncorrectAnswersAction());
     if (method === 'POST') {
       yield call(
         UserWordsService.setUserWord,
@@ -103,6 +116,9 @@ function* sprintInCorrectAnswerWorker(data: SprintInCorrectAction) {
         wordId,
         updatedUserWord
       );
+      if (!compareDiff(chosenWord, updatedUserWord)) {
+        yield put(decreaseLearnedWordsAtion());
+      }
     }
   } catch (e) {
     console.log(e);

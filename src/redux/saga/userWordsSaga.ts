@@ -1,4 +1,5 @@
 import { call, put, takeEvery } from 'redux-saga/effects';
+import { increaseLearnedWordsAtion } from '../store/reducers/statisticReducer';
 import {
   ChangeToHardAction,
   ChangeToStudiedAction,
@@ -13,11 +14,9 @@ import {
   UserWordResponse,
 } from '../../services/user-words/userWordsServiceTypes';
 import {
-  getUserWordsAction,
   setOneUserWordAction,
   setUserWordsAction,
 } from '../store/reducers/userWordsReducer';
-import CreateUserWordMode from '../../helpers/helpersTypes';
 import {
   createHardUserWord,
   createStudiedUserWord,
@@ -67,6 +66,7 @@ function* createStudiedUserWordWroker(data: CreateStudiedUserWordAction) {
       wordId,
       studiedUserWord
     );
+    yield put(increaseLearnedWordsAtion());
     yield put(setOneUserWordAction(userWord));
   } catch (e) {
     console.log(e);
@@ -107,6 +107,7 @@ function* changeToStudiedWorker(data: ChangeToStudiedAction) {
       wordId,
       updatedUserWord
     );
+    yield put(increaseLearnedWordsAtion());
     yield put(setUserWordsAction(updatedUserWords));
   } catch (e) {
     console.log(e);
