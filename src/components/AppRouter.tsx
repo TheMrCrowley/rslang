@@ -10,11 +10,12 @@ import EBook from './e-book/EBook';
 import Layout from './main-page/Layout';
 import LoginPage from './pages/LoginPage';
 import RegistrationPage from './pages/RegistrationPage';
-import DemoHomePage from './pages/DemoHomePage';
 import GamesPage from './main-page/GamesPage';
 import SprintPage from './sprint/SprintPage';
 import { requestStatisticAction } from '../redux/store/reducers/statisticReducer';
 import AudioCallPage from './audiocall/AudioCallPage';
+import DemoHomePage, { darkBgColor } from './pages/DemoHomePage';
+import { Typography } from '@mui/material';
 
 const AppRouter = () => {
   const dispatch = useDispatch();
@@ -50,7 +51,7 @@ const AppRouter = () => {
         <Route path="audiocall" element={<AudioCallPage />} />
         {/* <Route path="statistics" element={<StatisticsPage />} />
         <Route path="team" element={<TeamPage />} /> */}
-        <Route path="*" element={<h1>Not found</h1>} />
+        <Route path="*" element={<Typography align='center' variant='h2' sx={{ color: darkBgColor}}>Page not found</Typography>} />
       </Route>
     </Routes>
   );
