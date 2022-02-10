@@ -135,13 +135,13 @@ const AudioCallPage = () => {
       setInCorrectAnswers(prev => [...prev, { ...currentQuestion }]);
       playHandler(inCorrectAudio);
     }
-    setTimeout(() => {
+    // setTimeout(() => {
       if (gameQuestions.length) {
         nextQuestion();
       } else {
         showResults();
       }
-    }, 500);
+    // }, 500);
   };
 
   useEffect(() => {
