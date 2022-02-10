@@ -4,14 +4,11 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import DirectionsRunIcon from '@mui/icons-material/DirectionsRun';
-import EmojiNatureIcon from '@mui/icons-material/EmojiNature';
+import CampaignIcon from '@mui/icons-material/Campaign';
 import { RootState } from '../../redux/store';
 import Bg from '../../assets/Untitled.png';
 import MainPageLayoutButton from './MainPageLayoutButton';
-
-export const mainBgColor = '#64ffda';
-export const lightBgColor = '#99ffe0';
-export const darkBgColor = '#14cba8';
+import { darkBgColor, lightBgColor } from '../e-book/cosnstants';
 
 const DemoHomePage = () => {
   const navigate = useNavigate();
@@ -85,11 +82,14 @@ const DemoHomePage = () => {
         <MainPageLayoutButton onClick={() => navigate('/book')} text="E-book">
           <MenuBookIcon fontSize="large" />
         </MainPageLayoutButton>
-        <MainPageLayoutButton onClick={() => null} text="Sprint">
+        <MainPageLayoutButton onClick={() => navigate('/sprint')} text="Sprint">
           <DirectionsRunIcon fontSize="large" />
         </MainPageLayoutButton>
-        <MainPageLayoutButton onClick={() => null} text="Savanah">
-          <EmojiNatureIcon fontSize="large" />
+        <MainPageLayoutButton
+          onClick={() => navigate('/audiocall')}
+          text="Audiocall"
+        >
+          <CampaignIcon fontSize="large" />
         </MainPageLayoutButton>
         {!isAuth && (
           <MainPageLayoutButton

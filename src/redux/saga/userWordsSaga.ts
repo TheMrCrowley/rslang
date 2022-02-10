@@ -60,11 +60,13 @@ function* setWordDifficultyWorker(data: SetWordDifficulty) {
 
 function* correctAnswerWorker(data: CorrectAnswerAction) {
   try {
-    const { userId, wordId, method } = data.payload;
+    const { userId, wordId, method, from } = data.payload;
     if (method === 'POST') {
       const wordBody: UserWord = yield call(
         createUserWordBody,
-        CreateUserWordMode.CORRECT_ANSWER
+        CreateUserWordMode.CORRECT_ANSWER,
+        undefined,
+        from
       );
       yield call(UserWordsService.setUserWord, userId, wordId, wordBody);
     } else {
@@ -72,7 +74,9 @@ function* correctAnswerWorker(data: CorrectAnswerAction) {
         updateUserWordBody,
         userId,
         wordId,
-        CreateUserWordMode.CORRECT_ANSWER
+        CreateUserWordMode.CORRECT_ANSWER,
+        undefined,
+        from
       );
       yield call(UserWordsService.updateUserWord, userId, wordId, newWordBody);
     }
@@ -84,11 +88,13 @@ function* correctAnswerWorker(data: CorrectAnswerAction) {
 
 function* incorrectAnswerWorker(data: InCorrectAnswerAction) {
   try {
-    const { userId, wordId, method } = data.payload;
+    const { userId, wordId, method, from } = data.payload;
     if (method === 'POST') {
       const wordBody: UserWord = yield call(
         createUserWordBody,
-        CreateUserWordMode.INCORRECT_ANSWER
+        CreateUserWordMode.INCORRECT_ANSWER,
+        undefined,
+        from
       );
       yield call(UserWordsService.setUserWord, userId, wordId, wordBody);
     } else {
@@ -96,7 +102,9 @@ function* incorrectAnswerWorker(data: InCorrectAnswerAction) {
         updateUserWordBody,
         userId,
         wordId,
-        CreateUserWordMode.INCORRECT_ANSWER
+        CreateUserWordMode.INCORRECT_ANSWER,
+        undefined,
+        from
       );
       yield call(UserWordsService.updateUserWord, userId, wordId, newWordBody);
     }

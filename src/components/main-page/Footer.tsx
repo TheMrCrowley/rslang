@@ -3,7 +3,7 @@ import { styled } from '@mui/material/styles';
 import { Box, Link, Typography } from '@mui/material';
 import { useLocation } from 'react-router-dom';
 import RsLogo from '../../assets/rs.svg';
-import { darkBgColor } from '../pages/DemoHomePage';
+import { darkBgColor } from '../e-book/cosnstants';
 
 const Footer = () => {
   const location = useLocation();
@@ -30,7 +30,11 @@ const Footer = () => {
         height: '4em',
         color: window.location.pathname !== '/book' ? 'black' : 'white',
         backgroundColor:
-          window.location.pathname !== '/book' ? darkBgColor : 'white',
+          window.location.pathname !== '/book' &&
+          window.location.pathname !== '/sprint' &&
+          window.location.pathname !== '/audiocall'
+            ? darkBgColor
+            : 'white',
         mb: 'auto',
       }}
     >

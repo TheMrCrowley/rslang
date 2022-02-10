@@ -1,20 +1,28 @@
-import { Box, FormGroup } from '@mui/material';
 import React from 'react';
+import { Box } from '@mui/material';
 import { mainBgColor } from '../e-book/cosnstants';
 
-const AuthPageContainer: React.FC = ({ children }) => {
+interface LevelSelecContainerProps {
+  color?: string;
+}
+
+const LevelSelecContainer: React.FC<LevelSelecContainerProps> = ({
+  children,
+  color = mainBgColor,
+}) => {
   return (
     <Box
       sx={{
-        flex: '1',
         display: 'flex',
         justifyContent: 'space-around',
         alignItems: 'center',
+        width: '100%',
+        minHeight: 'calc(100vh - 4rem)',
         pl: '3.5em',
-        bgcolor: mainBgColor,
+        bgcolor: color,
       }}
     >
-      <FormGroup
+      <Box
         sx={{
           flexBasis: '400px',
           display: 'flex',
@@ -26,9 +34,9 @@ const AuthPageContainer: React.FC = ({ children }) => {
         }}
       >
         {children}
-      </FormGroup>
+      </Box>
     </Box>
   );
 };
 
-export default AuthPageContainer;
+export default LevelSelecContainer;

@@ -26,9 +26,8 @@ export default class WordsService {
       `/users/${userId}/aggregatedWords`,
       {
         params: {
-          group,
-          page,
           wordsPerPage: 20,
+          filter: { $and: [{ page }, { group }] },
         },
       }
     );

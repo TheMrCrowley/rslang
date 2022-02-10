@@ -15,6 +15,13 @@ import { requestActionCreator } from '../store/reducers/requestReducer';
 import LocalStorageService from '../../services/localStorageService';
 
 import { LoginResponseData } from '../../services/auth/authServiceTypes';
+import StatisticService from '../../services/statistic/statisticService';
+import {
+  createAfterRegistration,
+  getDate,
+  updateStatisticAfterSignIn,
+} from '../../helpers/statisticHandlers';
+import { StatisticResponse } from '../../services/statistic/statisticServiceTypes';
 
 function* registrationWorker(data: RegistrationAction) {
   try {
@@ -31,11 +38,15 @@ function* registrationWorker(data: RegistrationAction) {
     );
     yield put(setUserDataAction(signinResponse));
     yield put(setIsAuthAction());
+    yield call(
+      StatisticService.updateStatistic,
+      signinResponse.userId,
+      createAfterRegistration()
+    );
     yield put(requestActionCreator(RequestActionTypes.REQUEST_SUCCESS));
   } catch (e) {
     yield put(requestActionCreator(RequestActionTypes.REQUEST_ERROR));
   }
-  yield put(requestActionCreator(RequestActionTypes.REQUEST_RESET));
 }
 
 function* signInWorker(data: SigninAction) {
@@ -52,11 +63,21 @@ function* signInWorker(data: SigninAction) {
     );
     yield put(setUserDataAction(signinResponse));
     yield put(setIsAuthAction());
+    const statistic: StatisticResponse = yield call(
+      StatisticService.getStatistic,
+      signinResponse.userId
+    );
+    if (!statistic.optional.wordStatistic[getDate()]) {
+      yield call(
+        StatisticService.updateStatistic,
+        signinResponse.userId,
+        updateStatisticAfterSignIn(statistic)
+      );
+    }
     yield put(requestActionCreator(RequestActionTypes.REQUEST_SUCCESS));
   } catch (e) {
     yield put(requestActionCreator(RequestActionTypes.REQUEST_ERROR));
   }
-  yield put(requestActionCreator(RequestActionTypes.REQUEST_RESET));
 }
 
 function* checkAuth() {
