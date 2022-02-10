@@ -1,21 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Box, Button } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
-
-const StyledBox = styled(Box)`
-  display: flex;
-  column-gap: 2rem;
-`;
-
-const StyledButton = styled(Button)`
-  color: #202026;
-  text-decoration: none;
-  font-size: 48px;
-  &:hover {
-    background-color: #fecb00;
-  }
-`;
+import MainPageLayoutButton from '../pages/MainPageLayoutButton';
+import { lightBgColor } from '../pages/DemoHomePage';
 
 const StyledLink = styled(Link)`
   text-decoration: none;
@@ -23,14 +11,43 @@ const StyledLink = styled(Link)`
 
 const GamesPage = () => {
   return (
-    <StyledBox>
-      <StyledLink to="/sprint">
-        <StyledButton>Sprint</StyledButton>
-      </StyledLink>
-      <StyledLink to="/audiocall">
-        <StyledButton>Audiocall</StyledButton>
-      </StyledLink>
-    </StyledBox>
+    <Box
+      sx={{
+        flex: '1',
+        display: 'flex',
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        pl: '3.5rem',
+      }}
+    >
+      <Box
+        sx={{
+          display: 'flex',
+          flexFlow: 'row wrap',
+          gap: '2rem',
+          justifyContent: 'space-evenly',
+          alignItems: 'center',
+          p: '4em',
+          backgroundColor: lightBgColor,
+          borderRadius: '3em',
+        }}
+      >
+        <StyledLink to="/sprint">
+          <MainPageLayoutButton>
+            <Typography variant="h2" fontWeight="bold">
+              Sprint
+            </Typography>
+          </MainPageLayoutButton>
+        </StyledLink>
+        <StyledLink to="/audiocall">
+          <MainPageLayoutButton>
+            <Typography variant="h2" fontWeight="bold">
+              Audiocall
+            </Typography>
+          </MainPageLayoutButton>
+        </StyledLink>
+      </Box>
+    </Box>
   );
 };
 
