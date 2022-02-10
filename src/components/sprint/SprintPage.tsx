@@ -13,11 +13,6 @@ import React, {
 import { useDispatch } from 'react-redux';
 import { styled } from '@mui/material/styles';
 import CircularProgress from '@mui/material/CircularProgress';
-import {
-  correctAnswerAction,
-  incorrectAnswerAction,
-} from '../../redux/store/reducers/userWordsReducer';
-import requestMethodChoiser from '../../helpers/requestMethodChoiser';
 import useTypedSelector from '../../hooks/useTypedSelector';
 import getRandomNumber from '../../helpers/getRandomNumber';
 import {
@@ -25,11 +20,13 @@ import {
   getQuestionItems,
   SprintQuestionItem,
 } from './SprintModel';
-import SprintButton from './SprintButton';
+
 import {
   changeSprintStatusAction,
-  requestSptintDataAction,
+  requestSprintDataAction,
   resetSprintStateAction,
+  sprintCorrectAction,
+  sprintInCorrectAction,
 } from '../../redux/store/reducers/sprintGameReducer';
 import { SprintGameStatus } from '../../redux/types/sprintTypes';
 import SprintMenu from './SprintMenu';
@@ -37,7 +34,9 @@ import ResultLine from './ResultLine';
 import Results from './Results';
 import getAssetsUrl from '../../helpers/getAssetsUrl';
 import MainPageLayoutButton from '../pages/MainPageLayoutButton';
-import { colors, darkColors } from '../e-book/cosnstants';
+import { colors } from '../e-book/cosnstants';
+import { isNewWord } from '../../helpers/statisticHandlers';
+import { changeSprintNewWordAction } from '../../redux/store/reducers/statisticReducer';
 
 const StyledBox = styled(Box)`
   width: 100%;
@@ -78,12 +77,12 @@ const SprintPage: FC = () => {
 
   const startHandler = (group: number) => {
     const randomPage = getRandomNumber(0, 29);
-    dispatch(requestSptintDataAction({ group, page: randomPage }));
+    dispatch(requestSprintDataAction({ group, page: randomPage }));
   };
 
   const restartHandler = useCallback(() => {
     const { group, page } = sprintGameState;
-    dispatch(requestSptintDataAction({ group, page }));
+    dispatch(requestSprintDataAction({ group, page }));
   }, [sprintGameState.group, sprintGameState.page]);
 
   const nextQuestion = () => {
@@ -108,15 +107,13 @@ const SprintPage: FC = () => {
     if (authState.isAuth) {
       const { userId } = authState.userData;
       const { wordId } = currentQuestion;
-      const method = requestMethodChoiser(userWords, wordId);
+      if (isNewWord(userWords, wordId)) {
+        dispatch(changeSprintNewWordAction());
+      }
       if (isCorrect) {
-        dispatch(
-          correctAnswerAction({ userId, wordId, method, from: 'SPRINT' })
-        );
+        dispatch(sprintCorrectAction({ userId, wordId, words: userWords }));
       } else {
-        dispatch(
-          incorrectAnswerAction({ userId, wordId, method, from: 'SPRINT' })
-        );
+        dispatch(sprintInCorrectAction({ userId, wordId, words: userWords }));
       }
     }
     if (isCorrect) {

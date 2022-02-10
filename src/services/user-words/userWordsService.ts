@@ -13,8 +13,8 @@ export default class UserWordsService {
     userId: string,
     wordId: string,
     wordBody: UserWord
-  ): Promise<UserWord> => {
-    const response = await $api.post<UserWord>(
+  ): Promise<UserWordResponse> => {
+    const response = await $api.post<UserWordResponse>(
       `/users/${userId}/words/${wordId}`,
       wordBody
     );

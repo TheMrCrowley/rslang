@@ -1,10 +1,17 @@
 import { call, takeEvery, put } from 'redux-saga/effects';
-import { getStatisticState } from '../../helpers/statisticHandlers';
+import {
+  getStatisticState,
+  updateStatistic,
+} from '../../helpers/statisticHandlers';
 import StatisticService from '../../services/statistic/statisticService';
-import { StatisticResponse } from '../../services/statistic/statisticServiceTypes';
+import {
+  StatisticRequest,
+  StatisticResponse,
+} from '../../services/statistic/statisticServiceTypes';
 import { setStatisticAction } from '../store/reducers/statisticReducer';
 import {
   RequestStatisticAction,
+  SaveStatisticAction,
   StatisticActionTypes,
 } from '../types/statisticTypes';
 
@@ -15,7 +22,21 @@ function* requestStatisticWorker(data: RequestStatisticAction) {
       StatisticService.getStatistic,
       userId
     );
-    yield put(setStatisticAction({ data: getStatisticState(statistic) }));
+    yield put(setStatisticAction(getStatisticState(statistic)));
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+function* updateStatisticWorker(data: SaveStatisticAction) {
+  try {
+    const { newStatistic, userId } = data.payload;
+    const updatedStatistic: StatisticRequest = yield call(
+      updateStatistic,
+      newStatistic
+    );
+    console.log(updatedStatistic);
+    yield call(StatisticService.updateStatistic, userId, updatedStatistic);
   } catch (e) {
     console.log(e);
   }
@@ -26,6 +47,7 @@ function* statisticWatcher() {
     StatisticActionTypes.REQUEST_STATISTIC,
     requestStatisticWorker
   );
+  yield takeEvery(StatisticActionTypes.SAVE_STATISTIC, updateStatisticWorker);
 }
 
 export default statisticWatcher;

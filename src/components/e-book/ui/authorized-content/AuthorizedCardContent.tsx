@@ -5,8 +5,13 @@ import ProgressBar from '../progress-bar/ProgressBar';
 import CardButton from '../button/CardButton';
 import { DIFFICULT_GROUP } from '../../cosnstants';
 import useTypedSelector from '../../../../hooks/useTypedSelector';
-import { setWordDifficultyAction } from '../../../../redux/store/reducers/userWordsReducer';
 import requestMethodChoiser from '../../../../helpers/requestMethodChoiser';
+import {
+  changeToHardAction,
+  changeToStudiedAction,
+  createHardUserWordAction,
+  createStudiedUserWordAction,
+} from '../../../../redux/store/reducers/userWordsReducer';
 
 interface AuthorizedCardContentProps {
   wordId: string;
@@ -29,6 +34,36 @@ const AuthorizedCardContent: FC<AuthorizedCardContentProps> = ({
   const dispatch = useDispatch();
   const { userId } = useTypedSelector(store => store.auth.userData);
   const { userWords } = useTypedSelector(store => store.userWords);
+
+  const hardHandler = () => {
+    const method = requestMethodChoiser(userWords, wordId);
+    if (method === 'POST') {
+      dispatch(createHardUserWordAction({ userId, wordId }));
+    } else {
+      dispatch(
+        changeToHardAction({
+          userId,
+          wordId,
+          words: userWords,
+        })
+      );
+    }
+  };
+
+  const studiedHandler = () => {
+    const method = requestMethodChoiser(userWords, wordId);
+    if (method === 'POST') {
+      dispatch(createStudiedUserWordAction({ userId, wordId }));
+    } else {
+      dispatch(
+        changeToStudiedAction({
+          userId,
+          wordId,
+          words: userWords,
+        })
+      );
+    }
+  };
   return (
     <Box
       sx={{
@@ -42,39 +77,13 @@ const AuthorizedCardContent: FC<AuthorizedCardContentProps> = ({
       ) : (
         !isStudied &&
         !isDifficult && (
-          <CardButton
-            onClick={() => {
-              const method = requestMethodChoiser(userWords, wordId);
-              dispatch(
-                setWordDifficultyAction({
-                  difficulty: 'hard',
-                  method,
-                  userId,
-                  wordId,
-                })
-              );
-            }}
-            color={color}
-          >
+          <CardButton onClick={hardHandler} color={color}>
             Difficult
           </CardButton>
         )
       )}
       {!isStudied && (
-        <CardButton
-          color={color}
-          onClick={() => {
-            const method = requestMethodChoiser(userWords, wordId);
-            dispatch(
-              setWordDifficultyAction({
-                difficulty: 'studied',
-                method,
-                userId,
-                wordId,
-              })
-            );
-          }}
-        >
+        <CardButton color={color} onClick={studiedHandler}>
           Studied
         </CardButton>
       )}

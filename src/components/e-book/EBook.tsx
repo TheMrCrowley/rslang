@@ -1,6 +1,7 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Box } from '@mui/material';
+import { useParams } from 'react-router-dom';
 import BookBar from './ui/bookbar/BookBar';
 import CardList from './CardList';
 import {
@@ -34,8 +35,15 @@ const EBook: FC<EBookProps> = ({ isAuth, userId }) => {
     } else {
       dispatch(requestWordsAction({ group, page }));
     }
-  }, [page, group, isAuth, userWords]);
-
+  }, [page, group, isAuth, userWords, dispatch, userId]);
+  // for track studied page
+  // const isStudiedPage = useMemo(() => {
+  //   return words.every(
+  //     wordItem =>
+  //       wordItem.userWord?.difficulty === 'hard' ||
+  //       wordItem.userWord?.difficulty === 'studied'
+  //   );
+  // }, [words]);
   return (
     <Box
       sx={{

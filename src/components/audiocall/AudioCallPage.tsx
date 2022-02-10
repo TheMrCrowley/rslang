@@ -23,19 +23,18 @@ import {
 } from './audioCallModel';
 import getRandomNumber from '../../helpers/getRandomNumber';
 import {
+  audiocallCorrectAction,
+  audiocallInCorrectAction,
   changeAudioCallStatusAction,
   requestAudioCallDataAction,
   resetAudioCallStateAction,
 } from '../../redux/store/reducers/audioCallReducer';
 import { compareAnswers } from '../sprint/SprintModel';
-import requestMethodChoiser from '../../helpers/requestMethodChoiser';
-import {
-  correctAnswerAction,
-  incorrectAnswerAction,
-} from '../../redux/store/reducers/userWordsReducer';
 import MainPageLayoutButton from '../pages/MainPageLayoutButton';
 import { colors, darkColors } from '../e-book/cosnstants';
 import GameAssets from '../ui/GameAssets';
+import { isNewWord } from '../../helpers/statisticHandlers';
+import { changeAudioCallNewWordAction } from '../../redux/store/reducers/statisticReducer';
 
 const StyledBox = styled(Box)`
   height: calc(100vh - 4rem);
@@ -121,11 +120,15 @@ const AudioCallPage = () => {
     if (authState.isAuth) {
       const { userId } = authState.userData;
       const { wordId } = currentQuestion;
-      const method = requestMethodChoiser(userWords, wordId);
+      if (isNewWord(userWords, wordId)) {
+        dispatch(changeAudioCallNewWordAction());
+      }
       if (isCorrect) {
-        dispatch(correctAnswerAction({ userId, wordId, method }));
+        dispatch(audiocallCorrectAction({ userId, wordId, words: userWords }));
       } else {
-        dispatch(incorrectAnswerAction({ userId, wordId, method }));
+        dispatch(
+          audiocallInCorrectAction({ userId, wordId, words: userWords })
+        );
       }
     }
     if (isCorrect) {
@@ -136,11 +139,11 @@ const AudioCallPage = () => {
       playHandler(inCorrectAudio);
     }
     // setTimeout(() => {
-      if (gameQuestions.length) {
-        nextQuestion();
-      } else {
-        showResults();
-      }
+    if (gameQuestions.length) {
+      nextQuestion();
+    } else {
+      showResults();
+    }
     // }, 500);
   };
 

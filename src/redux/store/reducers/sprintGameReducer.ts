@@ -12,6 +12,7 @@ import {
   SprintGameActions,
   SprintStatus,
 } from '../../types/sprintTypes';
+import { UserWordResponse } from '../../../services/user-words/userWordsServiceTypes';
 
 const sprintGameInitialState: SprintState = {
   words: [] as Word[],
@@ -33,11 +34,11 @@ export const sprintGameReducer = (
       return { ...state, request: true };
     case SprintGameActions.SPRINT_REQUEST_END:
       return { ...state, request: false };
-    case SprintGameActions.INCREASE_CORRECT_ASWERS:
+    case SprintGameActions.INCREASE_CORRECT_ANSWERS:
       return { ...state, correctAnswers: state.correctAnswers + 1 };
     case SprintGameActions.SET_SPRINT_DATA:
       return { ...state, words: [...action.payload] };
-    case SprintGameActions.CHNAGE_SPRINT_STATUS:
+    case SprintGameActions.CHANGE_SPRINT_STATUS:
       return { ...state, gameStatus: action.payload };
     case SprintGameActions.SET_WORDS_SECTION: {
       return {
@@ -53,7 +54,7 @@ export const sprintGameReducer = (
   }
 };
 
-export const requestSptintDataAction = (
+export const requestSprintDataAction = (
   payload: WordsRequestData
 ): SprintGameAction => ({
   type: SprintGameActions.REQUEST_SPRINT_DATA,
@@ -67,7 +68,7 @@ export const setSprintDataAction = (
 export const changeSprintStatusAction = (
   payload: SprintStatus
 ): SprintGameAction => ({
-  type: SprintGameActions.CHNAGE_SPRINT_STATUS,
+  type: SprintGameActions.CHANGE_SPRINT_STATUS,
   payload,
 });
 
@@ -84,9 +85,27 @@ export const sprintRequestEndAction = (): SprintGameAction => ({
 });
 
 export const sprintIncreaseAnswerAction = (): SprintGameAction => ({
-  type: SprintGameActions.INCREASE_CORRECT_ASWERS,
+  type: SprintGameActions.INCREASE_CORRECT_ANSWERS,
 });
 
 export const resetSprintStateAction = (): SprintGameAction => ({
   type: SprintGameActions.RESET_SPRINT_STATE,
+});
+
+export const sprintCorrectAction = (payload: {
+  userId: string;
+  wordId: string;
+  words: UserWordResponse[];
+}): SprintGameAction => ({
+  type: SprintGameActions.SPRINT_CORRECT_ANSWER,
+  payload,
+});
+
+export const sprintInCorrectAction = (payload: {
+  userId: string;
+  wordId: string;
+  words: UserWordResponse[];
+}): SprintGameAction => ({
+  type: SprintGameActions.SPRINT_INCORRECT_ANSWER,
+  payload,
 });

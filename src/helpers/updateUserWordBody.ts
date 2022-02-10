@@ -1,78 +1,91 @@
-import UserWordsService from '../services/user-words/userWordsService';
-import { UserWord } from '../services/user-words/userWordsServiceTypes';
-import CreateUserWordMode from './helpersTypes';
+import {
+  UserWord,
+  UserWordResponse,
+} from '../services/user-words/userWordsServiceTypes';
 
-const updateUserWordBody = async (
-  userId: string,
-  wordId: string,
-  mode:
-    | CreateUserWordMode.CHANGE_DIFFICULTY
-    | CreateUserWordMode.CORRECT_ANSWER
-    | CreateUserWordMode.INCORRECT_ANSWER,
-  difficulty?: string,
-  from?: 'SPRINT' | 'AUDIOCALL'
-): Promise<UserWord> => {
-  const oldUserBody = await UserWordsService.getOneUserWord(userId, wordId);
-  if (mode === CreateUserWordMode.CHANGE_DIFFICULTY && difficulty) {
-    return {
-      difficulty,
-      optional: { ...oldUserBody.optional },
-    };
-  }
-  if (mode === CreateUserWordMode.CORRECT_ANSWER) {
-    const newUserWord: UserWord = {
-      difficulty: oldUserBody.difficulty,
-      optional: {
-        ...oldUserBody.optional,
-        totalAnswers: oldUserBody.optional.totalAnswers + 1,
-        totalCorrectAnswers: oldUserBody.optional.totalCorrectAnswers + 1,
-        correctStreak: oldUserBody.optional.correctStreak + 1,
-      },
-    };
-    // change difficulty if streak success
-    if (
-      newUserWord.difficulty === 'hard' &&
-      newUserWord.optional.correctStreak === 5
-    ) {
-      newUserWord.difficulty = 'studied';
-    }
-    if (
-      newUserWord.difficulty === 'learning' &&
-      newUserWord.optional.correctStreak === 3
-    ) {
-      newUserWord.difficulty = 'studied';
-    }
-    if (from === 'SPRINT') {
-      newUserWord.optional.sprint = true;
-    }
-    if (from === 'AUDIOCALL') {
-      newUserWord.optional.audiocall = true;
-    }
-    return newUserWord;
-  }
-  if (mode === CreateUserWordMode.INCORRECT_ANSWER) {
-    const newUserWord: UserWord = {
-      difficulty: oldUserBody.difficulty,
-      optional: {
-        ...oldUserBody.optional,
-        totalAnswers: oldUserBody.optional.totalAnswers + 1,
-        totalCorrectAnswers: oldUserBody.optional.totalCorrectAnswers,
-        correctStreak: 0,
-      },
-    };
-    // change difficulty if fuckup
-    if (newUserWord.difficulty === 'studied') {
-      newUserWord.difficulty = 'learning';
-    }
-    if (from === 'SPRINT') {
-      newUserWord.optional.sprint = true;
-    }
-    if (from === 'AUDIOCALL') {
-      newUserWord.optional.audiocall = true;
-    }
-    return newUserWord;
-  }
-  return oldUserBody;
+export const updateUserWordsState = (
+  words: UserWordResponse[],
+  word: UserWordResponse
+): UserWordResponse[] => {
+  const wordsWithoutWord = words.filter(
+    wordItem => wordItem.wordId !== word.wordId
+  );
+  return [...wordsWithoutWord, { ...word }];
 };
 
-export default updateUserWordBody;
+export const changeToHard = (word: UserWordResponse): UserWord => {
+  return {
+    difficulty: 'hard',
+    optional: {
+      ...word.optional,
+    },
+  };
+};
+
+export const changeToStudied = (word: UserWordResponse): UserWord => {
+  return {
+    difficulty: 'studied',
+    optional: {
+      ...word.optional,
+    },
+  };
+};
+
+const changeDifficultyAfterStreak = (word: UserWord) => {
+  if (word.difficulty === 'hard' && word.optional.correctStreak === 5) {
+    word.difficulty = 'studied';
+  }
+  if (word.difficulty === 'learning' && word.optional.correctStreak === 3) {
+    word.difficulty = 'studied';
+  }
+};
+
+const resetDifficultyByStreak = (word: UserWord) => {
+  if (word.difficulty === 'studied') {
+    word.difficulty = 'learning';
+  }
+};
+
+const setGame = (word: UserWord, game: 'sprint' | 'audiocall') => {
+  if (game === 'sprint') {
+    word.optional.sprint = true;
+  } else {
+    word.optional.audiocall = true;
+  }
+};
+
+export const updateAfterCorrectAnswer = (
+  word: UserWordResponse,
+  game: 'sprint' | 'audiocall'
+): UserWord => {
+  const updatedUserWord: UserWord = {
+    difficulty: word.difficulty,
+    optional: {
+      ...word.optional,
+      totalAnswers: word.optional.totalAnswers + 1,
+      totalCorrectAnswers: word.optional.totalCorrectAnswers + 1,
+      correctStreak: word.optional.correctStreak + 1,
+    },
+  };
+  changeDifficultyAfterStreak(updatedUserWord);
+  setGame(updatedUserWord, game);
+  return updatedUserWord;
+};
+
+export const updateAfterIncorrectAnswer = (
+  word: UserWordResponse,
+  game: 'sprint' | 'audiocall'
+): UserWord => {
+  const updatedUserWord: UserWord = {
+    difficulty: word.difficulty,
+    optional: {
+      ...word.optional,
+      totalAnswers: word.optional.totalAnswers + 1,
+      totalCorrectAnswers: word.optional.totalCorrectAnswers,
+      correctStreak: 0,
+    },
+  };
+  resetDifficultyByStreak(updatedUserWord);
+  setGame(updatedUserWord, game);
+  return updatedUserWord;
+};

@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
+import { Typography } from '@mui/material';
 import useTypedSelector from '../hooks/useTypedSelector';
 import { checkAuthAction } from '../redux/store/reducers/authReducer';
 import { getUserWordsAction } from '../redux/store/reducers/userWordsReducer';
@@ -12,20 +13,39 @@ import LoginPage from './pages/LoginPage';
 import RegistrationPage from './pages/RegistrationPage';
 import GamesPage from './main-page/GamesPage';
 import SprintPage from './sprint/SprintPage';
-import { requestStatisticAction } from '../redux/store/reducers/statisticReducer';
-import AudioCallPage from './audiocall/AudioCallPage';
 import DemoHomePage from './pages/DemoHomePage';
-import { Typography } from '@mui/material';
 import { darkBgColor } from './e-book/cosnstants';
+import {
+  requestStatisticAction,
+  saveStatisticAction,
+} from '../redux/store/reducers/statisticReducer';
+import AudioCallPage from './audiocall/AudioCallPage';
 
 const AppRouter = () => {
   const dispatch = useDispatch();
   const authState = useTypedSelector(store => store.auth);
+  const statisticState = useTypedSelector(store => store.statistic);
+
   useEffect(() => {
     if (LocalStorageService.hasItem(StorageKeys.USER_DATA)) {
       dispatch(checkAuthAction());
     }
   }, []);
+
+  useEffect(() => {
+    if (authState.userData.userId && authState.isAuth) {
+      dispatch(
+        saveStatisticAction({
+          newStatistic: statisticState,
+          userId: authState.userData.userId,
+        })
+      );
+      const { sprint } =
+        statisticState.completeStatistic.optional.gameStatistic;
+      console.log(sprint);
+    }
+  }, [statisticState]);
+
   useMemo(() => {
     if (authState.isAuth) {
       dispatch(getUserWordsAction({ userId: authState.userData.userId }));
@@ -39,7 +59,7 @@ const AppRouter = () => {
         <Route path="registration" element={<RegistrationPage />} />
         <Route path="login" element={<LoginPage />} />
         <Route
-          path="book"
+          path="book/"
           element={
             <EBook
               isAuth={authState.isAuth}
@@ -52,7 +72,14 @@ const AppRouter = () => {
         <Route path="audiocall" element={<AudioCallPage />} />
         {/* <Route path="statistics" element={<StatisticsPage />} />
         <Route path="team" element={<TeamPage />} /> */}
-        <Route path="*" element={<Typography align='center' variant='h2' sx={{ color: darkBgColor }}>Page not found</Typography>} />
+        <Route
+          path="*"
+          element={
+            <Typography align="center" variant="h2" sx={{ color: darkBgColor }}>
+              Page not found
+            </Typography>
+          }
+        />
       </Route>
     </Routes>
   );
