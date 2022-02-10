@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/media-has-caption */
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import React, {
   FC,
   LegacyRef,
@@ -36,6 +36,8 @@ import SprintMenu from './SprintMenu';
 import ResultLine from './ResultLine';
 import Results from './Results';
 import getAssetsUrl from '../../helpers/getAssetsUrl';
+import MainPageLayoutButton from '../pages/MainPageLayoutButton';
+import { colors, darkColors } from '../e-book/cosnstants';
 
 const StyledBox = styled(Box)`
   width: 100%;
@@ -43,6 +45,7 @@ const StyledBox = styled(Box)`
   display: flex;
   justify-content: center;
   align-items: center;
+  padding-left: 3.5rem;
 `;
 
 const StyledProgress = styled(CircularProgress)`
@@ -147,12 +150,14 @@ const SprintPage: FC = () => {
     nextQuestion();
   }, [sprintGameState.words]);
 
+  const { group } = sprintGameState;
+
   if (sprintGameState.request) {
     return <StyledProgress />;
   }
 
   return (
-    <StyledBox>
+    <StyledBox sx={{ backgroundColor: colors[group] }}>
       <>
         <audio
           src={getAssetsUrl('files/01_0001.mp3')}
@@ -167,16 +172,39 @@ const SprintPage: FC = () => {
         <SprintMenu onClick={startHandler} />
       )}
       {sprintGameState.gameStatus === SprintGameStatus.INRUN && (
-        <div>
-          <div>{currentQuestion.word}</div>
-          <div>{currentQuestion.answer}</div>
-          <SprintButton type="button" onClick={() => answerHandler(false)}>
-            InCorrect
-          </SprintButton>
-          <SprintButton onClick={() => answerHandler(true)}>
-            Correct
-          </SprintButton>
-        </div>
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+          <Box
+            sx={{
+              display: 'flex',
+              flexFlow: 'row wrap',
+              gap: '1em',
+              color: 'white',
+            }}
+          >
+            <Typography variant="h2" fontWeight="bold">
+              {currentQuestion.word} = {currentQuestion.answer}?
+            </Typography>
+          </Box>
+          <Box
+            sx={{
+              display: 'flex',
+              flexFlow: 'row wrap',
+              justifyContent: 'space-between',
+              gap: '1rem',
+            }}
+          >
+            <MainPageLayoutButton
+              color="#ff1744"
+              onClick={() => answerHandler(false)}
+              text="incorrect"
+            />
+            <MainPageLayoutButton
+              color="#00e576"
+              onClick={() => answerHandler(true)}
+              text="correct"
+            />
+          </Box>
+        </Box>
       )}
       {sprintGameState.gameStatus === SprintGameStatus.END && (
         <>

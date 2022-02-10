@@ -8,6 +8,16 @@ export const colors = [
   '#90a4ea',
 ];
 
+export const darkColors = [
+  '#c75b39',
+  '#c88719',
+  '#7da453',
+  '#009faf',
+  '#ba2d65',
+  '#883997',
+  '#62757f',
+];
+
 export const mainBgColor = '#64ffda';
 export const lightBgColor = '#99ffe0';
 export const darkBgColor = '#14cba8';

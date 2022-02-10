@@ -14,7 +14,6 @@ import ReactAudioPlayer from 'react-audio-player';
 import useTypedSelector from '../../hooks/useTypedSelector';
 import getAssetsUrl from '../../helpers/getAssetsUrl';
 import SprintMenu from '../sprint/SprintMenu';
-import SprintButton from '../sprint/SprintButton';
 import Results from '../sprint/Results';
 import ResultLine from '../sprint/ResultLine';
 import { AudioCallGameStatus } from '../../redux/types/audioCallTypes';
@@ -34,6 +33,8 @@ import {
   correctAnswerAction,
   incorrectAnswerAction,
 } from '../../redux/store/reducers/userWordsReducer';
+import MainPageLayoutButton from '../pages/MainPageLayoutButton';
+import { colors, darkColors } from '../e-book/cosnstants';
 
 const StyledBox = styled(Box)`
   width: 100%;
@@ -41,6 +42,12 @@ const StyledBox = styled(Box)`
   display: flex;
   justify-content: center;
   align-items: center;
+  padding-left: 3.5rem;
+`;
+
+const StyledGameContainer = styled(Box)`
+  display: flex;
+  gap: 1em;
 `;
 
 const StyledProgress = styled(CircularProgress)`
@@ -151,8 +158,10 @@ const AudioCallPage = () => {
     return <StyledProgress />;
   }
 
+  const { group } = audioCallState;
+
   return (
-    <StyledBox>
+    <StyledBox sx={{ backgroundColor: colors[group] }}>
       <>
         <ReactAudioPlayer
           src="https://rslang-team15-natein.netlify.app/static/media/correct.a7b1cde9.mp3"
@@ -172,16 +181,16 @@ const AudioCallPage = () => {
             src={getAssetsUrl(currentQuestion.audio)}
             autoPlay
           />
-          <div style={{ display: 'flex', columnGap: '1rem' }}>
+          <StyledGameContainer>
             {currentQuestion.answers.map(answerItem => (
-              <SprintButton
+              <MainPageLayoutButton
                 key={answerItem}
                 onClick={() => answerHandler(answerItem)}
-              >
-                {answerItem}
-              </SprintButton>
+                color={darkColors[group]}
+                text={answerItem}
+              />
             ))}
-          </div>
+          </StyledGameContainer>
         </div>
       )}
       {audioCallState.gameStatus === AudioCallGameStatus.END && (
