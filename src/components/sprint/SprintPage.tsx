@@ -39,7 +39,7 @@ import getAssetsUrl from '../../helpers/getAssetsUrl';
 
 const StyledBox = styled(Box)`
   width: 100%;
-  height: 100vh;
+  height: calc(100vh - 4rem);
   display: flex;
   justify-content: center;
   align-items: center;
