@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Box, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import MainPageLayoutButton from '../pages/MainPageLayoutButton';
-import { lightBgColor } from '../pages/DemoHomePage';
+import { lightBgColor } from '../e-book/cosnstants';
 
 const StyledLink = styled(Link)`
   text-decoration: none;

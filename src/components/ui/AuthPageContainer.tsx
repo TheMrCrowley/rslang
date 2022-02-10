@@ -1,6 +1,6 @@
 import { Box, FormGroup } from '@mui/material';
 import React from 'react';
-import { mainBgColor } from '../pages/DemoHomePage';
+import { mainBgColor } from '../e-book/cosnstants';
 
 const AuthPageContainer: React.FC = ({ children }) => {
   return (

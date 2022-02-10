@@ -8,10 +8,7 @@ import CampaignIcon from '@mui/icons-material/Campaign';
 import { RootState } from '../../redux/store';
 import Bg from '../../assets/Untitled.png';
 import MainPageLayoutButton from './MainPageLayoutButton';
-
-export const mainBgColor = '#64ffda';
-export const lightBgColor = '#99ffe0';
-export const darkBgColor = '#14cba8';
+import { darkBgColor, lightBgColor } from '../e-book/cosnstants';
 
 const DemoHomePage = () => {
   const navigate = useNavigate();

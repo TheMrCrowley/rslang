@@ -8,6 +8,10 @@ export const colors = [
   '#90a4ea',
 ];
 
+export const mainBgColor = '#64ffda';
+export const lightBgColor = '#99ffe0';
+export const darkBgColor = '#14cba8';
+
 export const isAuth = true;
 
 export const MAX_PROGRESS_ITEMS = 5;
