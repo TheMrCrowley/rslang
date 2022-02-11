@@ -3,8 +3,8 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import SendIcon from '@mui/icons-material/Send';
 import { signinAction } from '../../redux/store/reducers/authReducer';
-import { UserLoginData } from '../../services/types';
 import AuthPageContainer from '../ui/AuthPageContainer';
+import { LoginRequestData } from '../../services/auth/authServiceTypes';
 
 const LoginPage = () => {
   const dispatch = useDispatch();
@@ -22,14 +22,14 @@ const LoginPage = () => {
   };
 
   const validatePassword = () => {
-    if (!password.length || password.length > 8) {
+    if (!password.length || password.length < 8) {
       setInvalidPassword(true);
     } else {
       setInvalidPassword(false);
     }
   };
 
-  const createUserData = (): UserLoginData => ({
+  const createUserData = (): LoginRequestData => ({
     email,
     password,
   });

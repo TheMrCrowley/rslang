@@ -1,5 +1,6 @@
 import getRandomNumber from '../../helpers/getRandomNumber';
 import { Word } from '../../services/words/wordsServiceTypes';
+import shuffle from '../../helpers/shuffleArray';
 
 export interface AudioCallQuestionItem {
   wordId: string;
@@ -19,7 +20,7 @@ const getOtherAnswers = (answer: string, wordsAnswers: string[]) => {
   while (otherAnswers.size < 4) {
     otherAnswers.add(wordsAnswers[getRandomNumber(0, wordsAnswers.length - 1)]);
   }
-  return Array.from(otherAnswers);
+  return shuffle(Array.from(otherAnswers));
 };
 
 const createAucioCallQuestionItem = (
@@ -42,5 +43,7 @@ export const getAudiCallQuestionItems = (
   words: Word[]
 ): AudioCallQuestionItem[] => {
   const allAnswers = getAllAnswers(words);
-  return words.map(word => createAucioCallQuestionItem(word, allAnswers));
+  return shuffle(
+    words.map(word => createAucioCallQuestionItem(word, allAnswers))
+  );
 };

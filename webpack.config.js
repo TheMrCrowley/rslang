@@ -30,6 +30,7 @@ module.exports = {
   plugins,
   entry: path.join(__dirname, 'src/index.tsx'),
   output: {
+    publicPath: "/",
     path: path.join(__dirname, 'dist'),
     filename: '[name].[contenthash].js',
     assetModuleFilename: 'assets/[hash][ext][query]',

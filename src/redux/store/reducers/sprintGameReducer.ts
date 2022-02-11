@@ -6,10 +6,10 @@ import {
   WordWithCustomProps,
 } from '../../../services/words/wordsServiceTypes';
 import {
-  SprintGameStatus,
-  SprintState,
   SprintGameAction,
   SprintGameActions,
+  SprintGameStatus,
+  SprintState,
   SprintStatus,
 } from '../../types/sprintTypes';
 import { UserWordResponse } from '../../../services/user-words/userWordsServiceTypes';
@@ -20,6 +20,7 @@ const sprintGameInitialState: SprintState = {
   gameStatus: SprintGameStatus.PREPARE,
   group: 0,
   page: 0,
+  book: false,
 };
 
 export const sprintGameReducer = (
@@ -46,14 +47,19 @@ export const sprintGameReducer = (
     }
     case SprintGameActions.RESET_SPRINT_STATE:
       return { ...sprintGameInitialState };
+    case SprintGameActions.SET_SPRINT_BOOK:
+      return { ...state, book: true };
     default:
       return state;
   }
 };
 
-export const requestSprintDataAction = (
-  payload: WordsRequestData
-): SprintGameAction => ({
+export const requestSprintDataAction = (payload: {
+  group: number;
+  page: number;
+  book?: boolean;
+  userId?: string;
+}): SprintGameAction => ({
   type: SprintGameActions.REQUEST_SPRINT_DATA,
   payload,
 });
@@ -101,4 +107,8 @@ export const sprintInCorrectAction = (payload: {
 }): SprintGameAction => ({
   type: SprintGameActions.SPRINT_INCORRECT_ANSWER,
   payload,
+});
+
+export const setSprintBookAction = (): SprintGameAction => ({
+  type: SprintGameActions.SET_SPRINT_BOOK,
 });

@@ -1,4 +1,7 @@
-import { Word } from '../../services/words/wordsServiceTypes';
+import {
+  Word,
+  WordWithCustomProps,
+} from '../../services/words/wordsServiceTypes';
 import getRandomNumber from '../../helpers/getRandomNumber';
 import shuffle from '../../helpers/shuffleArray';
 
@@ -11,9 +14,11 @@ export interface SprintQuestionItem {
   translate: string;
 }
 
-const getCorrectQuestions = (words: Word[]): SprintQuestionItem[] => {
+const getCorrectQuestions = (
+  words: Word[] | WordWithCustomProps[]
+): SprintQuestionItem[] => {
   return words.map(wordItem => ({
-    wordId: wordItem.id,
+    wordId: wordItem._id || wordItem.id,
     word: wordItem.word,
     answer: wordItem.wordTranslate,
     audio: wordItem.audio,
@@ -35,7 +40,7 @@ const getIncorrectQuestions = (
       }
     }
     return {
-      wordId: wordItem.id,
+      wordId: wordItem.id || wordItem._id,
       word: wordItem.word,
       answer: fakeAnswer,
       audio: wordItem.audio,

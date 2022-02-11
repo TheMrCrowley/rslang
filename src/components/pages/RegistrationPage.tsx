@@ -3,8 +3,8 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import SendIcon from '@mui/icons-material/Send';
 import { registrationAction } from '../../redux/store/reducers/authReducer';
-import { UserRegistrationData } from '../../services/types';
 import AuthPageContainer from '../ui/AuthPageContainer';
+import { RegistrationRequestData } from '../../services/auth/authServiceTypes';
 
 const RegistrationPage = () => {
   const [name, setName] = useState('');
@@ -33,14 +33,14 @@ const RegistrationPage = () => {
   };
 
   const validatePassword = () => {
-    if (!password.length || password.length > 8) {
+    if (!password.length || password.length < 8) {
       setInvalidPassword(true);
     } else {
       setInvalidPassword(false);
     }
   };
 
-  const createFormData = (): UserRegistrationData => ({
+  const createFormData = (): RegistrationRequestData => ({
     name,
     email,
     password,
@@ -92,7 +92,6 @@ const RegistrationPage = () => {
         onClick={() => {
           const user = createFormData();
           if (!invalidName && !invalidEmail && !invalidPassword) {
-            console.log(user);
             dispatch(registrationAction(user));
           }
         }}

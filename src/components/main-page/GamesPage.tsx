@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { Box, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import MainPageLayoutButton from '../pages/MainPageLayoutButton';
@@ -32,14 +32,14 @@ const GamesPage = () => {
           borderRadius: '3em',
         }}
       >
-        <StyledLink to="/sprint">
+        <StyledLink to="sprint">
           <MainPageLayoutButton>
             <Typography variant="h2" fontWeight="bold">
               Sprint
             </Typography>
           </MainPageLayoutButton>
         </StyledLink>
-        <StyledLink to="/audiocall">
+        <StyledLink to="audiocall">
           <MainPageLayoutButton>
             <Typography variant="h2" fontWeight="bold">
               Audiocall

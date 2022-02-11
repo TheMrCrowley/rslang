@@ -11,7 +11,6 @@ import React, {
 import { useDispatch } from 'react-redux';
 import { styled } from '@mui/material/styles';
 import CircularProgress from '@mui/material/CircularProgress';
-import ReactAudioPlayer from 'react-audio-player';
 import useTypedSelector from '../../hooks/useTypedSelector';
 import getRandomNumber from '../../helpers/getRandomNumber';
 import { SprintQuestionItem } from './SprintModel';
@@ -91,7 +90,6 @@ const SprintPage: FC = () => {
   if (sprintGameState.request) {
     return <StyledProgress />;
   }
-
   return (
     <GamePageWrapper color={colors[group]}>
       <>

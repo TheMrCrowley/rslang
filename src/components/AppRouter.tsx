@@ -55,6 +55,7 @@ const AppRouter = () => {
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
+        <Route index element={<DemoHomePage />} />
         <Route path="home" element={<DemoHomePage />} />
         <Route path="registration" element={<RegistrationPage />} />
         <Route path="login" element={<LoginPage />} />
@@ -68,8 +69,8 @@ const AppRouter = () => {
           }
         />
         <Route path="games" element={<GamesPage />} />
-        <Route path="sprint" element={<SprintPage />} />
-        <Route path="audiocall" element={<AudioCallPage />} />
+        <Route path="games/sprint" element={<SprintPage />} />
+        <Route path="games/audiocall" element={<AudioCallPage />} />
         {/* <Route path="statistics" element={<StatisticsPage />} />
         <Route path="team" element={<TeamPage />} /> */}
         <Route

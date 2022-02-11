@@ -6,9 +6,13 @@ import {
   setSprintDataAction,
   sprintRequestStartAction,
   changeSprintStatusAction,
+  setSprintBookAction,
 } from '../store/reducers/sprintGameReducer';
 import WordsService from '../../services/words/wordsService';
-import { Word } from '../../services/words/wordsServiceTypes';
+import {
+  Word,
+  WordWithCustomProps,
+} from '../../services/words/wordsServiceTypes';
 import {
   RequestSprintDataAction,
   SprintCorrectAction,
@@ -41,14 +45,25 @@ import {
 function* requestSprintDataWorker(data: RequestSprintDataAction) {
   try {
     yield put(sprintRequestStartAction());
-    const { group, page } = data.payload;
+    const { group, page, userId, book } = data.payload;
     yield put(setWordsSectionAction({ group, page }));
-    const wordsResponse: Word[] = yield call(
-      WordsService.getWords,
-      group,
-      page
-    );
-    yield put(setSprintDataAction(wordsResponse));
+    if (book && userId) {
+      yield put(setSprintBookAction());
+      const wordsResponse: WordWithCustomProps[] = yield call(
+        WordsService.getNotStudiedWords,
+        userId,
+        group,
+        page
+      );
+      yield put(setSprintDataAction(wordsResponse));
+    } else {
+      const wordsResponse: Word[] = yield call(
+        WordsService.getWords,
+        group,
+        page
+      );
+      yield put(setSprintDataAction(wordsResponse));
+    }
     yield put(sprintRequestEndAction());
     yield put(changeSprintStatusAction(SprintGameStatus.INRUN));
   } catch (e) {

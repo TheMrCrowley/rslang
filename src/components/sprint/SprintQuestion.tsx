@@ -1,25 +1,10 @@
 import { Box, Typography } from '@mui/material';
-import React, { FC, useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { isNewWord } from '../../helpers/statisticHandlers';
-import useTypedSelector from '../../hooks/useTypedSelector';
-import {
-  changeSprintStatusAction,
-  setWordsSectionAction,
-  sprintCorrectAction,
-  sprintInCorrectAction,
-} from '../../redux/store/reducers/sprintGameReducer';
-import { changeSprintNewWordAction } from '../../redux/store/reducers/statisticReducer';
+import React, { FC } from 'react';
 import { AuthState } from '../../redux/types/authTypes';
-import { SprintGameStatus } from '../../redux/types/sprintTypes';
-import WordsService from '../../services/words/wordsService';
 import MainPageLayoutButton from '../pages/MainPageLayoutButton';
-import {
-  compareAnswers,
-  getQuestionItems,
-  SprintQuestionItem,
-} from './SprintModel';
+import { SprintQuestionItem } from './SprintModel';
 import SprintTimer from './SprintTimer';
+import useSprint from '../../hooks/useSprint';
 
 interface SprintQuestionProps {
   auth: AuthState;
@@ -34,67 +19,12 @@ const SprintQuestion: FC<SprintQuestionProps> = ({
   correctAnswer,
   incorrectAnswer,
 }) => {
-  const dispatch = useDispatch();
-  const { words, group, page } = useTypedSelector(store => store.sprintGame);
-  const { userWords } = useTypedSelector(store => store.userWords);
-
-  const [questions, setQuestions] = useState<SprintQuestionItem[]>([]);
-  const [currentQuestion, setCurrentQuestion] = useState<SprintQuestionItem>(
-    {} as SprintQuestionItem
+  const { word, answer, confirm, decline } = useSprint(
+    auth,
+    correctAnswer,
+    incorrectAnswer,
+    audioHandler
   );
-
-  const nextQuestion = () => {
-    setQuestions(prev => {
-      setCurrentQuestion(prev.pop() as SprintQuestionItem);
-      return prev;
-    });
-  };
-
-  useEffect(() => {
-    setQuestions(getQuestionItems(words));
-    nextQuestion();
-  }, [words]);
-
-  const answerHandler = (answer: boolean) => {
-    const isCorrect = compareAnswers(currentQuestion.isCorrect, answer);
-    if (auth.isAuth) {
-      const { userId } = auth.userData;
-      const { wordId } = currentQuestion;
-      if (isNewWord(userWords, wordId)) {
-        dispatch(changeSprintNewWordAction());
-      }
-      if (isCorrect) {
-        dispatch(sprintCorrectAction({ userId, wordId, words: userWords }));
-      } else {
-        dispatch(sprintInCorrectAction({ userId, wordId, words: userWords }));
-      }
-    }
-    if (isCorrect) {
-      correctAnswer(currentQuestion);
-      audioHandler(true);
-    } else {
-      incorrectAnswer(currentQuestion);
-      audioHandler(false);
-    }
-    if (questions.length) {
-      nextQuestion();
-    } else {
-      const newPage = page - 1;
-      if (page >= 0) {
-        dispatch(setWordsSectionAction({ group, page: newPage }));
-        WordsService.getWords(group, newPage).then(data => {
-          setQuestions(getQuestionItems(data));
-          nextQuestion();
-        });
-      } else {
-        dispatch(changeSprintStatusAction(SprintGameStatus.END));
-      }
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener('keypress');
-  }, []);
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
@@ -108,7 +38,7 @@ const SprintQuestion: FC<SprintQuestionProps> = ({
         }}
       >
         <Typography variant="h2" fontWeight="bold">
-          {currentQuestion.word} = {currentQuestion.answer}?
+          {word} = {answer}?
         </Typography>
       </Box>
       <Box
@@ -121,12 +51,12 @@ const SprintQuestion: FC<SprintQuestionProps> = ({
       >
         <MainPageLayoutButton
           color="#ff1744"
-          onClick={() => answerHandler(false)}
+          onClick={decline}
           text="incorrect"
         />
         <MainPageLayoutButton
           color="#00e576"
-          onClick={() => answerHandler(true)}
+          onClick={confirm}
           text="correct"
         />
       </Box>

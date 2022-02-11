@@ -22,6 +22,7 @@ export interface SprintState {
   request: boolean;
   group: number;
   page: number;
+  book: boolean;
 }
 
 export enum SprintGameActions {
@@ -34,6 +35,11 @@ export enum SprintGameActions {
   SET_WORDS_SECTION = 'SET_WORDS_SECTION',
   SPRINT_CORRECT_ANSWER = 'SPRINT_CORRECT_ANSWER',
   SPRINT_INCORRECT_ANSWER = 'SPRINT_INCORRECT_ANSWER',
+  SET_SPRINT_BOOK = 'SET_SPRINT_BOOK',
+}
+
+export interface SetSprintBookAction {
+  type: SprintGameActions.SET_SPRINT_BOOK;
 }
 
 export interface SprintCorrectAction {
@@ -56,7 +62,7 @@ export interface SprintInCorrectAction {
 
 export interface RequestSprintDataAction {
   type: SprintGameActions.REQUEST_SPRINT_DATA;
-  payload: WordsRequestData;
+  payload: { group: number; page: number; book?: boolean; userId?: string };
 }
 
 export interface SetSprintDataAction {
@@ -95,4 +101,5 @@ export type SprintGameAction =
   | ResetSprintStateAction
   | SetWordsSectionAction
   | SprintCorrectAction
-  | SprintInCorrectAction;
+  | SprintInCorrectAction
+  | SetSprintBookAction;

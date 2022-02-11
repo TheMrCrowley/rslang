@@ -52,7 +52,14 @@ const EBook: FC<EBookProps> = ({ isAuth, userId }) => {
         pl: '3.5rem',
       }}
     >
-      <BookBar setPage={setPage} setGroup={setGroup} group={group} />
+      <BookBar
+        setPage={setPage}
+        setGroup={setGroup}
+        group={group}
+        page={page}
+        isAuth={isAuth}
+        userId={userId}
+      />
       <CardList words={words} />
     </Box>
   );

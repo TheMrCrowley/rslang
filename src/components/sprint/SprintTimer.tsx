@@ -6,7 +6,8 @@ import { changeSprintStatusAction } from '../../redux/store/reducers/sprintGameR
 import { SprintGameStatus } from '../../redux/types/sprintTypes';
 
 const SprintTimer = () => {
-  const [time, status] = useTimer(10);
+  // TODO switch to const
+  const [time, status] = useTimer(60);
   const dispatch = useDispatch();
   useEffect(() => {
     if (!status) {
