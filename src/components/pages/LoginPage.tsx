@@ -2,32 +2,16 @@ import { Button, TextField, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import SendIcon from '@mui/icons-material/Send';
+import { useNavigate } from 'react-router-dom';
 import { signinAction } from '../../redux/store/reducers/authReducer';
 import AuthPageContainer from '../ui/AuthPageContainer';
 import { LoginRequestData } from '../../services/auth/authServiceTypes';
 
 const LoginPage = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [invalidEmail, setInvalidEmail] = useState(false);
-  const [invalidPassword, setInvalidPassword] = useState(false);
-
-  const validateEmail = () => {
-    if (!email.length) {
-      setInvalidEmail(true);
-    } else {
-      setInvalidEmail(false);
-    }
-  };
-
-  const validatePassword = () => {
-    if (!password.length || password.length < 8) {
-      setInvalidPassword(true);
-    } else {
-      setInvalidPassword(false);
-    }
-  };
 
   const createUserData = (): LoginRequestData => ({
     email,
@@ -37,9 +21,6 @@ const LoginPage = () => {
     <AuthPageContainer>
       <Typography variant="h4">Log in to RS Lang</Typography>
       <TextField
-        error={invalidEmail}
-        helperText={invalidEmail && 'Please, enter your e-mail'}
-        onBlur={validateEmail}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
           setEmail(e.target.value)
         }
@@ -50,9 +31,6 @@ const LoginPage = () => {
         required
       />
       <TextField
-        error={invalidPassword}
-        helperText={invalidPassword && 'Password should be less than 8 chars.'}
-        onBlur={validatePassword}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
           setPassword(e.target.value)
         }
@@ -65,9 +43,8 @@ const LoginPage = () => {
       <Button
         onClick={() => {
           const user = createUserData();
-          if (!invalidEmail && !invalidPassword) {
-            dispatch(signinAction(user));
-          }
+          dispatch(signinAction(user));
+          navigate('/home');
         }}
         variant="contained"
         endIcon={<SendIcon />}

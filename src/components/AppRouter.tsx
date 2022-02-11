@@ -25,7 +25,6 @@ const AppRouter = () => {
   const dispatch = useDispatch();
   const authState = useTypedSelector(store => store.auth);
   const statisticState = useTypedSelector(store => store.statistic);
-
   useEffect(() => {
     if (LocalStorageService.hasItem(StorageKeys.USER_DATA)) {
       dispatch(checkAuthAction());
@@ -40,9 +39,6 @@ const AppRouter = () => {
           userId: authState.userData.userId,
         })
       );
-      const { sprint } =
-        statisticState.completeStatistic.optional.gameStatistic;
-      console.log(sprint);
     }
   }, [statisticState]);
 
@@ -57,7 +53,10 @@ const AppRouter = () => {
       <Route path="/" element={<Layout />}>
         <Route index element={<DemoHomePage />} />
         <Route path="home" element={<DemoHomePage />} />
-        <Route path="registration" element={<RegistrationPage />} />
+        <Route
+          path="registration"
+          element={<RegistrationPage request={authState.request} />}
+        />
         <Route path="login" element={<LoginPage />} />
         <Route
           path="book/"

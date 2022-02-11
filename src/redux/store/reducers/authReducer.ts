@@ -14,6 +14,7 @@ import {
 const authInitialState: AuthState = {
   isAuth: false,
   userData: {} as LoginResponseData,
+  request: false,
 };
 
 export const authReducer = (
@@ -21,18 +22,16 @@ export const authReducer = (
   action: AuthAction
 ): AuthState => {
   switch (action.type) {
-    case AuthActionsTypes.REGISTRATION:
-      return state;
-    case AuthActionsTypes.SIGNIN:
-      return state;
     case AuthActionsTypes.LOGOUT:
       return { ...state, isAuth: false, userData: {} as LoginResponseData };
-    case AuthActionsTypes.CHECK_AUTH:
-      return state;
     case AuthActionsTypes.SET_IS_AUTH:
       return { ...state, isAuth: true };
     case AuthActionsTypes.SET_USER_DATA:
       return { ...state, userData: { ...(action as SetDataAction).payload } };
+    case AuthActionsTypes.AUTH_REQUEST_START:
+      return { ...state, request: true };
+    case AuthActionsTypes.AUTH_REQUEST_END:
+      return { ...state, request: false };
     default:
       return state;
   }
@@ -65,4 +64,12 @@ export const setIsAuthAction = (): AuthAction => ({
 export const setUserDataAction = (payload: LoginResponseData): AuthAction => ({
   type: AuthActionsTypes.SET_USER_DATA,
   payload,
+});
+
+export const authRequestStartAction = (): AuthAction => ({
+  type: AuthActionsTypes.AUTH_REQUEST_START,
+});
+
+export const authRequestEndAction = (): AuthAction => ({
+  type: AuthActionsTypes.AUTH_REQUEST_END,
 });

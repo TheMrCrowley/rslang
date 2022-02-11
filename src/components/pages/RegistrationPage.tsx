@@ -1,58 +1,42 @@
-import { Button, TextField, Typography } from '@mui/material';
-import React, { useState } from 'react';
+import {
+  Button,
+  CircularProgress,
+  TextField,
+  Tooltip,
+  Typography,
+} from '@mui/material';
+import React, { FC, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import SendIcon from '@mui/icons-material/Send';
+import { useNavigate } from 'react-router-dom';
 import { registrationAction } from '../../redux/store/reducers/authReducer';
 import AuthPageContainer from '../ui/AuthPageContainer';
 import { RegistrationRequestData } from '../../services/auth/authServiceTypes';
 
-const RegistrationPage = () => {
+interface RegistrationPageProps {
+  request: boolean;
+}
+
+const RegistrationPage: FC<RegistrationPageProps> = ({ request }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const dispatch = useDispatch();
-
-  const [invalidName, setInvalidName] = useState(false);
-  const [invalidEmail, setInvalidEmail] = useState(false);
-  const [invalidPassword, setInvalidPassword] = useState(false);
-
-  const validateName = () => {
-    if (!name.length || name.length > 10) {
-      setInvalidName(true);
-    } else {
-      setInvalidName(false);
-    }
-  };
-
-  const validateEmail = () => {
-    if (!email.length) {
-      setInvalidEmail(true);
-    } else {
-      setInvalidEmail(false);
-    }
-  };
-
-  const validatePassword = () => {
-    if (!password.length || password.length < 8) {
-      setInvalidPassword(true);
-    } else {
-      setInvalidPassword(false);
-    }
-  };
+  const navigate = useNavigate();
 
   const createFormData = (): RegistrationRequestData => ({
     name,
     email,
     password,
   });
+  if (request) {
+    return <CircularProgress />;
+  }
   return (
     <AuthPageContainer>
       <Typography variant="h4">Sign up</Typography>
       <Typography variant="h5">It&apos;s quick and easy</Typography>
       <TextField
-        error={invalidName}
-        helperText={invalidName && 'Please, enter the name!'}
-        onBlur={validateName}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
           setName(e.target.value)
         }
@@ -63,9 +47,6 @@ const RegistrationPage = () => {
         required
       />
       <TextField
-        error={invalidEmail}
-        helperText={invalidEmail && 'Please, enter your e-mail'}
-        onBlur={validateEmail}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
           setEmail(e.target.value)
         }
@@ -75,25 +56,23 @@ const RegistrationPage = () => {
         type="email"
         required
       />
-      <TextField
-        error={invalidPassword}
-        helperText={invalidPassword && 'Password should be less than 8 chars.'}
-        onBlur={validatePassword}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          setPassword(e.target.value)
-        }
-        value={password}
-        label="Password"
-        variant="outlined"
-        type="password"
-        required
-      />
+      <Tooltip title="Password must be longer than 8 characters">
+        <TextField
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setPassword(e.target.value)
+          }
+          value={password}
+          label="Password"
+          variant="outlined"
+          type="password"
+          required
+        />
+      </Tooltip>
       <Button
         onClick={() => {
           const user = createFormData();
-          if (!invalidName && !invalidEmail && !invalidPassword) {
-            dispatch(registrationAction(user));
-          }
+          dispatch(registrationAction(user));
+          navigate('/home');
         }}
         variant="contained"
         endIcon={<SendIcon />}
