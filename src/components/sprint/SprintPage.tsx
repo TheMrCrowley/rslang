@@ -1,36 +1,27 @@
 /* eslint-disable jsx-a11y/media-has-caption */
-import { Box, Typography } from '@mui/material';
+import { Box } from '@mui/material';
 import React, {
   FC,
-  LegacyRef,
-  MutableRefObject,
-  useCallback,
+  RefObject,
   useEffect,
-  useMemo,
+  LegacyRef,
   useRef,
   useState,
 } from 'react';
 import { useDispatch } from 'react-redux';
 import { styled } from '@mui/material/styles';
 import CircularProgress from '@mui/material/CircularProgress';
+import ReactAudioPlayer from 'react-audio-player';
 import useTypedSelector from '../../hooks/useTypedSelector';
 import getRandomNumber from '../../helpers/getRandomNumber';
-import {
-  compareAnswers,
-  getQuestionItems,
-  SprintQuestionItem,
-} from './SprintModel';
+import { SprintQuestionItem } from './SprintModel';
 
 import {
-  changeSprintStatusAction,
   requestSprintDataAction,
   resetSprintStateAction,
-  sprintCorrectAction,
-  sprintInCorrectAction,
 } from '../../redux/store/reducers/sprintGameReducer';
 import { SprintGameStatus } from '../../redux/types/sprintTypes';
 import SprintMenu from './SprintMenu';
-import ResultLine from './ResultLine';
 import Results from './Results';
 import getAssetsUrl from '../../helpers/getAssetsUrl';
 import MainPageLayoutButton from '../pages/MainPageLayoutButton';
@@ -55,20 +46,12 @@ const StyledProgress = styled(CircularProgress)`
 `;
 
 const SprintPage: FC = () => {
-  const correctAudio = useRef<HTMLAudioElement>();
-  const inCorrectAudio = useRef<HTMLAudioElement>();
-  // redux
-  const { userWords } = useTypedSelector(store => store.userWords);
+  const correctAudio = useRef() as RefObject<ReactAudioPlayer>;
+  const inCorrectAudio = useRef() as RefObject<ReactAudioPlayer>;
   const authState = useTypedSelector(store => store.auth);
   const sprintGameState = useTypedSelector(store => store.sprintGame);
   const dispatch = useDispatch();
-  //
-  const [currentQuestion, setCurrentQuestion] = useState<SprintQuestionItem>(
-    {} as SprintQuestionItem
-  );
-  const [gameQuestions, setGameQuestions] = useState<SprintQuestionItem[]>([
-    {} as SprintQuestionItem,
-  ] as SprintQuestionItem[]);
+
   const [correctAnswers, setCorrectAnswers] = useState<SprintQuestionItem[]>(
     [] as SprintQuestionItem[]
   );
@@ -81,61 +64,13 @@ const SprintPage: FC = () => {
     dispatch(requestSprintDataAction({ group, page: randomPage }));
   };
 
-  const restartHandler = useCallback(() => {
-    const { group, page } = sprintGameState;
-    dispatch(requestSprintDataAction({ group, page }));
-  }, [sprintGameState.group, sprintGameState.page]);
-
-  const nextQuestion = () => {
-    setGameQuestions(prev => {
-      setCurrentQuestion(prev.pop() as SprintQuestionItem);
-      return prev;
-    });
-  };
-
-  const showResults = () => {
-    dispatch(changeSprintStatusAction(SprintGameStatus.END));
-  };
-
-  const playHandler = (ref: MutableRefObject<HTMLAudioElement>) => {
-    if (ref.current) {
-      ref.current.play();
+  const playHandler = (isCorrect: boolean) => {
+    if (isCorrect && correctAudio.current) {
+      correctAudio.current.audioEl.current?.play();
+    } else if (!isCorrect && inCorrectAudio.current) {
+      inCorrectAudio.current.audioEl.current?.play();
     }
   };
-
-  const answerHandler = (answer: boolean) => {
-    const isCorrect = compareAnswers(currentQuestion.isCorrect, answer);
-    if (authState.isAuth) {
-      const { userId } = authState.userData;
-      const { wordId } = currentQuestion;
-      if (isNewWord(userWords, wordId)) {
-        dispatch(changeSprintNewWordAction());
-      }
-      if (isCorrect) {
-        dispatch(sprintCorrectAction({ userId, wordId, words: userWords }));
-      } else {
-        dispatch(sprintInCorrectAction({ userId, wordId, words: userWords }));
-      }
-    }
-    if (isCorrect) {
-      setCorrectAnswers(prev => [...prev, { ...currentQuestion }]);
-      playHandler(correctAudio as MutableRefObject<HTMLAudioElement>);
-    } else {
-      setInCorrectAnswers(prev => [...prev, { ...currentQuestion }]);
-      playHandler(inCorrectAudio as MutableRefObject<HTMLAudioElement>);
-    }
-    if (gameQuestions.length) {
-      nextQuestion();
-    } else {
-      showResults();
-    }
-  };
-
-  useEffect(() => {
-    if (gameQuestions.length) {
-      dispatch(changeSprintStatusAction(SprintGameStatus.INRUN));
-    }
-  }, [gameQuestions.length, dispatch]);
 
   useEffect(() => {
     return () => {
@@ -143,12 +78,15 @@ const SprintPage: FC = () => {
     };
   }, []);
 
-  useMemo(() => {
-    setGameQuestions(getQuestionItems(sprintGameState.words));
-    nextQuestion();
-  }, [sprintGameState.words]);
-
   const { group } = sprintGameState;
+
+  const handleCorrectAnswer = (answer: SprintQuestionItem) => {
+    setCorrectAnswers(prev => [...prev, { ...answer }]);
+  };
+
+  const handleInCorrectAnswer = (answer: SprintQuestionItem) => {
+    setInCorrectAnswers(prev => [...prev, { ...answer }]);
+  };
 
   if (sprintGameState.request) {
     return <StyledProgress />;

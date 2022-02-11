@@ -15,8 +15,7 @@ import {
 import { UserWordResponse } from '../../../services/user-words/userWordsServiceTypes';
 
 const sprintGameInitialState: SprintState = {
-  words: [] as Word[],
-  correctAnswers: 0,
+  words: [],
   request: false,
   gameStatus: SprintGameStatus.PREPARE,
   group: 0,
@@ -34,8 +33,6 @@ export const sprintGameReducer = (
       return { ...state, request: true };
     case SprintGameActions.SPRINT_REQUEST_END:
       return { ...state, request: false };
-    case SprintGameActions.INCREASE_CORRECT_ANSWERS:
-      return { ...state, correctAnswers: state.correctAnswers + 1 };
     case SprintGameActions.SET_SPRINT_DATA:
       return { ...state, words: [...action.payload] };
     case SprintGameActions.CHANGE_SPRINT_STATUS:
@@ -82,10 +79,6 @@ export const sprintRequestStartAction = (): SprintGameAction => ({
 
 export const sprintRequestEndAction = (): SprintGameAction => ({
   type: SprintGameActions.SPRINT_REQUEST_END,
-});
-
-export const sprintIncreaseAnswerAction = (): SprintGameAction => ({
-  type: SprintGameActions.INCREASE_CORRECT_ANSWERS,
 });
 
 export const resetSprintStateAction = (): SprintGameAction => ({

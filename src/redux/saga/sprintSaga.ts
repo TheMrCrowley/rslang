@@ -5,6 +5,7 @@ import {
   sprintRequestEndAction,
   setSprintDataAction,
   sprintRequestStartAction,
+  changeSprintStatusAction,
 } from '../store/reducers/sprintGameReducer';
 import WordsService from '../../services/words/wordsService';
 import { Word } from '../../services/words/wordsServiceTypes';
@@ -12,6 +13,7 @@ import {
   RequestSprintDataAction,
   SprintCorrectAction,
   SprintGameActions,
+  SprintGameStatus,
   SprintInCorrectAction,
 } from '../types/sprintTypes';
 import {
@@ -48,6 +50,7 @@ function* requestSprintDataWorker(data: RequestSprintDataAction) {
     );
     yield put(setSprintDataAction(wordsResponse));
     yield put(sprintRequestEndAction());
+    yield put(changeSprintStatusAction(SprintGameStatus.INRUN));
   } catch (e) {
     console.log(e);
   }

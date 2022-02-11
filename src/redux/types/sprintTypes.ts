@@ -20,7 +20,6 @@ export interface SprintState {
   words: Word[] | WordWithCustomProps[];
   gameStatus: SprintStatus;
   request: boolean;
-  correctAnswers: number;
   group: number;
   page: number;
 }
@@ -30,7 +29,6 @@ export enum SprintGameActions {
   SET_SPRINT_DATA = 'SET_SPRINT_DATA',
   SPRINT_REQUEST_START = 'SPRINT_REQUEST_START',
   SPRINT_REQUEST_END = 'SPRINT_REQUEST_END',
-  INCREASE_CORRECT_ANSWERS = 'INCREASE_CORRECT_ANSWERS',
   CHANGE_SPRINT_STATUS = 'CHANGE_SPRINT_STATUS',
   RESET_SPRINT_STATE = 'RESET_SPRINT_STATE',
   SET_WORDS_SECTION = 'SET_WORDS_SECTION',
@@ -79,10 +77,6 @@ export interface SprintRequestEndAction {
   type: SprintGameActions.SPRINT_REQUEST_END;
 }
 
-export interface IncreaseCorrectAnswersAction {
-  type: SprintGameActions.INCREASE_CORRECT_ANSWERS;
-}
-
 export interface ChangeGameStatusAction {
   type: SprintGameActions.CHANGE_SPRINT_STATUS;
   payload: SprintStatus;
@@ -97,7 +91,6 @@ export type SprintGameAction =
   | SetSprintDataAction
   | SprintRequestStartAction
   | SprintRequestEndAction
-  | IncreaseCorrectAnswersAction
   | ChangeGameStatusAction
   | ResetSprintStateAction
   | SetWordsSectionAction
