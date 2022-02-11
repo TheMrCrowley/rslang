@@ -32,9 +32,10 @@ import {
 import { compareAnswers } from '../sprint/SprintModel';
 import MainPageLayoutButton from '../pages/MainPageLayoutButton';
 import { colors, darkColors } from '../e-book/cosnstants';
-import GameAssets from '../ui/GameAssets';
 import { isNewWord } from '../../helpers/statisticHandlers';
 import { changeAudioCallNewWordAction } from '../../redux/store/reducers/statisticReducer';
+import AudicallInGameBottomAssets from '../ui/AudiocallInGameBottomAssets';
+import AudicallInGameUpAssets from '../ui/AudiocallInGameUpAssets';
 
 const StyledBox = styled(Box)`
   height: calc(100vh - 4rem);
@@ -138,13 +139,11 @@ const AudioCallPage = () => {
       setInCorrectAnswers(prev => [...prev, { ...currentQuestion }]);
       playHandler(inCorrectAudio);
     }
-    // setTimeout(() => {
     if (gameQuestions.length) {
       nextQuestion();
     } else {
       showResults();
     }
-    // }, 500);
   };
 
   useEffect(() => {
@@ -192,7 +191,7 @@ const AudioCallPage = () => {
             autoPlay
           />
           <StyledGameContainer>
-            <GameAssets color={darkColors[group]} />
+            <AudicallInGameUpAssets color={darkColors[group]} />
             <ButtonWrapper>
               {currentQuestion.answers.map(answerItem => (
                 <MainPageLayoutButton
@@ -203,6 +202,7 @@ const AudioCallPage = () => {
                 />
               ))}
             </ButtonWrapper>
+            <AudicallInGameBottomAssets color={darkColors[group]} />
           </StyledGameContainer>
         </div>
       )}
@@ -225,6 +225,7 @@ const AudioCallPage = () => {
                 key={item.wordId}
               />
             ))}
+            group={group}
           />
           <button type="button" onClick={restartHandler}>
             Restart

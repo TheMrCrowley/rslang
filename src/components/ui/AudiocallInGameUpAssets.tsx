@@ -1,0 +1,49 @@
+import React, { FC } from 'react';
+import { Box, styled } from '@mui/material';
+import CampaignIcon from '@mui/icons-material/Campaign';
+
+interface AudicallInGameUpAssetsProps {
+  onClick: () => void;
+  color: string;
+}
+
+const AudicallInGameUpAssets: FC<AudicallInGameUpAssetsProps> = ({
+  onClick,
+  color,
+}) => {
+  const StyledAudioCallUpAssetsContainer = styled(Box)`
+    display: flex;
+    align-self: center;
+    flex-flow: row;
+    gap: 1rem;
+    justify-content: space-around;
+    margin-top: 12vw;
+    margin-bottom: 10vw;
+    padding: 1.5rem;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.3);
+    &: hover {
+      background-color: rgba(255, 255, 255, 1);
+    }
+    &: hover svg {
+      color: ${color};
+    }
+  `;
+
+  const StyledCampaignIcon = styled(CampaignIcon)`
+    height: 7rem;
+    width: 7rem;
+    color: white;
+    &: hover {
+      color: ${color};
+    }
+  `;
+
+  return (
+    <StyledAudioCallUpAssetsContainer onClick={onClick}>
+      <StyledCampaignIcon />
+    </StyledAudioCallUpAssetsContainer>
+  );
+};
+
+export default AudicallInGameUpAssets;
