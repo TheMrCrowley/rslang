@@ -21,6 +21,8 @@ import {
 } from '../redux/store/reducers/statisticReducer';
 import AudioCallPage from './audiocall/AudioCallPage';
 import CardList from './e-book/CardList';
+import renderLineChart from './pages/StatisticPage';
+import StatisticPage from './pages/StatisticPage';
 
 const AppRouter = () => {
   const dispatch = useDispatch();
@@ -82,8 +84,8 @@ const AppRouter = () => {
         <Route path="games" element={<GamesPage />} />
         <Route path="games/sprint" element={<SprintPage />} />
         <Route path="games/audiocall" element={<AudioCallPage />} />
-        {/* <Route path="statistics" element={<StatisticsPage />} />
-        <Route path="team" element={<TeamPage />} /> */}
+        <Route path="statistics" element={<StatisticPage />} />
+        {/* <Route path="team" element={<TeamPage />} /> *!/ */}
         <Route
           path="*"
           element={

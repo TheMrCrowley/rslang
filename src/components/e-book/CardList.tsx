@@ -3,6 +3,7 @@ import React, { FC } from 'react';
 import { styled } from '@mui/material/styles';
 import BasicCard from './Card';
 import useBookWords from '../../hooks/useBookWords';
+import { WordWithCustomProps } from '../../services/words/wordsServiceTypes';
 
 interface CardListProps {
   isAuth: boolean;
@@ -22,7 +23,13 @@ const StyledListBox = styled(Box)({
 const CardList: FC<CardListProps> = ({ isAuth, userId }) => {
   const words = useBookWords(isAuth, userId);
   const cards = words.map(word => {
-    return <BasicCard key={word.id} cardData={word} isAuth={isAuth} />;
+    return (
+      <BasicCard
+        key={word.id}
+        cardData={word as WordWithCustomProps}
+        isAuth={isAuth}
+      />
+    );
   });
   return <StyledListBox>{cards}</StyledListBox>;
 };
