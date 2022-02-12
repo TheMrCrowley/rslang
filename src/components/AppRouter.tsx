@@ -20,6 +20,7 @@ import {
   saveStatisticAction,
 } from '../redux/store/reducers/statisticReducer';
 import AudioCallPage from './audiocall/AudioCallPage';
+import CardList from './e-book/CardList';
 
 const AppRouter = () => {
   const dispatch = useDispatch();
@@ -48,6 +49,7 @@ const AppRouter = () => {
       dispatch(requestStatisticAction({ userId: authState.userData.userId }));
     }
   }, [authState.isAuth]);
+  console.log(authState);
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
@@ -66,7 +68,17 @@ const AppRouter = () => {
               userId={authState.userData.userId}
             />
           }
-        />
+        >
+          <Route
+            path=":group/:page"
+            element={
+              <CardList
+                isAuth={authState.isAuth}
+                userId={authState.userData.userId}
+              />
+            }
+          />
+        </Route>
         <Route path="games" element={<GamesPage />} />
         <Route path="games/sprint" element={<SprintPage />} />
         <Route path="games/audiocall" element={<AudioCallPage />} />

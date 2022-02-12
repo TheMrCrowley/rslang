@@ -14,6 +14,7 @@ import {
 
 const wordsInitialState: WordsState = {
   words: [] as Word[],
+  request: false,
 };
 
 export const wordsReducer = (
@@ -27,6 +28,10 @@ export const wordsReducer = (
       return state;
     case WordsActionTypes.SET_WORDS:
       return { ...state, words: [...(action as SetWordsAction).payload] };
+    case WordsActionTypes.WORDS_REQUEST_START:
+      return { ...state, request: true };
+    case WordsActionTypes.WORDS_REQUEST_END:
+      return { ...state, request: false };
     default:
       return state;
   }
@@ -46,4 +51,12 @@ export const setWordsAction = (
 ): WordsAction => ({
   type: WordsActionTypes.SET_WORDS,
   payload,
+});
+
+export const wordsRequestStartAction = (): WordsAction => ({
+  type: WordsActionTypes.WORDS_REQUEST_START,
+});
+
+export const wordsRequestEndAction = (): WordsAction => ({
+  type: WordsActionTypes.WORDS_REQUEST_END,
 });

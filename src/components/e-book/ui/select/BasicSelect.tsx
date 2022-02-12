@@ -4,17 +4,18 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-// **** TO DO ***** join isAuth to original source
-import { isAuth } from '../../cosnstants';
+import { FC } from 'react';
+import { useNavigate } from 'react-router-dom';
+import useBookParams from '../../../../hooks/useBookParams';
 
-interface BasicSelectProps {
-  setGroup: (val: number) => void;
-  group: number;
+interface SelectProps {
+  isAuth: boolean;
 }
-
-const BasicSelect: React.FC<BasicSelectProps> = ({ setGroup, group }) => {
+const BasicSelect: FC<SelectProps> = ({ isAuth }) => {
+  const { page, group } = useBookParams();
+  const navigate = useNavigate();
   const handleChange = (event: SelectChangeEvent) => {
-    setGroup(event.target.value as unknown as number);
+    navigate(`${event.target.value}/${page}`);
   };
 
   return (
@@ -24,17 +25,17 @@ const BasicSelect: React.FC<BasicSelectProps> = ({ setGroup, group }) => {
         <Select
           labelId="demo-simple-select-label"
           id="demo-simple-select"
-          value={group.toString()}
+          value={`${group}`}
           label="Age"
           onChange={handleChange}
         >
-          <MenuItem value={0}>1</MenuItem>
-          <MenuItem value={1}>2</MenuItem>
-          <MenuItem value={2}>3</MenuItem>
-          <MenuItem value={3}>4</MenuItem>
-          <MenuItem value={4}>5</MenuItem>
-          <MenuItem value={5}>6</MenuItem>
-          {isAuth ? <MenuItem value={6}>7</MenuItem> : null}
+          <MenuItem value={1}>1</MenuItem>
+          <MenuItem value={2}>2</MenuItem>
+          <MenuItem value={3}>3</MenuItem>
+          <MenuItem value={4}>4</MenuItem>
+          <MenuItem value={5}>5</MenuItem>
+          <MenuItem value={6}>6</MenuItem>
+          {isAuth ? <MenuItem value={7}>7</MenuItem> : null}
         </Select>
       </FormControl>
     </Box>

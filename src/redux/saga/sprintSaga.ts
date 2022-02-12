@@ -41,6 +41,7 @@ import {
   decreaseLearnedWordsAtion,
   increaseLearnedWordsAtion,
 } from '../store/reducers/statisticReducer';
+import { setOneUserWordAction } from '../store/reducers/userWordsReducer';
 
 function* requestSprintDataWorker(data: RequestSprintDataAction) {
   try {
@@ -77,12 +78,13 @@ function* sprintCorrectAnswerWorker(data: SprintCorrectAction) {
     const method = requestMethodChoiser(words, wordId);
     yield put(changeSprintCorrectAnswersAction());
     if (method === 'POST') {
-      yield call(
+      const newWord: UserWordResponse = yield call(
         UserWordsService.setUserWord,
         userId,
         wordId,
         userWordFromSprintCorrect()
       );
+      yield put(setOneUserWordAction(newWord));
     } else {
       const chosenWord = words.find(
         wordItem => wordItem.wordId === wordId
@@ -92,7 +94,7 @@ function* sprintCorrectAnswerWorker(data: SprintCorrectAction) {
         chosenWord,
         'sprint'
       );
-      yield call(
+      const updatedWord: UserWordResponse = yield call(
         UserWordsService.updateUserWord,
         userId,
         wordId,
@@ -101,6 +103,7 @@ function* sprintCorrectAnswerWorker(data: SprintCorrectAction) {
       if (!compareDiff(chosenWord, updatedUserWord)) {
         yield put(increaseLearnedWordsAtion());
       }
+      yield put(setOneUserWordAction(updatedWord));
     }
   } catch (e) {
     console.log(e);

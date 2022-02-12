@@ -7,15 +7,19 @@ import { Divider } from '@mui/material';
 import AuthorizedCardContent from './ui/authorized-content/AuthorizedCardContent';
 import handleTagInText from './utils';
 // **** TO DO ***** join isAuth to original source
-import { colors, isAuth } from './cosnstants';
+import { colors } from './cosnstants';
 // import {isDifficult, isStudied} from './cosnstants';
 import Player from './Player';
-import Word from './Word';
+import WordItem from './Word';
 import Meaning from './Meaning';
 import Example from './Example';
-import { WordWithCustomProps } from '../../services/words/wordsServiceTypes';
+import {
+  WordWithCustomProps,
+  Word,
+} from '../../services/words/wordsServiceTypes';
 
 export interface BasicCardProps {
+  isAuth: boolean;
   cardData: WordWithCustomProps;
 }
 
@@ -58,7 +62,7 @@ const BasicCard: FC<BasicCardProps> = ({ cardData }) => {
         image={`${BASE_CONTENT_URL}/${image}?raw=true`}
       />
       <CardContent sx={{ textAlign: 'right' }}>
-        <Word
+        <WordItem
           word={word}
           color={colors[group]}
           isAuth={isAuth}

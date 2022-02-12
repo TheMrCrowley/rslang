@@ -10,10 +10,21 @@ export enum WordsActionTypes {
   REQUEST_WORDS_PROPS = 'REQUEST_WORDS_PROPS',
   SET_WORDS = 'SET_WORDS',
   SET_WORDS_WITH_PROPS = 'SET_WORDS_WITH_PROPS',
+  WORDS_REQUEST_START = 'WORDS_REQUEST_START',
+  WORDS_REQUEST_END = 'WORDS_REQUEST_END',
+}
+
+export interface WordsRequestStartAction {
+  type: WordsActionTypes.WORDS_REQUEST_START;
+}
+
+export interface WordsRequestEndAction {
+  type: WordsActionTypes.WORDS_REQUEST_END;
 }
 
 export interface WordsState {
   words: WordWithCustomProps[] | Word[];
+  request: boolean;
 }
 
 export interface RequestWordsAction {
@@ -40,4 +51,6 @@ export type WordsAction =
   | SetWordsWithProps
   | RequestWordsWithPropsAction
   | RequestWordsAction
-  | SetWordsAction;
+  | SetWordsAction
+  | WordsRequestStartAction
+  | WordsRequestEndAction;

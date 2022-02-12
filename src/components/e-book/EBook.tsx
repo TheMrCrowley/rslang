@@ -1,14 +1,10 @@
-import React, { FC, useEffect, useMemo, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { FC, useEffect } from 'react';
 import { Box } from '@mui/material';
-import { useParams } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
+import { styled } from '@mui/material/styles';
 import BookBar from './ui/bookbar/BookBar';
-import CardList from './CardList';
-import {
-  requestWordsAction,
-  requestWordsWithPropsAction,
-} from '../../redux/store/reducers/wordsReducer';
 import { colors } from './cosnstants';
+import useBookParams from '../../hooks/useBookParams';
 import useTypedSelector from '../../hooks/useTypedSelector';
 
 interface EBookProps {
@@ -16,52 +12,24 @@ interface EBookProps {
   userId?: string;
 }
 
-const EBook: FC<EBookProps> = ({ isAuth, userId }) => {
-  const [group, setGroup] = useState<number>(0);
-  const [page, setPage] = useState<number>(0);
-  const { words } = useTypedSelector(state => state.words);
-  const { userWords } = useTypedSelector(store => store.userWords);
-  const dispatch = useDispatch();
+const StyledBookBox = styled(Box)({
+  paddingTop: '4.25em',
+  paddingLeft: '3.5rem',
+});
 
+const EBook: FC<EBookProps> = ({ isAuth, userId }) => {
+  const { group } = useBookParams();
+  const { userWords } = useTypedSelector(store => store.userWords);
+  console.log(userWords);
+  const navigate = useNavigate();
   useEffect(() => {
-    if (isAuth && userId) {
-      dispatch(
-        requestWordsWithPropsAction({
-          group,
-          page,
-          userId,
-        })
-      );
-    } else {
-      dispatch(requestWordsAction({ group, page }));
-    }
-  }, [page, group, isAuth, userWords, dispatch, userId]);
-  // for track studied page
-  // const isStudiedPage = useMemo(() => {
-  //   return words.every(
-  //     wordItem =>
-  //       wordItem.userWord?.difficulty === 'hard' ||
-  //       wordItem.userWord?.difficulty === 'studied'
-  //   );
-  // }, [words]);
+    navigate('1/1');
+  }, [navigate]);
   return (
-    <Box
-      sx={{
-        backgroundColor: colors[group],
-        pt: '4.25em',
-        pl: '3.5rem',
-      }}
-    >
-      <BookBar
-        setPage={setPage}
-        setGroup={setGroup}
-        group={group}
-        page={page}
-        isAuth={isAuth}
-        userId={userId}
-      />
-      <CardList words={words} />
-    </Box>
+    <StyledBookBox sx={{ backgroundColor: colors[group] }}>
+      <BookBar isAuth={isAuth} userId={userId} />
+      <Outlet />
+    </StyledBookBox>
   );
 };
 

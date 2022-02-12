@@ -1,26 +1,30 @@
 import { Box } from '@mui/material';
 import React, { FC } from 'react';
+import { styled } from '@mui/material/styles';
 import BasicCard from './Card';
-import { CardListProps } from './interface';
+import useBookWords from '../../hooks/useBookWords';
 
-const CardList: FC<CardListProps> = ({ words }) => {
-  return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexFlow: 'row wrap',
-        justifyContent: 'center',
-        alignItems: 'stretch',
-        alignContent: 'stretch',
-        gap: '1em 1em',
-        pb: '1em',
-      }}
-    >
-      {words.map(word => {
-        return <BasicCard key={word.id} cardData={word} />;
-      })}
-    </Box>
-  );
+interface CardListProps {
+  isAuth: boolean;
+  userId: string;
+}
+
+const StyledListBox = styled(Box)({
+  display: 'flex',
+  flexFlow: 'row wrap',
+  justifyContent: 'center',
+  alignItems: 'stretch',
+  alignContent: 'stretch',
+  gap: '1em 1em',
+  pb: '1em',
+});
+
+const CardList: FC<CardListProps> = ({ isAuth, userId }) => {
+  const words = useBookWords(isAuth, userId);
+  const cards = words.map(word => {
+    return <BasicCard key={word.id} cardData={word} isAuth={isAuth} />;
+  });
+  return <StyledListBox>{cards}</StyledListBox>;
 };
 
 export default CardList;

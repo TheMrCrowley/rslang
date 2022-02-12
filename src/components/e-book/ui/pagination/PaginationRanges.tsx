@@ -1,15 +1,14 @@
-import React from 'react';
+import React, { ChangeEvent, FC } from 'react';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
+import { useNavigate } from 'react-router-dom';
 import useWindowWidth from '../../../../hooks/useWindowWidth';
+import useBookParams from '../../../../hooks/useBookParams';
 
-export interface PaginationRangesProps {
-  setPage: (val: number) => void;
-}
-
-const PaginationRanges: React.FC<PaginationRangesProps> = ({ setPage }) => {
+const PaginationRanges: FC = () => {
   const winWith = useWindowWidth();
-
+  const navigate = useNavigate();
+  const { group } = useBookParams();
   // **** TO DO ******
   // join  page numbers to original source
   const TOTAL_PAGES = 30;
@@ -21,6 +20,10 @@ const PaginationRanges: React.FC<PaginationRangesProps> = ({ setPage }) => {
     string = 'string',
   }
 
+  const handleChangePage = (e: ChangeEvent<unknown>, current: number) => {
+    navigate(`${group}/${current}`);
+  };
+
   return (
     <Stack spacing={2}>
       <Pagination
@@ -29,7 +32,7 @@ const PaginationRanges: React.FC<PaginationRangesProps> = ({ setPage }) => {
         siblingCount={2}
         size={winWith < 780 ? PageNumberSize.small : PageNumberSize.large}
         color="primary"
-        onChange={(e, page) => setPage(page - 1)}
+        onChange={handleChangePage}
       />
     </Stack>
   );
