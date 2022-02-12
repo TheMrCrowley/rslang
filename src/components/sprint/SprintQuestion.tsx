@@ -1,10 +1,12 @@
-import { Box, Typography } from '@mui/material';
+import { Box, Fade, Typography, Zoom } from '@mui/material';
 import React, { FC } from 'react';
+import { styled } from '@mui/material/styles';
 import { AuthState } from '../../redux/types/authTypes';
 import MainPageLayoutButton from '../pages/MainPageLayoutButton';
 import { SprintQuestionItem } from './SprintModel';
 import SprintTimer from './SprintTimer';
 import useSprint from '../../hooks/useSprint';
+import SprintQuestionText from './SprintQuestionText';
 
 interface SprintQuestionProps {
   auth: AuthState;
@@ -12,6 +14,12 @@ interface SprintQuestionProps {
   incorrectAnswer: (answer: SprintQuestionItem) => void;
   audioHandler: (isCorrect: boolean) => void;
 }
+
+const StyledButtonWrapper = styled(Box)`
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+`;
 
 const SprintQuestion: FC<SprintQuestionProps> = ({
   auth,
@@ -29,26 +37,8 @@ const SprintQuestion: FC<SprintQuestionProps> = ({
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
       <SprintTimer />
-      <Box
-        sx={{
-          display: 'flex',
-          flexFlow: 'row wrap',
-          gap: '1em',
-          color: 'white',
-        }}
-      >
-        <Typography variant="h2" fontWeight="bold">
-          {word} = {answer}?
-        </Typography>
-      </Box>
-      <Box
-        sx={{
-          display: 'flex',
-          flexFlow: 'row wrap',
-          justifyContent: 'space-between',
-          gap: '1rem',
-        }}
-      >
+      <SprintQuestionText word={word} answer={answer} />
+      <StyledButtonWrapper>
         <MainPageLayoutButton
           color="#ff1744"
           onClick={decline}
@@ -59,7 +49,7 @@ const SprintQuestion: FC<SprintQuestionProps> = ({
           onClick={confirm}
           text="correct"
         />
-      </Box>
+      </StyledButtonWrapper>
     </Box>
   );
 };

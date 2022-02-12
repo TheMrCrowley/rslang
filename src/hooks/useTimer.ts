@@ -5,15 +5,6 @@ const useTimer = (time: number) => {
   const [isActive, setIsActive] = useState<boolean>(true);
 
   useEffect(() => {
-    // let interval: NodeJS.Timer | null = null;
-    // if (isActive) {
-    //   interval = setInterval(() => {
-    //     setSeconds(prev => prev - 1);
-    //   }, 1000);
-    // } else if (!isActive && seconds !== 0) {
-    //   clearInterval(interval);
-    // }
-    // return () => clearInterval(interval);
     const timerId = setInterval(() => {
       if (seconds > 0 && isActive) {
         setSeconds(seconds - 1);

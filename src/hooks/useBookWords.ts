@@ -9,7 +9,7 @@ import useBookParams from './useBookParams';
 
 const useBookWords = (isAuth: boolean, userId?: string) => {
   const { userWords } = useTypedSelector(state => state.userWords);
-  const { words } = useTypedSelector(state => state.words);
+  const { words, request } = useTypedSelector(state => state.words);
   const { group, page } = useBookParams();
   const dispatch = useDispatch();
 
@@ -28,7 +28,11 @@ const useBookWords = (isAuth: boolean, userId?: string) => {
       }
     }
   }, [page, group, isAuth, dispatch, userWords]);
-  return useMemo(() => words, [words]);
+  const cards = useMemo(() => words, [words]);
+  return {
+    cards,
+    request,
+  };
 };
 
 export default useBookWords;

@@ -21,13 +21,13 @@ import {
 } from '../redux/store/reducers/statisticReducer';
 import AudioCallPage from './audiocall/AudioCallPage';
 import CardList from './e-book/CardList';
-import renderLineChart from './pages/StatisticPage';
 import StatisticPage from './pages/StatisticPage';
 
 const AppRouter = () => {
   const dispatch = useDispatch();
   const authState = useTypedSelector(store => store.auth);
   const statisticState = useTypedSelector(store => store.statistic);
+
   useEffect(() => {
     if (LocalStorageService.hasItem(StorageKeys.USER_DATA)) {
       dispatch(checkAuthAction());
@@ -51,7 +51,6 @@ const AppRouter = () => {
       dispatch(requestStatisticAction({ userId: authState.userData.userId }));
     }
   }, [authState.isAuth]);
-  console.log(authState);
   return (
     <Routes>
       <Route path="/" element={<Layout />}>

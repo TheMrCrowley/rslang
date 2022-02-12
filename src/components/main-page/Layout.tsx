@@ -1,26 +1,33 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
 import { Box } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import Header from './Header';
 import Footer from './Footer';
 
+const LayoutWrapper = styled(Box)({
+  minHeight: '100vh',
+  display: 'flex',
+  justifyContent: 'stretch',
+  flexDirection: 'column',
+});
+
+const TopContentWrapper = styled(Box)({
+  flex: '1 1 auto',
+  display: 'flex',
+  flexDirection: 'column',
+  overflow: 'hidden',
+});
+
 const Layout = () => {
   return (
-    <>
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'stretch',
-          justifyContent: 'space-around',
-          minHeight: 'calc(100vh - 4em)',
-        }}
-      >
+    <LayoutWrapper>
+      <TopContentWrapper>
         <Header />
         <Outlet />
-      </Box>
+      </TopContentWrapper>
       <Footer />
-    </>
+    </LayoutWrapper>
   );
 };
 

@@ -17,8 +17,6 @@ import {
 import WordsService from '../services/words/wordsService';
 import { SprintGameStatus } from '../redux/types/sprintTypes';
 import { AuthState } from '../redux/types/authTypes';
-import loginPage from '../components/pages/LoginPage';
-import { isAuth } from '../components/e-book/cosnstants';
 
 const useSprint = (
   auth: AuthState,
@@ -48,6 +46,7 @@ const useSprint = (
     setQuestions(getQuestionItems(words));
     nextQuestion();
   }, [words]);
+
   // TODO divide this fck big function
   const answerHandler = (answer: boolean) => {
     const isCorrect = compareAnswers(currentQuestion.isCorrect, answer);
