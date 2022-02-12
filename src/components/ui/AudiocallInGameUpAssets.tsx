@@ -2,12 +2,12 @@ import React, { FC } from 'react';
 import { Box, styled } from '@mui/material';
 import CampaignIcon from '@mui/icons-material/Campaign';
 
-interface AudicallInGameUpAssetsProps {
+interface AudiocallInGameUpAssetsProps {
   onClick: () => void;
   color: string;
 }
 
-const AudicallInGameUpAssets: FC<AudicallInGameUpAssetsProps> = ({
+const AudiocallInGameUpAssets: FC<AudiocallInGameUpAssetsProps> = ({
   onClick,
   color,
 }) => {
@@ -46,4 +46,4 @@ const AudicallInGameUpAssets: FC<AudicallInGameUpAssetsProps> = ({
   );
 };
 
-export default AudicallInGameUpAssets;
+export default AudiocallInGameUpAssets;

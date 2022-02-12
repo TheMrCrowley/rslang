@@ -1,12 +1,12 @@
 import React, { FC } from 'react';
 import { Box, styled, Typography } from '@mui/material';
 
-interface AudicallInGameBottomAssetsProps {
+interface AudiocallInGameBottomAssetsProps {
   onClick: () => void;
   color: string;
 }
 
-const AudicallInGameBottomAssets: FC<AudicallInGameBottomAssetsProps> = ({
+const AudiocallInGameBottomAssets: FC<AudiocallInGameBottomAssetsProps> = ({
   onClick,
   color,
 }) => {
@@ -36,9 +36,9 @@ const AudicallInGameBottomAssets: FC<AudicallInGameBottomAssetsProps> = ({
 
   return (
     <StyledAudioCallBottomAssetsContainer onClick={onClick}>
-      <StyledTypography variant="h4">I don&apos;t know...</StyledTypography>
+      <StyledTypography variant="h4">I don&apos;t know :(</StyledTypography>
     </StyledAudioCallBottomAssetsContainer>
   );
 };
 
-export default AudicallInGameBottomAssets;
+export default AudiocallInGameBottomAssets;

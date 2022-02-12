@@ -26,7 +26,7 @@ const PaginationRanges: React.FC<PaginationRangesProps> = ({ setPage }) => {
       <Pagination
         count={TOTAL_PAGES}
         defaultPage={START_PAGE}
-        siblingCount={0}
+        siblingCount={2}
         size={winWith < 780 ? PageNumberSize.small : PageNumberSize.large}
         color="primary"
         onChange={(e, page) => setPage(page - 1)}

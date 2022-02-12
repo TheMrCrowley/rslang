@@ -31,24 +31,17 @@ import {
 } from '../../redux/store/reducers/audioCallReducer';
 import { compareAnswers } from '../sprint/SprintModel';
 import MainPageLayoutButton from '../pages/MainPageLayoutButton';
-import { colors, darkColors } from '../e-book/cosnstants';
+import {
+  colors,
+  darkColors,
+  darkCorrectColor,
+  darkIncorrectColor,
+} from '../e-book/cosnstants';
 import { isNewWord } from '../../helpers/statisticHandlers';
 import { changeAudioCallNewWordAction } from '../../redux/store/reducers/statisticReducer';
-import AudicallInGameBottomAssets from '../ui/AudiocallInGameBottomAssets';
-import AudicallInGameUpAssets from '../ui/AudiocallInGameUpAssets';
-
-const StyledBox = styled(Box)`
-  height: calc(100vh - 4rem);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-left: 3.5rem;
-`;
-
-const StyledGameContainer = styled(Box)`
-  display: flex;
-  flex-direction: column;
-`;
+import AudiocallInGameBottomAssets from '../ui/AudiocallInGameBottomAssets';
+import AudiocallInGameUpAssets from '../ui/AudiocallInGameUpAssets';
+import GamePageWrapper from '../ui/GamePageWrapper';
 
 const ButtonWrapper = styled(Box)`
   display: flex;
@@ -93,6 +86,8 @@ const AudioCallPage = () => {
 
   const restartHandler = useCallback(() => {
     const { group, page } = audioCallState;
+    setInCorrectAnswers([]);
+    setCorrectAnswers([]);
     dispatch(requestAudioCallDataAction({ group, page }));
   }, [audioCallState.group, audioCallState.page]);
 
@@ -170,7 +165,7 @@ const AudioCallPage = () => {
   const { group } = audioCallState;
 
   return (
-    <StyledBox sx={{ backgroundColor: colors[group] }}>
+    <GamePageWrapper color={colors[group]}>
       <>
         <ReactAudioPlayer
           src="https://rslang-team15-natein.netlify.app/static/media/correct.a7b1cde9.mp3"
@@ -185,26 +180,25 @@ const AudioCallPage = () => {
         <SprintMenu onClick={startHandler} />
       )}
       {audioCallState.gameStatus === AudioCallGameStatus.INRUN && (
-        <div>
+        // TO DO connect sound to AudiocallInGameUpAssets
+        <>
           <ReactAudioPlayer
             src={getAssetsUrl(currentQuestion.audio)}
             autoPlay
           />
-          <StyledGameContainer>
-            <AudicallInGameUpAssets color={darkColors[group]} />
-            <ButtonWrapper>
-              {currentQuestion.answers.map(answerItem => (
-                <MainPageLayoutButton
-                  key={answerItem}
-                  onClick={() => answerHandler(answerItem)}
-                  color={darkColors[group]}
-                  text={answerItem}
-                />
-              ))}
-            </ButtonWrapper>
-            <AudicallInGameBottomAssets color={darkColors[group]} />
-          </StyledGameContainer>
-        </div>
+          <AudiocallInGameUpAssets color={darkColors[group]} />
+          <ButtonWrapper>
+            {currentQuestion.answers.map(answerItem => (
+              <MainPageLayoutButton
+                key={answerItem}
+                onClick={() => answerHandler(answerItem)}
+                color={darkColors[group]}
+                text={answerItem}
+              />
+            ))}
+          </ButtonWrapper>
+          <AudiocallInGameBottomAssets color={darkColors[group]} />
+        </>
       )}
       {audioCallState.gameStatus === AudioCallGameStatus.END && (
         <>
@@ -215,6 +209,7 @@ const AudioCallPage = () => {
                 translate={item.answer}
                 word={item.word}
                 key={item.wordId}
+                color={darkCorrectColor}
               />
             ))}
             incorrect={inCorrectAnswers.map(item => (
@@ -223,16 +218,20 @@ const AudioCallPage = () => {
                 translate={item.answer}
                 word={item.word}
                 key={item.wordId}
+                color={darkIncorrectColor}
               />
             ))}
-            group={group}
+            correctNum={correctAnswers.length}
+            incorrectNum={inCorrectAnswers.length}
           />
-          <button type="button" onClick={restartHandler}>
-            Restart
-          </button>
+          <MainPageLayoutButton
+            color={darkColors[group]}
+            onClick={restartHandler}
+            text="Play again"
+          />
         </>
       )}
-    </StyledBox>
+    </GamePageWrapper>
   );
 };
 
