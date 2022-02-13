@@ -30,7 +30,11 @@ const NavItem: FC<NavItemProps> = ({ innerText, children }) => {
     <StyledListItem
       button
       onClick={() => {
-        navigate(innerText.toLocaleLowerCase());
+        if (innerText.toLocaleLowerCase() === 'book') {
+          navigate('/book/1/1');
+        } else {
+          navigate(innerText.toLocaleLowerCase());
+        }
       }}
     >
       <StyledIcon>{children}</StyledIcon>
