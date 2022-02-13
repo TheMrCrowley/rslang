@@ -1,9 +1,10 @@
 import React from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import { Box } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import Header from './Header';
 import Footer from './Footer';
+import isGamePage from '../../helpers/isGamePage';
 
 const LayoutWrapper = styled(Box)({
   minHeight: '100vh',
@@ -20,13 +21,15 @@ const TopContentWrapper = styled(Box)({
 });
 
 const Layout = () => {
+  const loc = useLocation();
+
   return (
     <LayoutWrapper>
       <TopContentWrapper>
         <Header />
         <Outlet />
       </TopContentWrapper>
-      <Footer />
+      {isGamePage(loc) && <Footer />}
     </LayoutWrapper>
   );
 };

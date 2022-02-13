@@ -10,7 +10,7 @@ const AuthButton = () => {
   const dispatch = useDispatch();
   const authState = useSelector((store: RootState) => store.auth);
   return (
-    <Box sx={{ ml: 'auto' }}>
+    <Box>
       {!authState.isAuth ? (
         <Button
           variant="outlined"

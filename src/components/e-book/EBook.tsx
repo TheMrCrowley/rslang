@@ -15,8 +15,6 @@ const StyledBookBox = styled(Box)({
   display: 'flex',
   flexDirection: 'column',
   flex: '1 1 auto',
-  paddingTop: '4.25em',
-  paddingLeft: '3.5rem',
 });
 
 const EBook: FC<EBookProps> = ({ isAuth, userId }) => {
