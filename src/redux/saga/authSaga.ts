@@ -23,7 +23,10 @@ import {
   getDate,
   updateStatisticAfterSignIn,
 } from '../../helpers/statisticHandlers';
-import { StatisticResponse } from '../../services/statistic/statisticServiceTypes';
+import {
+  StatisticRequest,
+  StatisticResponse,
+} from '../../services/statistic/statisticServiceTypes';
 
 function* registrationWorker(data: RegistrationAction) {
   try {
@@ -69,11 +72,16 @@ function* signInWorker(data: SigninAction) {
       StatisticService.getStatistic,
       signinResponse.userId
     );
+    console.log(statistic);
     if (!statistic.optional.wordStatistic[getDate()]) {
+      const newStatistic: StatisticRequest = yield call(
+        updateStatisticAfterSignIn,
+        statistic
+      );
       yield call(
         StatisticService.updateStatistic,
         signinResponse.userId,
-        updateStatisticAfterSignIn(statistic)
+        newStatistic
       );
     }
     yield put(authRequestEndAction());

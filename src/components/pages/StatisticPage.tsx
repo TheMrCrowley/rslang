@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import {
   Bar,
   BarChart,
@@ -8,11 +8,13 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
+import { useDispatch } from 'react-redux';
 import {
   GameStatisticItem,
   GameStatisticType,
 } from '../../services/statistic/statisticServiceTypes';
 import useTypedSelector from '../../hooks/useTypedSelector';
+import { requestStatisticAction } from '../../redux/store/reducers/statisticReducer';
 
 const sprintData: GameStatisticType = {
   '09.02.2022': {
@@ -49,19 +51,24 @@ const statisticToChartData = (gameData: GameStatisticType): GameChartData => {
   return datas.map(dataKey => {
     return {
       name: dataKey,
-      newWords: gameData[dataKey].newWords,
-      streak: gameData[dataKey].longestStreak,
+      newWords: gameData[dataKey].newWords || 0,
+      streak: gameData[dataKey].longestStreak || 0,
       procent:
         (gameData[dataKey].correctAnswers * 100) /
-        gameData[dataKey].totalAnswers,
+          gameData[dataKey].totalAnswers || 0,
     };
   });
 };
 
-const data = statisticToChartData(sprintData);
-
 const StatisticPage = () => {
+  const authState = useTypedSelector(store => store.auth);
   const { completeStatistic } = useTypedSelector(store => store.statistic);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (authState.isAuth) {
+      dispatch(requestStatisticAction({ userId: authState.userData.userId }));
+    }
+  }, []);
   const graphData = useMemo(() => {
     if (completeStatistic?.optional?.gameStatistic?.sprint) {
       return statisticToChartData(
@@ -70,6 +77,7 @@ const StatisticPage = () => {
     }
     return [];
   }, [completeStatistic]);
+  console.log(graphData);
   return (
     <BarChart width={730} height={250} data={graphData}>
       <CartesianGrid strokeDasharray="3 3" />
@@ -77,7 +85,7 @@ const StatisticPage = () => {
       <YAxis />
       <Tooltip />
       <Legend />
-      <Bar dataKey="newWords" fill="#8884d8" />
+      <Bar dataKey="newWords" name="new words" fill="#8884d8" />
       <Bar dataKey="streak" fill="#82ca9d" />
       <Bar dataKey="procent" fill="#82ca9d" />
     </BarChart>
