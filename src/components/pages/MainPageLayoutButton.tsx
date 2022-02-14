@@ -6,6 +6,7 @@ interface MainPageLayoutButtonProps {
   text?: string;
   onClick?: () => void;
   color?: string;
+  disabled?: boolean;
 }
 
 const MainPageLayoutButton: FC<MainPageLayoutButtonProps> = ({
@@ -13,6 +14,7 @@ const MainPageLayoutButton: FC<MainPageLayoutButtonProps> = ({
   text,
   onClick,
   color = darkBgColor,
+  disabled,
 }) => {
   const StyledMainPageLayuotButton = styled(Button)`
     color: #ffffff;
@@ -24,10 +26,14 @@ const MainPageLayoutButton: FC<MainPageLayoutButtonProps> = ({
       background-color: #ffffff;
       color: ${color};
     }
+    &: disabled {
+      background-color: ${color};
+      color: white;
+    }
   `;
 
   return (
-    <StyledMainPageLayuotButton onClick={onClick}>
+    <StyledMainPageLayuotButton disabled={disabled} onClick={onClick}>
       {children}
       <Typography
         variant="h4"

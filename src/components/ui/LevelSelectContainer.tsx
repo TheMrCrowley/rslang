@@ -19,6 +19,7 @@ const LevelSelecContainer: React.FC<LevelSelecContainerProps> = ({
         alignItems: 'center',
         width: '100%',
         pl: '3.5em',
+        mt: '-5rem',
         bgcolor: color,
       }}
     >

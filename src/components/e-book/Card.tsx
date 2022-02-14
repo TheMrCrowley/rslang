@@ -19,6 +19,9 @@ export interface BasicCardProps {
   cardData: WordWithCustomProps;
 }
 
+export const BASE_CONTENT_URL =
+  'https://github.com/rolling-scopes-school/react-rslang-be/blob/main/';
+
 const BasicCard: FC<BasicCardProps> = ({ cardData }) => {
   const {
     _id,
@@ -39,9 +42,6 @@ const BasicCard: FC<BasicCardProps> = ({ cardData }) => {
 
   const handledTextMeaning = handleTagInText(textMeaning);
   const handledTextExample = handleTagInText(textExample);
-
-  const BASE_CONTENT_URL =
-    'https://github.com/rolling-scopes-school/react-rslang-be/blob/main/';
 
   return (
     <Card

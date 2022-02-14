@@ -1,42 +1,43 @@
 import React, { FC } from 'react';
-import { Box, styled, Typography } from '@mui/material';
+import { Button, styled, Typography } from '@mui/material';
+import { colors, darkColors, lightColors } from '../e-book/cosnstants';
 
 interface AudiocallInGameBottomAssetsProps {
   onClick: () => void;
-  color: string;
+  group: number;
+  disabled?: boolean;
 }
 
 const AudiocallInGameBottomAssets: FC<AudiocallInGameBottomAssetsProps> = ({
   onClick,
-  color,
+  group,
+  disabled,
 }) => {
-  const StyledAudioCallBottomAssetsContainer = styled(Box)`
-    display: flex;
-    align-self: center;
-    flex-flow: row;
-    justify-content: space-around;
-    margin-top: 4vw;
+  const StyledAudioCallBottomAssetsContainer = styled(Button)`
     padding: 0.5rem 1.5rem;
     border-radius: 2rem;
-    background-color: rgba(255, 255, 255, 0.3);
+    background-color: white;
     &: hover {
-      background-color: rgba(255, 255, 255, 1);
+      background-color: ${darkColors[group]};
     }
-    &: hover h4 {
-      color: ${color};
+    &: hover span {
+      color: white;
+    }
+    &: disabled {
+      background-color: ${lightColors[group]};
+      color: ${darkColors[group]};
     }
   `;
 
   const StyledTypography = styled(Typography)`
-    color: white;
-    &: hover {
-      color: ${color};
-    }
+    color: ${colors[group]};
   `;
 
   return (
-    <StyledAudioCallBottomAssetsContainer onClick={onClick}>
-      <StyledTypography variant="h4">I don&apos;t know :(</StyledTypography>
+    <StyledAudioCallBottomAssetsContainer disabled={disabled} onClick={onClick}>
+      <StyledTypography variant="h3" component="span" fontWeight="bold">
+        Next
+      </StyledTypography>
     </StyledAudioCallBottomAssetsContainer>
   );
 };

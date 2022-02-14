@@ -8,7 +8,7 @@ import React, {
 } from 'react';
 import { useDispatch } from 'react-redux';
 import { styled } from '@mui/material/styles';
-import { Box } from '@mui/material';
+import { Box, CardMedia, Typography } from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
 import ReactAudioPlayer from 'react-audio-player';
 import useTypedSelector from '../../hooks/useTypedSelector';
@@ -42,6 +42,7 @@ import { changeAudioCallNewWordAction } from '../../redux/store/reducers/statist
 import AudiocallInGameBottomAssets from '../ui/AudiocallInGameBottomAssets';
 import AudiocallInGameUpAssets from '../ui/AudiocallInGameUpAssets';
 import GamePageWrapper from '../ui/GamePageWrapper';
+import { BASE_CONTENT_URL } from '../e-book/Card';
 
 const ButtonWrapper = styled(Box)`
   display: flex;
@@ -65,6 +66,8 @@ const AudioCallPage = () => {
   const authState = useTypedSelector(store => store.auth);
   const audioCallState = useTypedSelector(store => store.audioCallGame);
   const dispatch = useDispatch();
+  const [afterAnswerState, setAfterAnswerState] = useState(false);
+  useEffect(() => {}, [afterAnswerState]);
 
   const [currentQuestion, setCurrentQuestion] = useState<AudioCallQuestionItem>(
     {} as AudioCallQuestionItem
@@ -92,6 +95,7 @@ const AudioCallPage = () => {
   }, [audioCallState.group, audioCallState.page]);
 
   const nextQuestion = () => {
+    setAfterAnswerState(false);
     setGameQuestions(prev => {
       setCurrentQuestion(prev.pop() as AudioCallQuestionItem);
       return prev;
@@ -134,10 +138,10 @@ const AudioCallPage = () => {
       setInCorrectAnswers(prev => [...prev, { ...currentQuestion }]);
       playHandler(inCorrectAudio);
     }
-    if (gameQuestions.length) {
-      nextQuestion();
-    } else {
+    if (!gameQuestions.length) {
       showResults();
+    } else {
+      setAfterAnswerState(true);
     }
   };
 
@@ -164,6 +168,16 @@ const AudioCallPage = () => {
 
   const { group } = audioCallState;
 
+  const changeButtonColor = (answer: string | boolean): string => {
+    if (!afterAnswerState) {
+      return darkColors[group];
+    }
+    if (compareAnswers(currentQuestion.answer, answer)) {
+      return darkCorrectColor;
+    }
+    return darkColors[group];
+  };
+
   return (
     <GamePageWrapper color={colors[group]}>
       <>
@@ -186,18 +200,52 @@ const AudioCallPage = () => {
             src={getAssetsUrl(currentQuestion.audio)}
             autoPlay
           />
-          <AudiocallInGameUpAssets color={darkColors[group]} />
+          {!afterAnswerState ? (
+            <AudiocallInGameUpAssets color={darkColors[group]} />
+          ) : (
+            <Box
+              sx={{
+                display: 'flex',
+                flexFlow: 'row wrap',
+                alignItems: 'center',
+                justifyContent: 'space-evenly',
+                gap: '1rem',
+              }}
+            >
+              <Typography
+                color="white"
+                fontWeight="bold"
+                variant="h1"
+                sx={{ textTransform: 'capitalize' }}
+              >
+                {currentQuestion.word}
+              </Typography>
+              <AudiocallInGameUpAssets color={darkColors[group]} />
+              <CardMedia
+                component="img"
+                height="140"
+                image={`${BASE_CONTENT_URL}/${currentQuestion.imgSrc}?raw=true`}
+                sx={{ borderRadius: '2rem', width: 'fit-content' }}
+              />
+            </Box>
+          )}
+
           <ButtonWrapper>
             {currentQuestion.answers.map(answerItem => (
               <MainPageLayoutButton
                 key={answerItem}
                 onClick={() => answerHandler(answerItem)}
-                color={darkColors[group]}
+                color={changeButtonColor(answerItem)}
                 text={answerItem}
+                disabled={afterAnswerState}
               />
             ))}
           </ButtonWrapper>
-          <AudiocallInGameBottomAssets color={darkColors[group]} />
+          <AudiocallInGameBottomAssets
+            disabled={!afterAnswerState}
+            onClick={nextQuestion}
+            group={group}
+          />
         </>
       )}
       {audioCallState.gameStatus === AudioCallGameStatus.END && (
