@@ -3,6 +3,7 @@ import React, { FC } from 'react';
 
 const StyledSprintInGameUpAssets = styled(Box)`
   display: flex;
+  flex-flow: row wrap;
   align-self: center;
   justify-content: space-around;
   column-gap: 1rem;
