@@ -104,7 +104,7 @@ const SprintPage: FC = () => {
   if (sprintGameState.request) {
     return <StyledProgress />;
   }
-  console.log(sprintGameState);
+
   return (
     <GamePageWrapper color={colors[group]}>
       <>

@@ -3,25 +3,33 @@ import useStatistic from '../../hooks/useStatistic';
 import AudiocallShortStatistic from './AudiocallShortStatistic';
 import SprintShortStatistic from './SprintShortStatistic';
 import WordsShortStatistic from './WordsShortStatistic';
+import useAuth from '../../hooks/useAuth';
+import WordsLongStatistic from './WordsLongStatistic';
 
-interface StatisticPageProps {
-  isAuth: boolean;
-  userId: string;
-}
-
-const StatisticPage: FC<StatisticPageProps> = ({ isAuth, userId }) => {
+const StatisticPage: FC = () => {
+  const { isAuth, userId } = useAuth();
   const statistic = useStatistic(isAuth, userId);
-
-  if (isAuth) {
+  if (!isAuth) {
     return <div>Not auth</div>;
   }
   return (
     <>
-      <SprintShortStatistic sprintStatistic={statistic.sprintStatistic} />
-      <AudiocallShortStatistic
-        audiocallStatistic={statistic.audiocallStatistic}
-      />
-      <WordsShortStatistic wordsStatistic={statistic.wordStatistic} />
+      {statistic.sprintStatistic && (
+        <SprintShortStatistic sprintStatistic={statistic.sprintStatistic} />
+      )}
+      {statistic.audiocallStatistic && (
+        <AudiocallShortStatistic
+          audiocallStatistic={statistic.audiocallStatistic}
+        />
+      )}
+      {statistic.wordStatistic && (
+        <WordsShortStatistic wordsStatistic={statistic.wordStatistic} />
+      )}
+      {statistic?.completeStatistic?.optional?.wordStatistic && (
+        <WordsLongStatistic
+          wordsStatistic={statistic?.completeStatistic?.optional?.wordStatistic}
+        />
+      )}
     </>
   );
 };

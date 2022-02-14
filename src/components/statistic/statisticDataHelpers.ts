@@ -2,6 +2,7 @@ import {
   GameStatisticItem,
   GameStatisticType,
   WordStatisticItem,
+  WordStatisticType,
 } from '../../services/statistic/statisticServiceTypes';
 
 type GameChartData = GameChartItem[];
@@ -18,6 +19,11 @@ interface WordChartItem {
   newWords: number;
   learnedWords: number;
   procent: number;
+}
+
+interface WordLongChardData {
+  name: string;
+  learnedWords: number;
 }
 
 export const longGameStatistic = (
@@ -54,4 +60,16 @@ export const shortWordStatistic = (
     learnedWords: wordData.learnedWords || 0,
     procent: (wordData.correctAnswers * 100) / wordData.totalAnswers || 0,
   };
+};
+
+export const longWordStatistic = (
+  wordData: WordStatisticType
+): WordLongChardData[] => {
+  const datas = Object.keys(wordData);
+  return datas.map(dataKey => {
+    return {
+      name: dataKey,
+      learnedWords: wordData[dataKey].learnedWords || 0,
+    };
+  });
 };

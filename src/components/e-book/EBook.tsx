@@ -5,11 +5,7 @@ import { styled } from '@mui/material/styles';
 import BookBar from './ui/bookbar/BookBar';
 import { colors } from './cosnstants';
 import useBookParams from '../../hooks/useBookParams';
-
-interface EBookProps {
-  isAuth: boolean;
-  userId?: string;
-}
+import useAuth from '../../hooks/useAuth';
 
 const StyledBookBox = styled(Box)({
   display: 'flex',
@@ -17,7 +13,8 @@ const StyledBookBox = styled(Box)({
   flex: '1 1 auto',
 });
 
-const EBook: FC<EBookProps> = ({ isAuth, userId }) => {
+const EBook: FC = () => {
+  const { isAuth, userId } = useAuth();
   const { group } = useBookParams();
   return (
     <StyledBookBox sx={{ backgroundColor: colors[group] }}>

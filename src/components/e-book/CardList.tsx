@@ -4,11 +4,7 @@ import { styled } from '@mui/material/styles';
 import BasicCard from './Card';
 import useBookWords from '../../hooks/useBookWords';
 import { WordWithCustomProps } from '../../services/words/wordsServiceTypes';
-
-interface CardListProps {
-  isAuth: boolean;
-  userId: string;
-}
+import useAuth from '../../hooks/useAuth';
 
 const StyledListBox = styled(Box)({
   flex: '1 1 auto',
@@ -21,7 +17,8 @@ const StyledListBox = styled(Box)({
   paddingBottom: '1em',
 });
 
-const CardList: FC<CardListProps> = ({ isAuth, userId }) => {
+const CardList: FC = () => {
+  const { isAuth, userId } = useAuth();
   const { cards } = useBookWords(isAuth, userId);
   const words = cards.map(word => {
     return (

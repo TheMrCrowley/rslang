@@ -22,10 +22,11 @@ import {
 import AudioCallPage from './audiocall/AudioCallPage';
 import CardList from './e-book/CardList';
 import StatisticPage from './statistic/StatisticPage';
+import useAuth from '../hooks/useAuth';
 
 const AppRouter = () => {
   const dispatch = useDispatch();
-  const authState = useTypedSelector(store => store.auth);
+  const { isAuth, userId } = useAuth();
   const statisticState = useTypedSelector(store => store.statistic);
 
   useEffect(() => {
@@ -35,50 +36,31 @@ const AppRouter = () => {
   }, []);
 
   useEffect(() => {
-    if (authState.userData.userId && authState.isAuth) {
+    if (isAuth && userId) {
       dispatch(
         saveStatisticAction({
           newStatistic: statisticState,
-          userId: authState.userData.userId,
+          userId,
         })
       );
     }
   }, [statisticState]);
 
   useMemo(() => {
-    if (authState.isAuth) {
-      dispatch(getUserWordsAction({ userId: authState.userData.userId }));
-      dispatch(requestStatisticAction({ userId: authState.userData.userId }));
+    if (isAuth) {
+      dispatch(getUserWordsAction({ userId }));
+      dispatch(requestStatisticAction({ userId }));
     }
-  }, [authState.isAuth]);
+  }, [isAuth]);
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
         <Route index element={<DemoHomePage />} />
         <Route path="home" element={<DemoHomePage />} />
-        <Route
-          path="registration"
-          element={<RegistrationPage request={authState.request} />}
-        />
+        <Route path="registration" element={<RegistrationPage />} />
         <Route path="login" element={<LoginPage />} />
-        <Route
-          path="book/"
-          element={
-            <EBook
-              isAuth={authState.isAuth}
-              userId={authState.userData.userId}
-            />
-          }
-        >
-          <Route
-            path=":group/:page"
-            element={
-              <CardList
-                isAuth={authState.isAuth}
-                userId={authState.userData.userId}
-              />
-            }
-          />
+        <Route path="book/" element={<EBook />}>
+          <Route path=":group/:page" element={<CardList />} />
         </Route>
         <Route path="games" element={<GamesPage />} />
         <Route path="games/sprint" element={<SprintPage />} />

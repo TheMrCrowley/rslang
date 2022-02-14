@@ -12,26 +12,26 @@ import { useNavigate } from 'react-router-dom';
 import { registrationAction } from '../../redux/store/reducers/authReducer';
 import AuthPageContainer from '../ui/AuthPageContainer';
 import { RegistrationRequestData } from '../../services/auth/authServiceTypes';
+import useTypedSelector from '../../hooks/useTypedSelector';
 
-interface RegistrationPageProps {
-  request: boolean;
-}
-
-const RegistrationPage: FC<RegistrationPageProps> = ({ request }) => {
+const RegistrationPage: FC = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { request } = useTypedSelector(store => store.auth);
 
   const createFormData = (): RegistrationRequestData => ({
     name,
     email,
     password,
   });
+
   if (request) {
     return <CircularProgress />;
   }
+
   return (
     <AuthPageContainer>
       <Typography variant="h4">Sign up</Typography>

@@ -12,7 +12,7 @@ const useStatistic = (isAuth: boolean, userId: string) => {
       dispatch(requestStatisticAction({ userId }));
     }
   }, []);
-  return useMemo(() => statistic, [statistic]);
+  return useMemo(() => statistic, [statistic, isAuth]);
 };
 
 export default useStatistic;

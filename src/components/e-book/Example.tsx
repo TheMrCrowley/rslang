@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { Typography, Box } from '@mui/material';
-import { HandledText } from './utils';
+import { HandledText } from '../../helpers/handleTagInText';
 
 const Example: FC<HandledText> = ({ head, target, tail }) => {
   return (

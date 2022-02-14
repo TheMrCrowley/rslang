@@ -11,11 +11,11 @@ import {
 import useWordsShortData from '../../hooks/useWordsShortData';
 import { WordStatisticItem } from '../../services/statistic/statisticServiceTypes';
 
-interface AudiocallStatisticProps {
+interface WordsShortStatisticProps {
   wordsStatistic: WordStatisticItem;
 }
 
-const WordsShortStatistic: FC<AudiocallStatisticProps> = ({
+const WordsShortStatistic: FC<WordsShortStatisticProps> = ({
   wordsStatistic,
 }) => {
   const graphData = useWordsShortData(wordsStatistic);

@@ -9,8 +9,6 @@ const PaginationRanges: FC = () => {
   const winWith = useWindowWidth();
   const navigate = useNavigate();
   const { group } = useBookParams();
-  // **** TO DO ******
-  // join  page numbers to original source
   const TOTAL_PAGES = 30;
   const START_PAGE = 1;
   const enum PageNumberSize {
