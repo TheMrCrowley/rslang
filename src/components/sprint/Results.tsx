@@ -5,7 +5,6 @@ import { darkCorrectColor, darkIncorrectColor } from '../e-book/cosnstants';
 
 const ResultsWrapper = styled(Box)`
   height: 65vh;
-  margin-top: 6rem;
   margin-bottom: 1rem;
   padding: 2.5rem 1rem 2.5rem 2.5rem;
   background-color: white;
