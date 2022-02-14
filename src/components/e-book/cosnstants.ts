@@ -18,9 +18,23 @@ export const darkColors = [
   '#62757f',
 ];
 
+export const lightColors = [
+  '#ffbb93',
+  '#ffe97d',
+  '#e1ffb1',
+  '#88ffff',
+  '#ff94c2',
+  '#ee98fb',
+  '#c1d5e0',
+];
+
 export const mainBgColor = '#64ffda';
 export const lightBgColor = '#99ffe0';
 export const darkBgColor = '#14cba8';
+export const incorrectColor = '#ff1744';
+export const correctColor = '#00e676';
+export const darkIncorrectColor = '#c4001d';
+export const darkCorrectColor = '#00b248';
 
 export const isAuth = true;
 

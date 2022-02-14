@@ -13,12 +13,13 @@ const LevelSelecContainer: React.FC<LevelSelecContainerProps> = ({
   return (
     <Box
       sx={{
+        flex: '1 1',
         display: 'flex',
         justifyContent: 'space-around',
         alignItems: 'center',
         width: '100%',
-        minHeight: 'calc(100vh - 4rem)',
         pl: '3.5em',
+        mt: '-5rem',
         bgcolor: color,
       }}
     >

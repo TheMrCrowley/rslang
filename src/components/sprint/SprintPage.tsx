@@ -34,18 +34,19 @@ import ResultLine from './ResultLine';
 import Results from './Results';
 import getAssetsUrl from '../../helpers/getAssetsUrl';
 import MainPageLayoutButton from '../pages/MainPageLayoutButton';
-import { colors } from '../e-book/cosnstants';
+import {
+  colors,
+  darkColors,
+  darkCorrectColor,
+  darkIncorrectColor,
+} from '../e-book/cosnstants';
 import { isNewWord } from '../../helpers/statisticHandlers';
 import { changeSprintNewWordAction } from '../../redux/store/reducers/statisticReducer';
-
-const StyledBox = styled(Box)`
-  width: 100%;
-  height: calc(100vh - 4rem);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding-left: 3.5rem;
-`;
+import ElementsToCenterWrapper from '../ui/ElementsToCenterWrapper';
+import GameWhiteContent from '../ui/GameWhiteContent';
+import CountDown from '../ui/CountDown';
+import GamePageWrapper from '../ui/GamePageWrapper';
+import SprintInGameUpAssets from '../ui/SprintInGameUpAssets';
 
 const StyledProgress = styled(CircularProgress)`
   color: #202026;
@@ -154,7 +155,7 @@ const SprintPage: FC = () => {
   }
 
   return (
-    <StyledBox sx={{ backgroundColor: colors[group] }}>
+    <GamePageWrapper color={colors[group]}>
       <>
         <audio
           src={getAssetsUrl('files/01_0001.mp3')}
@@ -169,39 +170,46 @@ const SprintPage: FC = () => {
         <SprintMenu onClick={startHandler} />
       )}
       {sprintGameState.gameStatus === SprintGameStatus.INRUN && (
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-          <Box
-            sx={{
-              display: 'flex',
-              flexFlow: 'row wrap',
-              gap: '1em',
-              color: 'white',
-            }}
-          >
-            <Typography variant="h2" fontWeight="bold">
-              {currentQuestion.word} = {currentQuestion.answer}?
+        <>
+          <SprintInGameUpAssets color={darkColors[group]}>
+            <Typography
+              variant="h4"
+              color="white"
+              fontWeight="bold"
+              component="span"
+            >
+              Points: 0
             </Typography>
-          </Box>
+            <CountDown />
+          </SprintInGameUpAssets>
           <Box
             sx={{
               display: 'flex',
-              flexFlow: 'row wrap',
-              justifyContent: 'space-between',
+              flexDirection: 'column',
               gap: '1rem',
+              mb: '2rem',
             }}
           >
+            <ElementsToCenterWrapper>
+              <GameWhiteContent>{currentQuestion.word}</GameWhiteContent>
+            </ElementsToCenterWrapper>
+            <ElementsToCenterWrapper>
+              <GameWhiteContent>{currentQuestion.answer}</GameWhiteContent>
+            </ElementsToCenterWrapper>
+          </Box>
+          <ElementsToCenterWrapper>
             <MainPageLayoutButton
-              color="#ff1744"
+              color={darkIncorrectColor}
               onClick={() => answerHandler(false)}
               text="incorrect"
             />
             <MainPageLayoutButton
-              color="#00e576"
+              color={darkCorrectColor}
               onClick={() => answerHandler(true)}
               text="correct"
             />
-          </Box>
-        </Box>
+          </ElementsToCenterWrapper>
+        </>
       )}
       {sprintGameState.gameStatus === SprintGameStatus.END && (
         <>
@@ -212,6 +220,7 @@ const SprintPage: FC = () => {
                 translate={item.translate}
                 word={item.word}
                 key={item.wordId}
+                color={darkCorrectColor}
               />
             ))}
             incorrect={inCorrectAnswers.map(item => (
@@ -220,15 +229,20 @@ const SprintPage: FC = () => {
                 translate={item.translate}
                 word={item.word}
                 key={item.wordId}
+                color={darkIncorrectColor}
               />
             ))}
+            correctNum={correctAnswers.length}
+            incorrectNum={inCorrectAnswers.length}
           />
-          <button type="button" onClick={restartHandler}>
-            Restart
-          </button>
+          <MainPageLayoutButton
+            color={darkColors[group]}
+            onClick={restartHandler}
+            text="Play again"
+          />
         </>
       )}
-    </StyledBox>
+    </GamePageWrapper>
   );
 };
 

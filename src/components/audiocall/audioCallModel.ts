@@ -7,6 +7,7 @@ export interface AudioCallQuestionItem {
   answer: string;
   answers: string[];
   audio: string;
+  imgSrc: string;
 }
 
 const getAllAnswers = (words: Word[]): string[] =>
@@ -31,6 +32,7 @@ const createAucioCallQuestionItem = (
     wordId: wordItem.id,
     word: wordItem.word,
     answer: wordItem.wordTranslate,
+    imgSrc: wordItem.image,
     audio: wordItem.audio,
     answers: otherAnswers,
   };

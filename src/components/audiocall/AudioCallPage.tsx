@@ -8,7 +8,7 @@ import React, {
 } from 'react';
 import { useDispatch } from 'react-redux';
 import { styled } from '@mui/material/styles';
-import { Box } from '@mui/material';
+import { Box, CardMedia, Typography } from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
 import ReactAudioPlayer from 'react-audio-player';
 import useTypedSelector from '../../hooks/useTypedSelector';
@@ -31,23 +31,18 @@ import {
 } from '../../redux/store/reducers/audioCallReducer';
 import { compareAnswers } from '../sprint/SprintModel';
 import MainPageLayoutButton from '../pages/MainPageLayoutButton';
-import { colors, darkColors } from '../e-book/cosnstants';
-import GameAssets from '../ui/GameAssets';
+import {
+  colors,
+  darkColors,
+  darkCorrectColor,
+  darkIncorrectColor,
+} from '../e-book/cosnstants';
 import { isNewWord } from '../../helpers/statisticHandlers';
 import { changeAudioCallNewWordAction } from '../../redux/store/reducers/statisticReducer';
-
-const StyledBox = styled(Box)`
-  height: calc(100vh - 4rem);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-left: 3.5rem;
-`;
-
-const StyledGameContainer = styled(Box)`
-  display: flex;
-  flex-direction: column;
-`;
+import AudiocallInGameBottomAssets from '../ui/AudiocallInGameBottomAssets';
+import AudiocallInGameUpAssets from '../ui/AudiocallInGameUpAssets';
+import GamePageWrapper from '../ui/GamePageWrapper';
+import { BASE_CONTENT_URL } from '../e-book/Card';
 
 const ButtonWrapper = styled(Box)`
   display: flex;
@@ -71,6 +66,8 @@ const AudioCallPage = () => {
   const authState = useTypedSelector(store => store.auth);
   const audioCallState = useTypedSelector(store => store.audioCallGame);
   const dispatch = useDispatch();
+  const [afterAnswerState, setAfterAnswerState] = useState(false);
+  useEffect(() => {}, [afterAnswerState]);
 
   const [currentQuestion, setCurrentQuestion] = useState<AudioCallQuestionItem>(
     {} as AudioCallQuestionItem
@@ -92,10 +89,13 @@ const AudioCallPage = () => {
 
   const restartHandler = useCallback(() => {
     const { group, page } = audioCallState;
+    setInCorrectAnswers([]);
+    setCorrectAnswers([]);
     dispatch(requestAudioCallDataAction({ group, page }));
   }, [audioCallState.group, audioCallState.page]);
 
   const nextQuestion = () => {
+    setAfterAnswerState(false);
     setGameQuestions(prev => {
       setCurrentQuestion(prev.pop() as AudioCallQuestionItem);
       return prev;
@@ -138,13 +138,11 @@ const AudioCallPage = () => {
       setInCorrectAnswers(prev => [...prev, { ...currentQuestion }]);
       playHandler(inCorrectAudio);
     }
-    // setTimeout(() => {
-    if (gameQuestions.length) {
-      nextQuestion();
-    } else {
+    if (!gameQuestions.length) {
       showResults();
+    } else {
+      setAfterAnswerState(true);
     }
-    // }, 500);
   };
 
   useEffect(() => {
@@ -170,8 +168,18 @@ const AudioCallPage = () => {
 
   const { group } = audioCallState;
 
+  const changeButtonColor = (answer: string | boolean): string => {
+    if (!afterAnswerState) {
+      return darkColors[group];
+    }
+    if (compareAnswers(currentQuestion.answer, answer)) {
+      return darkCorrectColor;
+    }
+    return darkColors[group];
+  };
+
   return (
-    <StyledBox sx={{ backgroundColor: colors[group] }}>
+    <GamePageWrapper color={colors[group]}>
       <>
         <ReactAudioPlayer
           src="https://rslang-team15-natein.netlify.app/static/media/correct.a7b1cde9.mp3"
@@ -186,25 +194,59 @@ const AudioCallPage = () => {
         <SprintMenu onClick={startHandler} />
       )}
       {audioCallState.gameStatus === AudioCallGameStatus.INRUN && (
-        <div>
+        // TO DO connect sound to AudiocallInGameUpAssets
+        <>
           <ReactAudioPlayer
             src={getAssetsUrl(currentQuestion.audio)}
             autoPlay
           />
-          <StyledGameContainer>
-            <GameAssets color={darkColors[group]} />
-            <ButtonWrapper>
-              {currentQuestion.answers.map(answerItem => (
-                <MainPageLayoutButton
-                  key={answerItem}
-                  onClick={() => answerHandler(answerItem)}
-                  color={darkColors[group]}
-                  text={answerItem}
-                />
-              ))}
-            </ButtonWrapper>
-          </StyledGameContainer>
-        </div>
+          {!afterAnswerState ? (
+            <AudiocallInGameUpAssets color={darkColors[group]} />
+          ) : (
+            <Box
+              sx={{
+                display: 'flex',
+                flexFlow: 'row wrap',
+                alignItems: 'center',
+                justifyContent: 'space-evenly',
+                gap: '1rem',
+              }}
+            >
+              <Typography
+                color="white"
+                fontWeight="bold"
+                variant="h1"
+                sx={{ textTransform: 'capitalize' }}
+              >
+                {currentQuestion.word}
+              </Typography>
+              <AudiocallInGameUpAssets color={darkColors[group]} />
+              <CardMedia
+                component="img"
+                height="140"
+                image={`${BASE_CONTENT_URL}/${currentQuestion.imgSrc}?raw=true`}
+                sx={{ borderRadius: '2rem', width: 'fit-content' }}
+              />
+            </Box>
+          )}
+
+          <ButtonWrapper>
+            {currentQuestion.answers.map(answerItem => (
+              <MainPageLayoutButton
+                key={answerItem}
+                onClick={() => answerHandler(answerItem)}
+                color={changeButtonColor(answerItem)}
+                text={answerItem}
+                disabled={afterAnswerState}
+              />
+            ))}
+          </ButtonWrapper>
+          <AudiocallInGameBottomAssets
+            disabled={!afterAnswerState}
+            onClick={nextQuestion}
+            group={group}
+          />
+        </>
       )}
       {audioCallState.gameStatus === AudioCallGameStatus.END && (
         <>
@@ -215,6 +257,7 @@ const AudioCallPage = () => {
                 translate={item.answer}
                 word={item.word}
                 key={item.wordId}
+                color={darkCorrectColor}
               />
             ))}
             incorrect={inCorrectAnswers.map(item => (
@@ -223,15 +266,20 @@ const AudioCallPage = () => {
                 translate={item.answer}
                 word={item.word}
                 key={item.wordId}
+                color={darkIncorrectColor}
               />
             ))}
+            correctNum={correctAnswers.length}
+            incorrectNum={inCorrectAnswers.length}
           />
-          <button type="button" onClick={restartHandler}>
-            Restart
-          </button>
+          <MainPageLayoutButton
+            color={darkColors[group]}
+            onClick={restartHandler}
+            text="Play again"
+          />
         </>
       )}
-    </StyledBox>
+    </GamePageWrapper>
   );
 };
 
