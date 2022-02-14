@@ -50,6 +50,7 @@ const SprintPage: FC = () => {
   const authState = useTypedSelector(store => store.auth);
   const sprintGameState = useTypedSelector(store => store.sprintGame);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [correctAnswers, setCorrectAnswers] = useState<SprintQuestionItem[]>(
     [] as SprintQuestionItem[]
@@ -61,6 +62,19 @@ const SprintPage: FC = () => {
   const startHandler = (group: number) => {
     const randomPage = getRandomNumber(0, 29);
     dispatch(requestSprintDataAction({ group, page: randomPage }));
+  };
+
+  const restartHandler = useCallback(() => {
+    dispatch(
+      requestSprintDataAction({
+        group: sprintGameState.group,
+        page: sprintGameState.page,
+      })
+    );
+  }, [sprintGameState.group, sprintGameState.page]);
+
+  const backHandler = () => {
+    navigate('/games');
   };
 
   const playHandler = (isCorrect: boolean) => {
@@ -90,6 +104,7 @@ const SprintPage: FC = () => {
   if (sprintGameState.request) {
     return <StyledProgress />;
   }
+  console.log(sprintGameState);
   return (
     <GamePageWrapper color={colors[group]}>
       <>

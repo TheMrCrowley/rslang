@@ -35,7 +35,6 @@ function* updateStatisticWorker(data: SaveStatisticAction) {
       updateStatistic,
       newStatistic
     );
-    console.log(updatedStatistic);
     yield call(StatisticService.updateStatistic, userId, updatedStatistic);
   } catch (e) {
     console.log(e);

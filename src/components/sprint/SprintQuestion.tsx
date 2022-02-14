@@ -1,4 +1,4 @@
-import { Box, Fade, Typography, Zoom } from '@mui/material';
+import { Box } from '@mui/material';
 import React, { FC } from 'react';
 import { styled } from '@mui/material/styles';
 import { AuthState } from '../../redux/types/authTypes';

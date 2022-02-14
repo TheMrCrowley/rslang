@@ -21,7 +21,7 @@ import {
 } from '../redux/store/reducers/statisticReducer';
 import AudioCallPage from './audiocall/AudioCallPage';
 import CardList from './e-book/CardList';
-import StatisticPage from './pages/StatisticPage';
+import StatisticPage from './statistic/StatisticPage';
 
 const AppRouter = () => {
   const dispatch = useDispatch();

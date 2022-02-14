@@ -10,7 +10,6 @@ import { isNewWord } from '../helpers/statisticHandlers';
 import { changeSprintNewWordAction } from '../redux/store/reducers/statisticReducer';
 import {
   changeSprintStatusAction,
-  setWordsSectionAction,
   sprintCorrectAction,
   sprintInCorrectAction,
 } from '../redux/store/reducers/sprintGameReducer';
@@ -30,6 +29,7 @@ const useSprint = (
   );
   const { userWords } = useTypedSelector(store => store.userWords);
 
+  const [currentPage, setCurrentPage] = useState(page);
   const [questions, setQuestions] = useState<SprintQuestionItem[]>([]);
   const [currentQuestion, setCurrentQuestion] = useState<SprintQuestionItem>(
     {} as SprintQuestionItem
@@ -72,16 +72,17 @@ const useSprint = (
     if (questions.length) {
       nextQuestion();
     } else {
-      const newPage = page - 1;
-      if (newPage >= 0) {
-        dispatch(setWordsSectionAction({ group, page: newPage }));
+      setCurrentPage(currentPage - 1);
+      if (currentPage >= 0) {
         if (book) {
-          WordsService.getNotStudiedWords(userId, group, newPage).then(data => {
-            setQuestions(getQuestionItems(data));
-            nextQuestion();
-          });
+          WordsService.getNotStudiedWords(userId, group, currentPage).then(
+            data => {
+              setQuestions(getQuestionItems(data));
+              nextQuestion();
+            }
+          );
         } else {
-          WordsService.getWords(group, newPage).then(data => {
+          WordsService.getWords(group, currentPage).then(data => {
             setQuestions(getQuestionItems(data));
             nextQuestion();
           });
@@ -91,6 +92,7 @@ const useSprint = (
       }
     }
   };
+
   const confirmAnswer = () => answerHandler(true);
   const declineAnswer = () => answerHandler(false);
 
@@ -108,6 +110,7 @@ const useSprint = (
       window.removeEventListener('keydown', answerByKey);
     };
   }, [answerHandler]);
+
   return {
     word: currentQuestion.word,
     answer: currentQuestion.answer,

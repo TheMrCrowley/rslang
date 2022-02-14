@@ -59,6 +59,29 @@ export default class WordsService {
     return response.data[0].paginatedResults;
   };
 
+  static getHardWords = async (
+    userId: string
+  ): Promise<WordWithCustomProps[]> => {
+    const count = await $api.get<AggregatedWordsItem>(
+      `/users/${userId}/aggregatedWords`,
+      {
+        params: {
+          filter: { $and: [{ 'userWord.difficulty': 'hard' }] },
+        },
+      }
+    );
+    const response = await $api.get<AggregatedWordsItem[]>(
+      `/users/${userId}/aggregatedWords`,
+      {
+        params: {
+          wordsPerPage: count.data.totalCount,
+          filter: { $and: [{ 'userWord.difficulty': 'hard' }] },
+        },
+      }
+    );
+    return response.data[0].paginatedResults;
+  };
+
   static getWord = async (wordId: string): Promise<Word> => {
     const response = await $api.get<Word>(`${WordsEndpoints.WORDS}/${wordId}`);
     return response.data;

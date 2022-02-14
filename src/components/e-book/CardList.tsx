@@ -1,4 +1,4 @@
-import { Box, CircularProgress } from '@mui/material';
+import { Box } from '@mui/material';
 import React, { FC } from 'react';
 import { styled } from '@mui/material/styles';
 import BasicCard from './Card';
@@ -21,13 +21,8 @@ const StyledListBox = styled(Box)({
   paddingBottom: '1em',
 });
 
-const StyledProgress = styled(CircularProgress)({
-  color: '#202026',
-  alignSelf: 'center',
-});
-
 const CardList: FC<CardListProps> = ({ isAuth, userId }) => {
-  const { cards, request } = useBookWords(isAuth, userId);
+  const { cards } = useBookWords(isAuth, userId);
   const words = cards.map(word => {
     return (
       <BasicCard
@@ -37,11 +32,7 @@ const CardList: FC<CardListProps> = ({ isAuth, userId }) => {
       />
     );
   });
-  return (
-    <StyledListBox>
-      {request ? <StyledProgress size={100} /> : words}
-    </StyledListBox>
-  );
+  return <StyledListBox>{words}</StyledListBox>;
 };
 
 export default CardList;
