@@ -68,7 +68,6 @@ const useSprint = (
     }
     if (isCorrect) {
       correctAnswer(currentQuestion);
-
       audioHandler(true);
       setStreak(streak + 1);
       setPoints(points + (Math.floor(streak / 3) * 10 || 10));

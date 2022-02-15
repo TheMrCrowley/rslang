@@ -1,8 +1,9 @@
 import { call, put, takeEvery } from 'redux-saga/effects';
 import { compareDiff } from '../../helpers/statisticHandlers';
 import {
-  userWordFromAudioCallInCorrect,
   userWordFromAudioCallCorrect,
+  userWordFromAudioCallInCorrect,
+  userWordFromSprintCorrect,
 } from '../../helpers/createUserWordBody';
 
 import requestMethodChoiser from '../../helpers/requestMethodChoiser';
@@ -16,10 +17,15 @@ import {
   UserWordResponse,
 } from '../../services/user-words/userWordsServiceTypes';
 import WordsService from '../../services/words/wordsService';
-import { Word } from '../../services/words/wordsServiceTypes';
+import {
+  Word,
+  WordWithCustomProps,
+} from '../../services/words/wordsServiceTypes';
 import {
   audioCallRequestEndAction,
   audioCallRequestStartAction,
+  changeAudioCallStatusAction,
+  setAudiocallBookAction,
   setAudioCallDataAction,
   setAudioCallWordsSectionAction,
 } from '../store/reducers/audioCallReducer';
@@ -32,22 +38,36 @@ import {
 import {
   AudioCallCorrectAction,
   AudioCallGameActions,
+  AudioCallGameStatus,
   AudioCallInCorrectAction,
   RequestAucioCallDataAction,
 } from '../types/audioCallTypes';
+import { setOneUserWordAction } from '../store/reducers/userWordsReducer';
 
 function* requestAudioCallDataWorker(data: RequestAucioCallDataAction) {
   try {
     yield put(audioCallRequestStartAction());
-    const { group, page } = data.payload;
+    const { group, page, userId, book } = data.payload;
     yield put(setAudioCallWordsSectionAction({ group, page }));
-    const wordsResponse: Word[] = yield call(
-      WordsService.getWords,
-      group,
-      page
-    );
-    yield put(setAudioCallDataAction(wordsResponse));
+    if (book && userId) {
+      yield put(setAudiocallBookAction());
+      const wordsResponse: WordWithCustomProps[] = yield call(
+        WordsService.getNotStudiedWords,
+        userId,
+        group,
+        page
+      );
+      yield put(setAudioCallDataAction(wordsResponse));
+    } else {
+      const wordsResponse: Word[] = yield call(
+        WordsService.getWords,
+        group,
+        page
+      );
+      yield put(setAudioCallDataAction(wordsResponse));
+    }
     yield put(audioCallRequestEndAction());
+    yield put(changeAudioCallStatusAction(AudioCallGameStatus.INRUN));
   } catch (e) {
     console.log(e);
   }
@@ -59,12 +79,13 @@ function* audiocallCorrectAnswerWorker(data: AudioCallCorrectAction) {
     const method = requestMethodChoiser(words, wordId);
     yield put(changeAudioCallCorrectAnswerAction());
     if (method === 'POST') {
-      yield call(
+      const newWord: UserWordResponse = yield call(
         UserWordsService.setUserWord,
         userId,
         wordId,
         userWordFromAudioCallCorrect()
       );
+      yield put(setOneUserWordAction(newWord));
     } else {
       const chosenWord = words.find(
         wordItem => wordItem.wordId === wordId
@@ -74,7 +95,7 @@ function* audiocallCorrectAnswerWorker(data: AudioCallCorrectAction) {
         chosenWord,
         'audiocall'
       );
-      yield call(
+      const updatedWord: UserWordResponse = yield call(
         UserWordsService.updateUserWord,
         userId,
         wordId,
@@ -83,6 +104,7 @@ function* audiocallCorrectAnswerWorker(data: AudioCallCorrectAction) {
       if (!compareDiff(chosenWord, updatedUserWord)) {
         yield put(increaseLearnedWordsAtion());
       }
+      yield put(setOneUserWordAction(updatedWord));
     }
   } catch (e) {
     console.log(e);
@@ -95,12 +117,13 @@ function* audiocallInCorrectAnswerWorker(data: AudioCallInCorrectAction) {
     const method = requestMethodChoiser(words, wordId);
     yield put(changeAudioCallIncorrectAnswerAction());
     if (method === 'POST') {
-      yield call(
+      const newWord: UserWordResponse = yield call(
         UserWordsService.setUserWord,
         userId,
         wordId,
         userWordFromAudioCallInCorrect()
       );
+      yield put(setOneUserWordAction(newWord));
     } else {
       const chosenWord = words.find(
         wordItem => wordItem.wordId === wordId
@@ -110,7 +133,7 @@ function* audiocallInCorrectAnswerWorker(data: AudioCallInCorrectAction) {
         chosenWord,
         'audiocall'
       );
-      yield call(
+      const updatedWord: UserWordResponse = yield call(
         UserWordsService.updateUserWord,
         userId,
         wordId,
@@ -119,6 +142,7 @@ function* audiocallInCorrectAnswerWorker(data: AudioCallInCorrectAction) {
       if (!compareDiff(chosenWord, updatedUserWord)) {
         yield put(decreaseLearnedWordsAtion());
       }
+      yield put(setOneUserWordAction(updatedWord));
     }
   } catch (e) {
     console.log(e);

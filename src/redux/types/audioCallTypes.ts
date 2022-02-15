@@ -23,6 +23,7 @@ export interface AudioCallState {
   correctAnswers: number;
   group: number;
   page: number;
+  book: boolean;
 }
 
 export enum AudioCallGameActions {
@@ -30,12 +31,16 @@ export enum AudioCallGameActions {
   SET_AUDIOCALL_DATA = 'SET_AUDIOCALL_DATA',
   AUDIOCALL_REQUEST_START = 'AUDIOCALL_REQUEST_START',
   AUDIOCALL_REQUEST_END = 'AUDIOCALL_REQUEST_END',
-  INCREASE_AUDIOCALL_CORRECT_ASWERS = 'INCREASE_AUDIOCALL_CORRECT_ASWERS',
   CHNAGE_AUDIOCALL_STATUS = 'CHNAGE_AUDIOCALL_STATUS',
   RESET_AUDIOCALL_STATE = 'RESET_AUDIOCALL_STATE',
   SET_AUDIOCALL_WORDS_SECTION = 'SET_AUDIOCALL_WORDS_SECTION',
   AUDIOCALL_CORRECT_ANSWER = 'AUDIOCALL_CORRECT_ANSWER',
   AUDIOCALL_INCORRECT_ANSWER = 'AUDIOCALL_INCORRECT_ANSWER',
+  SET_AUDIOCALL_BOOK = 'SET_AUDIOCALL_BOOK',
+}
+
+export interface SetAudiocallBookAction {
+  type: AudioCallGameActions.SET_AUDIOCALL_BOOK;
 }
 
 export interface AudioCallCorrectAction {
@@ -58,7 +63,7 @@ export interface AudioCallInCorrectAction {
 
 export interface RequestAucioCallDataAction {
   type: AudioCallGameActions.REQUEST_AUDIOCALL_DATA;
-  payload: WordsRequestData;
+  payload: { group: number; page: number; book?: boolean; userId?: string };
 }
 
 export interface SetAucioCallDataAction {
@@ -79,10 +84,6 @@ export interface AucioCallRequestEndAction {
   type: AudioCallGameActions.AUDIOCALL_REQUEST_END;
 }
 
-export interface IncreaseAucioCallCorrectAnswersAction {
-  type: AudioCallGameActions.INCREASE_AUDIOCALL_CORRECT_ASWERS;
-}
-
 export interface ChangeAucioCallGameStatusAction {
   type: AudioCallGameActions.CHNAGE_AUDIOCALL_STATUS;
   payload: AudioCallStatus;
@@ -98,8 +99,8 @@ export type AudioCallGameAction =
   | SetWordsAucioCallAction
   | AucioCallRequestStartAction
   | AucioCallRequestEndAction
-  | IncreaseAucioCallCorrectAnswersAction
   | ChangeAucioCallGameStatusAction
   | ResetAucioCallStateAction
   | AudioCallCorrectAction
-  | AudioCallInCorrectAction;
+  | AudioCallInCorrectAction
+  | SetAudiocallBookAction;

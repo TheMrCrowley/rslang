@@ -28,8 +28,6 @@ export const sprintGameReducer = (
   action: SprintGameAction
 ): SprintState => {
   switch (action.type) {
-    case SprintGameActions.REQUEST_SPRINT_DATA:
-      return state;
     case SprintGameActions.SPRINT_REQUEST_START:
       return { ...state, request: true };
     case SprintGameActions.SPRINT_REQUEST_END:

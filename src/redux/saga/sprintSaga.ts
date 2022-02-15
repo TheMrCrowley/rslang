@@ -116,12 +116,13 @@ function* sprintInCorrectAnswerWorker(data: SprintInCorrectAction) {
     const method = requestMethodChoiser(words, wordId);
     yield put(changeSprintIncorrectAnswersAction());
     if (method === 'POST') {
-      yield call(
+      const newWord: UserWordResponse = yield call(
         UserWordsService.setUserWord,
         userId,
         wordId,
         userWordFromSprintIncorrect()
       );
+      yield put(setOneUserWordAction(newWord));
     } else {
       const chosenWord = words.find(
         wordItem => wordItem.wordId === wordId
@@ -131,7 +132,7 @@ function* sprintInCorrectAnswerWorker(data: SprintInCorrectAction) {
         chosenWord,
         'sprint'
       );
-      yield call(
+      const updatedWord: UserWordResponse = yield call(
         UserWordsService.updateUserWord,
         userId,
         wordId,
@@ -140,6 +141,7 @@ function* sprintInCorrectAnswerWorker(data: SprintInCorrectAction) {
       if (!compareDiff(chosenWord, updatedUserWord)) {
         yield put(decreaseLearnedWordsAtion());
       }
+      yield put(setOneUserWordAction(updatedWord));
     }
   } catch (e) {
     console.log(e);

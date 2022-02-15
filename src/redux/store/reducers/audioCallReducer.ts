@@ -14,12 +14,13 @@ import {
 } from '../../types/audioCallTypes';
 
 const audioCallInitialState: AudioCallState = {
-  words: [] as Word[],
+  words: [],
   correctAnswers: 0,
   request: false,
   gameStatus: AudioCallGameStatus.PREPARE,
   group: 0,
   page: 0,
+  book: false,
 };
 
 export const audioCallGameReducer = (
@@ -27,14 +28,10 @@ export const audioCallGameReducer = (
   action: AudioCallGameAction
 ): AudioCallState => {
   switch (action.type) {
-    case AudioCallGameActions.REQUEST_AUDIOCALL_DATA:
-      return state;
     case AudioCallGameActions.AUDIOCALL_REQUEST_START:
       return { ...state, request: true };
     case AudioCallGameActions.AUDIOCALL_REQUEST_END:
       return { ...state, request: false };
-    case AudioCallGameActions.INCREASE_AUDIOCALL_CORRECT_ASWERS:
-      return { ...state, correctAnswers: state.correctAnswers + 1 };
     case AudioCallGameActions.SET_AUDIOCALL_DATA:
       return { ...state, words: [...action.payload] };
     case AudioCallGameActions.CHNAGE_AUDIOCALL_STATUS:
@@ -48,6 +45,8 @@ export const audioCallGameReducer = (
     }
     case AudioCallGameActions.RESET_AUDIOCALL_STATE:
       return { ...audioCallInitialState };
+    case AudioCallGameActions.SET_AUDIOCALL_BOOK:
+      return { ...state, book: true };
     default:
       return state;
   }
@@ -89,10 +88,6 @@ export const audioCallRequestEndAction = (): AudioCallGameAction => ({
   type: AudioCallGameActions.AUDIOCALL_REQUEST_END,
 });
 
-export const audioCallIncreaseAnswerAction = (): AudioCallGameAction => ({
-  type: AudioCallGameActions.INCREASE_AUDIOCALL_CORRECT_ASWERS,
-});
-
 export const resetAudioCallStateAction = (): AudioCallGameAction => ({
   type: AudioCallGameActions.RESET_AUDIOCALL_STATE,
 });
@@ -113,4 +108,8 @@ export const audiocallInCorrectAction = (payload: {
 }): AudioCallGameAction => ({
   type: AudioCallGameActions.AUDIOCALL_INCORRECT_ANSWER,
   payload,
+});
+
+export const setAudiocallBookAction = (): AudioCallGameAction => ({
+  type: AudioCallGameActions.SET_AUDIOCALL_BOOK,
 });
