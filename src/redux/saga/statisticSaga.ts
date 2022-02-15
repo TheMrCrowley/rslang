@@ -31,10 +31,12 @@ function* requestStatisticWorker(data: RequestStatisticAction) {
 function* updateStatisticWorker(data: SaveStatisticAction) {
   try {
     const { newStatistic, userId } = data.payload;
+    console.log('stat save', newStatistic);
     const updatedStatistic: StatisticRequest = yield call(
       updateStatistic,
       newStatistic
     );
+    console.log('updated', updatedStatistic);
     yield call(StatisticService.updateStatistic, userId, updatedStatistic);
   } catch (e) {
     console.log(e);

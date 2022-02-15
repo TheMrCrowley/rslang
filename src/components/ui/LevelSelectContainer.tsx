@@ -30,32 +30,9 @@ const LevelSelecContainer: React.FC<LevelSelecContainerProps> = ({
   color = mainBgColor,
 }) => {
   return (
-    <Box
-      sx={{
-        flex: '1 1',
-        display: 'flex',
-        justifyContent: 'space-around',
-        alignItems: 'center',
-        width: '100%',
-        pl: '3.5em',
-        mt: '-5rem',
-        bgcolor: color,
-      }}
-    >
-      <Box
-        sx={{
-          flexBasis: '400px',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '1em',
-          p: '2em',
-          borderRadius: '2em',
-          bgcolor: 'white',
-        }}
-      >
-        {children}
-      </Box>
-    </Box>
+    <LevelMainWrapper color={color}>
+      <LevelInnerWrapper>{children}</LevelInnerWrapper>
+    </LevelMainWrapper>
   );
 };
 

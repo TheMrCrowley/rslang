@@ -37,15 +37,17 @@ const AppRouter = () => {
 
   useEffect(() => {
     if (isAuth && userId) {
-      dispatch(
-        saveStatisticAction({
-          newStatistic: statisticState,
-          userId,
-        })
-      );
+      if (Object.keys(statisticState.wordStatistic).length) {
+        dispatch(
+          saveStatisticAction({
+            newStatistic: statisticState,
+            userId,
+          })
+        );
+      }
     }
   }, [statisticState]);
-
+  console.log(statisticState);
   useMemo(() => {
     if (isAuth) {
       dispatch(getUserWordsAction({ userId }));

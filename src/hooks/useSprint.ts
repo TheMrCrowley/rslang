@@ -1,5 +1,5 @@
 import { useDispatch } from 'react-redux';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import useTypedSelector from './useTypedSelector';
 import {
   compareAnswers,
@@ -35,6 +35,10 @@ const useSprint = (
     {} as SprintQuestionItem
   );
 
+  // handle streak for points
+  const [streak, setStreak] = useState(0);
+  const [points, setPoints] = useState(0);
+
   const nextQuestion = () => {
     setQuestions(prev => {
       setCurrentQuestion(prev.pop() as SprintQuestionItem);
@@ -64,8 +68,12 @@ const useSprint = (
     }
     if (isCorrect) {
       correctAnswer(currentQuestion);
+
       audioHandler(true);
+      setStreak(streak + 1);
+      setPoints(points + (Math.floor(streak / 3) * 10 || 10));
     } else {
+      setStreak(0);
       incorrectAnswer(currentQuestion);
       audioHandler(false);
     }
@@ -116,6 +124,8 @@ const useSprint = (
     answer: currentQuestion.answer,
     confirm: confirmAnswer,
     decline: declineAnswer,
+    group,
+    points: useMemo(() => points, [points]),
   };
 };
 

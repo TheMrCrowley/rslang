@@ -21,7 +21,8 @@ export interface BasicCardProps {
 export const BASE_CONTENT_URL =
   'https://github.com/rolling-scopes-school/react-rslang-be/blob/main/';
 
-const BasicCard: FC<BasicCardProps> = ({ cardData }) => {
+const BasicCard: FC<BasicCardProps> = ({ isAuth, cardData }) => {
+  // TODO закинуть эти данные в стейт и попробовать обновлять по одной карточке
   const {
     _id,
     group,
@@ -42,6 +43,8 @@ const BasicCard: FC<BasicCardProps> = ({ cardData }) => {
   const handledTextMeaning = handleTagInText(textMeaning);
   const handledTextExample = handleTagInText(textExample);
 
+  const BASE_CONTENT_URL =
+    'https://github.com/rolling-scopes-school/react-rslang-be/blob/main/';
   return (
     <Card
       sx={{

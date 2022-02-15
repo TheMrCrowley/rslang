@@ -6,14 +6,12 @@ import {
   changeSprintCorrectAnswersHelper,
   changeSprintIncorrectAnswersHelper,
   changeSprintNewWordHelper,
+  createGameStatisticItem,
+  createWordStatisticItem,
   decreaseLearnedWordsHelper,
   increaseLearnedWordsHelper,
 } from '../../../helpers/statisticHandlers';
-import {
-  GameStatisticItem,
-  StatisticResponse,
-  WordStatisticItem,
-} from '../../../services/statistic/statisticServiceTypes';
+import { StatisticResponse } from '../../../services/statistic/statisticServiceTypes';
 import {
   StatisticState,
   StatisticAction,
@@ -23,9 +21,9 @@ import {
 const statisticInitialState: StatisticState = {
   completeStatistic: {} as StatisticResponse,
   learnedWords: 0,
-  audiocallStatistic: {} as GameStatisticItem,
-  sprintStatistic: {} as GameStatisticItem,
-  wordStatistic: {} as WordStatisticItem,
+  audiocallStatistic: createGameStatisticItem(),
+  sprintStatistic: createGameStatisticItem(),
+  wordStatistic: createWordStatisticItem(),
   sprintCurrentStreak: 0,
   audiocallCurrentStreak: 0,
 };

@@ -45,7 +45,7 @@ module.exports = {
     historyApiFallback: true
   },
   module: {
-  	rules: [
+    rules: [
       { test: /\.(html)$/, use: ['html-loader'] },
       {
         test: /\.css$/,

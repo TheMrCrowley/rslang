@@ -1,4 +1,4 @@
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import React, { FC } from 'react';
 import { styled } from '@mui/material/styles';
 import { AuthState } from '../../redux/types/authTypes';
@@ -7,6 +7,9 @@ import { SprintQuestionItem } from './SprintModel';
 import SprintTimer from './SprintTimer';
 import useSprint from '../../hooks/useSprint';
 import SprintQuestionText from './SprintQuestionText';
+import { darkColors } from '../e-book/cosnstants';
+import SprintInGameUpAssets from '../ui/SprintInGameUpAssets';
+import CountDown from '../ui/CountDown';
 
 interface SprintQuestionProps {
   auth: AuthState;
@@ -27,7 +30,7 @@ const SprintQuestion: FC<SprintQuestionProps> = ({
   correctAnswer,
   incorrectAnswer,
 }) => {
-  const { word, answer, confirm, decline } = useSprint(
+  const { word, answer, confirm, decline, group, points } = useSprint(
     auth,
     correctAnswer,
     incorrectAnswer,
@@ -36,7 +39,18 @@ const SprintQuestion: FC<SprintQuestionProps> = ({
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-      <SprintTimer />
+      <SprintInGameUpAssets color={darkColors[group]}>
+        <Typography
+          variant="h4"
+          color="white"
+          fontWeight="bold"
+          component="span"
+        >
+          {points}
+        </Typography>
+        <SprintTimer />
+      </SprintInGameUpAssets>
+
       <SprintQuestionText word={word} answer={answer} />
       <StyledButtonWrapper>
         <MainPageLayoutButton

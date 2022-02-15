@@ -24,7 +24,7 @@ const getStatisticFromResponse = (
   };
 };
 
-const createWordStatisticItem = (): WordStatisticItem => {
+export const createWordStatisticItem = (): WordStatisticItem => {
   return {
     correctAnswers: 0,
     learnedWords: 0,
@@ -33,7 +33,7 @@ const createWordStatisticItem = (): WordStatisticItem => {
   };
 };
 
-const createGameStatisticItem = (): GameStatisticItem => {
+export const createGameStatisticItem = (): GameStatisticItem => {
   return {
     correctAnswers: 0,
     longestStreak: 0,
