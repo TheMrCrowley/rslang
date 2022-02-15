@@ -21,7 +21,8 @@ export interface SprintState {
   gameStatus: SprintStatus;
   request: boolean;
   group: number;
-  page: number;
+  initialPage: number;
+  currentPage: number;
   book: boolean;
 }
 
@@ -36,6 +37,11 @@ export enum SprintGameActions {
   SPRINT_CORRECT_ANSWER = 'SPRINT_CORRECT_ANSWER',
   SPRINT_INCORRECT_ANSWER = 'SPRINT_INCORRECT_ANSWER',
   SET_SPRINT_BOOK = 'SET_SPRINT_BOOK',
+  CHANGE_SPRINT_CURRENT_PAGE = 'CHANGE_SPRINT_CURRENT_PAGE',
+}
+
+interface ChangeCurrentPageAction {
+  type: SprintGameActions.CHANGE_SPRINT_CURRENT_PAGE;
 }
 
 export interface SetSprintBookAction {
@@ -102,4 +108,5 @@ export type SprintGameAction =
   | SetWordsSectionAction
   | SprintCorrectAction
   | SprintInCorrectAction
-  | SetSprintBookAction;
+  | SetSprintBookAction
+  | ChangeCurrentPageAction;

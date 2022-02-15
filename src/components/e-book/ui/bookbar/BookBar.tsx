@@ -6,7 +6,8 @@ import BasicSelect from '../select/BasicSelect';
 import PaginationRanges from '../pagination/PaginationRanges';
 import { DIFFICULT_GROUP } from '../../cosnstants';
 import useBookParams from '../../../../hooks/useBookParams';
-import useSprintFromBook from '../../../../hooks/useSprintFromBook';
+import useSprintFromBook from '../../../sprint/useSprintFromBook';
+import useAudiocallFromBook from '../../../audiocall/useAudiocallFromBook';
 
 interface ResponsiveAppBarProps {
   isAuth: boolean;
@@ -35,10 +36,14 @@ const BookBar: React.FC<ResponsiveAppBarProps> = ({
 }) => {
   const { group, page } = useBookParams();
   const sprintHandler = useSprintFromBook(isAuth, group, page, userId);
+  const audioCallHandler = useAudiocallFromBook(isAuth, group, page, userId);
   return (
     <StyledBarContainer maxWidth="xl">
       <Button sx={{ color: '#202026' }} onClick={sprintHandler}>
         Sprint
+      </Button>
+      <Button sx={{ color: '#202026' }} onClick={audioCallHandler}>
+        Audiocall
       </Button>
       <ThemeProvider theme={theme}>
         {group === DIFFICULT_GROUP ? (

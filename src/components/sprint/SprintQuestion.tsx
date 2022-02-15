@@ -5,17 +5,15 @@ import { AuthState } from '../../redux/types/authTypes';
 import MainPageLayoutButton from '../pages/MainPageLayoutButton';
 import { SprintQuestionItem } from './SprintModel';
 import SprintTimer from './SprintTimer';
-import useSprint from '../../hooks/useSprint';
+import useSprintQuestion from './useSprintQuestion';
 import SprintQuestionText from './SprintQuestionText';
 import { darkColors } from '../e-book/cosnstants';
 import SprintInGameUpAssets from '../ui/SprintInGameUpAssets';
-import CountDown from '../ui/CountDown';
 
 interface SprintQuestionProps {
   auth: AuthState;
   correctAnswer: (answer: SprintQuestionItem) => void;
   incorrectAnswer: (answer: SprintQuestionItem) => void;
-  audioHandler: (isCorrect: boolean) => void;
 }
 
 const StyledButtonWrapper = styled(Box)`
@@ -26,15 +24,13 @@ const StyledButtonWrapper = styled(Box)`
 
 const SprintQuestion: FC<SprintQuestionProps> = ({
   auth,
-  audioHandler,
   correctAnswer,
   incorrectAnswer,
 }) => {
-  const { word, answer, confirm, decline, group, points } = useSprint(
+  const { word, answer, confirm, decline, group, points } = useSprintQuestion(
     auth,
     correctAnswer,
-    incorrectAnswer,
-    audioHandler
+    incorrectAnswer
   );
 
   return (
@@ -46,7 +42,7 @@ const SprintQuestion: FC<SprintQuestionProps> = ({
           fontWeight="bold"
           component="span"
         >
-          {points}
+          Points: {points}
         </Typography>
         <SprintTimer />
       </SprintInGameUpAssets>

@@ -1,9 +1,9 @@
 import { call, put, takeEvery } from 'redux-saga/effects';
+import { useDispatch } from 'react-redux';
 import { compareDiff } from '../../helpers/statisticHandlers';
 import {
   userWordFromAudioCallCorrect,
   userWordFromAudioCallInCorrect,
-  userWordFromSprintCorrect,
 } from '../../helpers/createUserWordBody';
 
 import requestMethodChoiser from '../../helpers/requestMethodChoiser';
@@ -17,10 +17,7 @@ import {
   UserWordResponse,
 } from '../../services/user-words/userWordsServiceTypes';
 import WordsService from '../../services/words/wordsService';
-import {
-  Word,
-  WordWithCustomProps,
-} from '../../services/words/wordsServiceTypes';
+import { WordWithCustomProps } from '../../services/words/wordsServiceTypes';
 import {
   audioCallRequestEndAction,
   audioCallRequestStartAction,
@@ -59,7 +56,7 @@ function* requestAudioCallDataWorker(data: RequestAucioCallDataAction) {
       );
       yield put(setAudioCallDataAction(wordsResponse));
     } else {
-      const wordsResponse: Word[] = yield call(
+      const wordsResponse: WordWithCustomProps[] = yield call(
         WordsService.getWords,
         group,
         page

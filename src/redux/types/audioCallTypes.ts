@@ -1,7 +1,6 @@
 import { UserWordResponse } from '../../services/user-words/userWordsServiceTypes';
 import {
   WordWithCustomProps,
-  Word,
   WordsRequestData,
 } from '../../services/words/wordsServiceTypes';
 
@@ -17,12 +16,13 @@ export type AudioCallStatus =
   | AudioCallGameStatus.END;
 
 export interface AudioCallState {
-  words: Word[] | WordWithCustomProps[];
+  words: WordWithCustomProps[];
   gameStatus: AudioCallStatus;
   request: boolean;
   correctAnswers: number;
   group: number;
-  page: number;
+  initialPage: number;
+  currentPage: number;
   book: boolean;
 }
 
@@ -37,6 +37,11 @@ export enum AudioCallGameActions {
   AUDIOCALL_CORRECT_ANSWER = 'AUDIOCALL_CORRECT_ANSWER',
   AUDIOCALL_INCORRECT_ANSWER = 'AUDIOCALL_INCORRECT_ANSWER',
   SET_AUDIOCALL_BOOK = 'SET_AUDIOCALL_BOOK',
+  CHANGE_AUDIOCALL_CURRENT_PAGE = 'CHANGE_AUDIOCALL_CURRENT_PAGE',
+}
+
+export interface ChangeAudiocallCurrentPageAction {
+  type: AudioCallGameActions.CHANGE_AUDIOCALL_CURRENT_PAGE;
 }
 
 export interface SetAudiocallBookAction {
@@ -68,7 +73,7 @@ export interface RequestAucioCallDataAction {
 
 export interface SetAucioCallDataAction {
   type: AudioCallGameActions.SET_AUDIOCALL_DATA;
-  payload: Word[] | WordWithCustomProps[];
+  payload: WordWithCustomProps[];
 }
 
 export interface SetWordsAucioCallAction {
@@ -103,4 +108,5 @@ export type AudioCallGameAction =
   | ResetAucioCallStateAction
   | AudioCallCorrectAction
   | AudioCallInCorrectAction
-  | SetAudiocallBookAction;
+  | SetAudiocallBookAction
+  | ChangeAudiocallCurrentPageAction;

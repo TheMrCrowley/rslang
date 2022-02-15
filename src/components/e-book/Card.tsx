@@ -12,14 +12,12 @@ import WordItem from './Word';
 import Meaning from './Meaning';
 import Example from './Example';
 import { WordWithCustomProps } from '../../services/words/wordsServiceTypes';
+import getAssetsUrl from '../../helpers/getAssetsUrl';
 
 export interface BasicCardProps {
   isAuth: boolean;
   cardData: WordWithCustomProps;
 }
-
-export const BASE_CONTENT_URL =
-  'https://github.com/rolling-scopes-school/react-rslang-be/blob/main/';
 
 const BasicCard: FC<BasicCardProps> = ({ isAuth, cardData }) => {
   // TODO закинуть эти данные в стейт и попробовать обновлять по одной карточке
@@ -43,8 +41,6 @@ const BasicCard: FC<BasicCardProps> = ({ isAuth, cardData }) => {
   const handledTextMeaning = handleTagInText(textMeaning);
   const handledTextExample = handleTagInText(textExample);
 
-  const BASE_CONTENT_URL =
-    'https://github.com/rolling-scopes-school/react-rslang-be/blob/main/';
   return (
     <Card
       sx={{
@@ -54,11 +50,7 @@ const BasicCard: FC<BasicCardProps> = ({ isAuth, cardData }) => {
         height: 'auto',
       }}
     >
-      <CardMedia
-        component="img"
-        height="140"
-        image={`${BASE_CONTENT_URL}/${image}?raw=true`}
-      />
+      <CardMedia component="img" height="140" image={getAssetsUrl(image)} />
       <CardContent sx={{ textAlign: 'right' }}>
         <WordItem
           word={word}
@@ -74,8 +66,8 @@ const BasicCard: FC<BasicCardProps> = ({ isAuth, cardData }) => {
         >
           {wordTranslate} {transcription}
           <Player
-            urls={[audio, audioMeaning, audioExample].map(
-              url => `${BASE_CONTENT_URL}/${url}?raw=true`
+            urls={[audio, audioMeaning, audioExample].map(url =>
+              getAssetsUrl(url)
             )}
           />
         </Typography>

@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/default-param-last */
 import { UserWordResponse } from '../../../services/user-words/userWordsServiceTypes';
 import {
-  Word,
   WordsRequestData,
   WordWithCustomProps,
 } from '../../../services/words/wordsServiceTypes';
@@ -19,7 +18,8 @@ const audioCallInitialState: AudioCallState = {
   request: false,
   gameStatus: AudioCallGameStatus.PREPARE,
   group: 0,
-  page: 0,
+  initialPage: 0,
+  currentPage: 0,
   book: false,
 };
 
@@ -40,9 +40,15 @@ export const audioCallGameReducer = (
       return {
         ...state,
         group: action.payload.group,
-        page: action.payload.page,
+        initialPage: action.payload.page,
+        currentPage: action.payload.page,
       };
     }
+    case AudioCallGameActions.CHANGE_AUDIOCALL_CURRENT_PAGE:
+      return {
+        ...state,
+        currentPage: state.currentPage - 1,
+      };
     case AudioCallGameActions.RESET_AUDIOCALL_STATE:
       return { ...audioCallInitialState };
     case AudioCallGameActions.SET_AUDIOCALL_BOOK:
@@ -52,19 +58,29 @@ export const audioCallGameReducer = (
   }
 };
 
-export const requestAudioCallDataAction = (
-  payload: WordsRequestData
-): AudioCallGameAction => ({
+export const changeAudiocallPageAction = (): AudioCallGameAction => ({
+  type: AudioCallGameActions.CHANGE_AUDIOCALL_CURRENT_PAGE,
+});
+
+export const requestAudioCallDataAction = (payload: {
+  group: number;
+  page: number;
+  book?: boolean;
+  userId?: string;
+}): AudioCallGameAction => ({
   type: AudioCallGameActions.REQUEST_AUDIOCALL_DATA,
   payload,
 });
 
 export const setAudioCallDataAction = (
-  payload: Word[] | WordWithCustomProps[]
-): AudioCallGameAction => ({
-  type: AudioCallGameActions.SET_AUDIOCALL_DATA,
-  payload,
-});
+  payload: WordWithCustomProps[]
+): AudioCallGameAction => {
+  console.log('payload', payload[0]);
+  return {
+    type: AudioCallGameActions.SET_AUDIOCALL_DATA,
+    payload,
+  };
+};
 
 export const changeAudioCallStatusAction = (
   payload: AudioCallStatus

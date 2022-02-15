@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { requestSprintDataAction } from '../redux/store/reducers/sprintGameReducer';
+import { requestSprintDataAction } from '../../redux/store/reducers/sprintGameReducer';
 
 const useSprintFromBook = (
   isAuth: boolean,

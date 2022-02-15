@@ -1,5 +1,5 @@
 import getRandomNumber from '../../helpers/getRandomNumber';
-import { Word } from '../../services/words/wordsServiceTypes';
+import { WordWithCustomProps } from '../../services/words/wordsServiceTypes';
 import shuffle from '../../helpers/shuffleArray';
 
 export interface AudioCallQuestionItem {
@@ -11,7 +11,7 @@ export interface AudioCallQuestionItem {
   imgSrc: string;
 }
 
-const getAllAnswers = (words: Word[]): string[] =>
+const getAllAnswers = (words: WordWithCustomProps[]): string[] =>
   words.map(word => word.wordTranslate);
 
 const getOtherAnswers = (answer: string, wordsAnswers: string[]) => {
@@ -24,13 +24,13 @@ const getOtherAnswers = (answer: string, wordsAnswers: string[]) => {
 };
 
 const createAucioCallQuestionItem = (
-  wordItem: Word,
+  wordItem: WordWithCustomProps,
   allAnswers: string[]
 ): AudioCallQuestionItem => {
   const otherAnswers = getOtherAnswers(wordItem.wordTranslate, allAnswers);
 
   return {
-    wordId: wordItem.id,
+    wordId: wordItem.id || wordItem._id,
     word: wordItem.word,
     answer: wordItem.wordTranslate,
     imgSrc: wordItem.image,
@@ -40,7 +40,7 @@ const createAucioCallQuestionItem = (
 };
 
 export const getAudiCallQuestionItems = (
-  words: Word[]
+  words: WordWithCustomProps[]
 ): AudioCallQuestionItem[] => {
   const allAnswers = getAllAnswers(words);
   return shuffle(

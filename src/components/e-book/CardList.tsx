@@ -23,7 +23,7 @@ const CardList: FC = () => {
   const words = cards.map(word => {
     return (
       <BasicCard
-        key={word.id}
+        key={word.id || word._id}
         cardData={word as WordWithCustomProps}
         isAuth={isAuth}
       />

@@ -19,7 +19,8 @@ const sprintGameInitialState: SprintState = {
   request: false,
   gameStatus: SprintGameStatus.PREPARE,
   group: 0,
-  page: 0,
+  initialPage: 0,
+  currentPage: 0,
   book: false,
 };
 
@@ -40,8 +41,12 @@ export const sprintGameReducer = (
       return {
         ...state,
         group: action.payload.group,
-        page: action.payload.page,
+        initialPage: action.payload.page,
+        currentPage: action.payload.page,
       };
+    }
+    case SprintGameActions.CHANGE_SPRINT_CURRENT_PAGE: {
+      return { ...state, currentPage: state.currentPage - 1 };
     }
     case SprintGameActions.RESET_SPRINT_STATE:
       return { ...sprintGameInitialState };
@@ -76,6 +81,10 @@ export const changeSprintStatusAction = (
 export const setWordsSectionAction = (
   payload: WordsRequestData
 ): SprintGameAction => ({ type: SprintGameActions.SET_WORDS_SECTION, payload });
+
+export const changeSprintPageAction = (): SprintGameAction => ({
+  type: SprintGameActions.CHANGE_SPRINT_CURRENT_PAGE,
+});
 
 export const sprintRequestStartAction = (): SprintGameAction => ({
   type: SprintGameActions.SPRINT_REQUEST_START,

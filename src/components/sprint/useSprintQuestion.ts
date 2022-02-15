@@ -1,35 +1,41 @@
 import { useDispatch } from 'react-redux';
-import { useEffect, useMemo, useState } from 'react';
-import useTypedSelector from './useTypedSelector';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import useTypedSelector from '../../hooks/useTypedSelector';
 import {
   compareAnswers,
   getQuestionItems,
   SprintQuestionItem,
-} from '../components/sprint/SprintModel';
-import { isNewWord } from '../helpers/statisticHandlers';
-import { changeSprintNewWordAction } from '../redux/store/reducers/statisticReducer';
+} from './SprintModel';
+import { isNewWord } from '../../helpers/statisticHandlers';
+import { changeSprintNewWordAction } from '../../redux/store/reducers/statisticReducer';
 import {
+  changeSprintPageAction,
   changeSprintStatusAction,
   sprintCorrectAction,
   sprintInCorrectAction,
-} from '../redux/store/reducers/sprintGameReducer';
-import WordsService from '../services/words/wordsService';
-import { SprintGameStatus } from '../redux/types/sprintTypes';
-import { AuthState } from '../redux/types/authTypes';
+} from '../../redux/store/reducers/sprintGameReducer';
+import WordsService from '../../services/words/wordsService';
+import { SprintGameStatus } from '../../redux/types/sprintTypes';
+import { AuthState } from '../../redux/types/authTypes';
+import useAudio from '../../hooks/useAudio';
 
-const useSprint = (
+const useSprintQuestion = (
   auth: AuthState,
   correctAnswer: (answer: SprintQuestionItem) => void,
-  incorrectAnswer: (answer: SprintQuestionItem) => void,
-  audioHandler: (isCorrect: boolean) => void
+  incorrectAnswer: (answer: SprintQuestionItem) => void
 ) => {
+  const correctAudio = useAudio(
+    'https://rslang-team15-natein.netlify.app/static/media/correct.a7b1cde9.mp3'
+  );
+  const inCorrectAudio = useAudio(
+    'https://rslang-team15-natein.netlify.app/static/media/wrong.8e2ad3b1.mp3'
+  );
   const dispatch = useDispatch();
-  const { words, group, page, book } = useTypedSelector(
+  const { words, group, book, currentPage } = useTypedSelector(
     store => store.sprintGame
   );
   const { userWords } = useTypedSelector(store => store.userWords);
 
-  const [currentPage, setCurrentPage] = useState(page);
   const [questions, setQuestions] = useState<SprintQuestionItem[]>([]);
   const [currentQuestion, setCurrentQuestion] = useState<SprintQuestionItem>(
     {} as SprintQuestionItem
@@ -68,30 +74,37 @@ const useSprint = (
     }
     if (isCorrect) {
       correctAnswer(currentQuestion);
-      audioHandler(true);
+      correctAudio();
       setStreak(streak + 1);
       setPoints(points + (Math.floor(streak / 3) * 10 || 10));
     } else {
       setStreak(0);
       incorrectAnswer(currentQuestion);
-      audioHandler(false);
+      inCorrectAudio();
     }
     if (questions.length) {
       nextQuestion();
     } else {
-      setCurrentPage(currentPage - 1);
-      if (currentPage >= 0) {
+      const newPage = currentPage - 1;
+      dispatch(changeSprintPageAction());
+      if (newPage >= 0) {
         if (book) {
-          WordsService.getNotStudiedWords(userId, group, currentPage).then(
-            data => {
+          WordsService.getNotStudiedWords(userId, group, newPage).then(data => {
+            if (data.length) {
               setQuestions(getQuestionItems(data));
               nextQuestion();
+            } else {
+              dispatch(changeSprintStatusAction(SprintGameStatus.END));
             }
-          );
+          });
         } else {
-          WordsService.getWords(group, currentPage).then(data => {
-            setQuestions(getQuestionItems(data));
-            nextQuestion();
+          WordsService.getWords(group, newPage).then(data => {
+            if (data.length) {
+              setQuestions(getQuestionItems(data));
+              nextQuestion();
+            } else {
+              dispatch(changeSprintStatusAction(SprintGameStatus.END));
+            }
           });
         }
       } else {
@@ -128,4 +141,4 @@ const useSprint = (
   };
 };
 
-export default useSprint;
+export default useSprintQuestion;

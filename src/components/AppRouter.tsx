@@ -47,7 +47,7 @@ const AppRouter = () => {
       }
     }
   }, [statisticState]);
-  console.log(statisticState);
+
   useMemo(() => {
     if (isAuth) {
       dispatch(getUserWordsAction({ userId }));
