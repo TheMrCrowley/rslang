@@ -35,6 +35,14 @@ export const incorrectColor = '#ff1744';
 export const correctColor = '#00e676';
 export const darkIncorrectColor = '#c4001d';
 export const darkCorrectColor = '#00b248';
+export const chartBlueColor = '#2962ff';
+export const chartDarkBlueColor = '#0039cb';
+export const chartPurpleColor = '#aa00ff';
+export const chartDarkPurpleColor = '#7200ca';
+export const chartGreenColor = '#00c853';
+export const chartDarkGreenColor = '#009624';
+export const chartSkyBlueColor = '#00e5ff';
+export const chartLemonGreenColor = '#79b700';
 
 export const isAuth = true;
 
