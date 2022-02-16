@@ -29,6 +29,7 @@ import {
   getStatisticState,
   updateStatistic,
 } from '../helpers/statisticHandlers';
+import TeamPage from './pages/TeamPage';
 
 const AppRouter = () => {
   const dispatch = useDispatch();
@@ -74,7 +75,7 @@ const AppRouter = () => {
         <Route path="games/sprint" element={<SprintPage />} />
         <Route path="games/audiocall" element={<AudioCallPage />} />
         <Route path="statistics" element={<StatisticPage />} />
-        {/* <Route path="team" element={<TeamPage />} /> *!/ */}
+        <Route path="team" element={<TeamPage />} /> *!/
         <Route
           path="*"
           element={
