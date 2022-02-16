@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Box, Typography } from '@mui/material';
+import { Box, Tooltip, Typography } from '@mui/material';
 import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
 import SelfImprovementIcon from '@mui/icons-material/SelfImprovement';
 import { UserWord } from '../../services/user-words/userWordsServiceTypes';
@@ -23,16 +23,22 @@ const WordItem: FC<WordProps> = ({ word, color, isAuth, userWord }) => {
           }}
         >
           {userWord?.difficulty === 'hard' && (
-            <FitnessCenterIcon htmlColor={color} fontSize="large" />
+            <Tooltip title="This word marked as difficult">
+              <FitnessCenterIcon htmlColor={color} fontSize="large" />
+            </Tooltip>
           )}
           {userWord?.difficulty === 'studied' && (
-            <SelfImprovementIcon fontSize="large" htmlColor={color} />
+            <Tooltip title="This word has been learned">
+              <SelfImprovementIcon fontSize="large" htmlColor={color} />
+            </Tooltip>
           )}
           {userWord?.difficulty === 'learning' && (
-            <Typography color={color} variant="h5">
-              {userWord.optional.totalCorrectAnswers}/
-              {userWord.optional.totalAnswers}
-            </Typography>
+            <Tooltip title="Correct answers in games/total answers">
+              <Typography color={color} variant="h5">
+                {userWord.optional.totalCorrectAnswers}/
+                {userWord.optional.totalAnswers}
+              </Typography>
+            </Tooltip>
           )}
           <Typography
             gutterBottom

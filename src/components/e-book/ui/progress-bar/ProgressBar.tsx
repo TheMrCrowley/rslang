@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Box } from '@mui/material';
+import { Box, Tooltip } from '@mui/material';
 import {
   MAX_PROGRESS_ITEMS,
   EMPTY_ITEM_COLOR,
@@ -37,17 +37,19 @@ const ProgressBar: FC<ProgressBarProps> = ({
   };
 
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        columnGap: '0.2em',
-        justifyContent: 'flex-end',
-        alignItems: 'flex-end',
-        ml: 'auto',
-      }}
-    >
-      {progressItems()}
-    </Box>
+    <Tooltip title="Your correct answers in a row in games">
+      <Box
+        sx={{
+          display: 'flex',
+          columnGap: '0.2em',
+          justifyContent: 'flex-end',
+          alignItems: 'flex-end',
+          ml: 'auto',
+        }}
+      >
+        {progressItems()}
+      </Box>
+    </Tooltip>
   );
 };
 

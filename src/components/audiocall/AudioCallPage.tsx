@@ -10,7 +10,7 @@ import AudiocallResults from './AudicallResults';
 import useAudiocallGame from './useAudiocallGame';
 
 const StyledProgress = styled(CircularProgress)`
-  color: #202026;
+  color: white;
   width: 100px;
   height: 100px;
 `;
