@@ -5,14 +5,14 @@ import {
 import getRandomNumber from '../../helpers/getRandomNumber';
 import shuffle from '../../helpers/shuffleArray';
 
-export interface SprintQuestionItem {
-  wordId: string;
-  word: string;
-  answer: string;
-  isCorrect: boolean;
-  audio: string;
-  translate: string;
-}
+// export interface SprintQuestionItem {
+//   wordId: string;
+//   word: string;
+//   answer: string;
+//   isCorrect: boolean;
+//   audio: string;
+//   translate: string;
+// }
 
 const getCorrectQuestions = (
   words: Word[] | WordWithCustomProps[]

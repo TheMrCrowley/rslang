@@ -1,7 +1,5 @@
 /* eslint-disable @typescript-eslint/default-param-last */
-
 import {
-  Word,
   WordsRequestData,
   WordWithCustomProps,
 } from '../../../services/words/wordsServiceTypes';
@@ -16,6 +14,7 @@ import { UserWordResponse } from '../../../services/user-words/userWordsServiceT
 
 const sprintGameInitialState: SprintState = {
   words: [],
+  allAnswers: [],
   request: false,
   gameStatus: SprintGameStatus.PREPARE,
   group: 0,
@@ -34,7 +33,11 @@ export const sprintGameReducer = (
     case SprintGameActions.SPRINT_REQUEST_END:
       return { ...state, request: false };
     case SprintGameActions.SET_SPRINT_DATA:
-      return { ...state, words: [...action.payload] };
+      return {
+        ...state,
+        words: [...action.payload.wordsForQuestion],
+        allAnswers: [...action.payload.answers],
+      };
     case SprintGameActions.CHANGE_SPRINT_STATUS:
       return { ...state, gameStatus: action.payload };
     case SprintGameActions.SET_WORDS_SECTION: {
@@ -67,9 +70,10 @@ export const requestSprintDataAction = (payload: {
   payload,
 });
 
-export const setSprintDataAction = (
-  payload: Word[] | WordWithCustomProps[]
-): SprintGameAction => ({ type: SprintGameActions.SET_SPRINT_DATA, payload });
+export const setSprintDataAction = (payload: {
+  wordsForQuestion: WordWithCustomProps[];
+  answers: string[];
+}): SprintGameAction => ({ type: SprintGameActions.SET_SPRINT_DATA, payload });
 
 export const changeSprintStatusAction = (
   payload: SprintStatus

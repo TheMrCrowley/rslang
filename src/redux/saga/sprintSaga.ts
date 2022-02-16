@@ -9,10 +9,7 @@ import {
   setSprintBookAction,
 } from '../store/reducers/sprintGameReducer';
 import WordsService from '../../services/words/wordsService';
-import {
-  Word,
-  WordWithCustomProps,
-} from '../../services/words/wordsServiceTypes';
+import { WordWithCustomProps } from '../../services/words/wordsServiceTypes';
 import {
   RequestSprintDataAction,
   SprintCorrectAction,
@@ -42,6 +39,7 @@ import {
   increaseLearnedWordsAtion,
 } from '../store/reducers/statisticReducer';
 import { setOneUserWordAction } from '../store/reducers/userWordsReducer';
+import { getAllTranslates } from '../../helpers/gameHelpers';
 
 function* requestSprintDataWorker(data: RequestSprintDataAction) {
   try {
@@ -56,14 +54,21 @@ function* requestSprintDataWorker(data: RequestSprintDataAction) {
         group,
         page
       );
-      yield put(setSprintDataAction(wordsResponse));
+      yield put(
+        setSprintDataAction({ wordsForQuestion: wordsResponse, answers: [] })
+      );
     } else {
-      const wordsResponse: Word[] = yield call(
+      const wordsResponse: WordWithCustomProps[] = yield call(
         WordsService.getWords,
         group,
         page
       );
-      yield put(setSprintDataAction(wordsResponse));
+      yield put(
+        setSprintDataAction({
+          wordsForQuestion: wordsResponse,
+          answers: getAllTranslates(wordsResponse),
+        })
+      );
     }
     yield put(sprintRequestEndAction());
     yield put(changeSprintStatusAction(SprintGameStatus.INRUN));

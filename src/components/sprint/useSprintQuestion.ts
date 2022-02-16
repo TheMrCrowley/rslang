@@ -1,10 +1,10 @@
 import { useDispatch } from 'react-redux';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import useTypedSelector from '../../hooks/useTypedSelector';
 import {
   compareAnswers,
   getQuestionItems,
-  SprintQuestionItem,
+  // SprintQuestionItem,
 } from './SprintModel';
 import { isNewWord } from '../../helpers/statisticHandlers';
 import { changeSprintNewWordAction } from '../../redux/store/reducers/statisticReducer';
@@ -18,6 +18,10 @@ import WordsService from '../../services/words/wordsService';
 import { SprintGameStatus } from '../../redux/types/sprintTypes';
 import { AuthState } from '../../redux/types/authTypes';
 import useAudio from '../../hooks/useAudio';
+import {
+  getSprintQuestions,
+  SprintQuestionItem,
+} from '../../helpers/gameHelpers';
 
 const useSprintQuestion = (
   auth: AuthState,
@@ -31,7 +35,7 @@ const useSprintQuestion = (
     'https://rslang-team15-natein.netlify.app/static/media/wrong.8e2ad3b1.mp3'
   );
   const dispatch = useDispatch();
-  const { words, group, book, currentPage } = useTypedSelector(
+  const { words, group, book, currentPage, allAnswers } = useTypedSelector(
     store => store.sprintGame
   );
   const { userWords } = useTypedSelector(store => store.userWords);
@@ -53,10 +57,11 @@ const useSprintQuestion = (
   };
 
   useEffect(() => {
-    setQuestions(getQuestionItems(words));
+    setQuestions(getSprintQuestions(words, allAnswers));
+
     nextQuestion();
   }, [words]);
-
+  console.log(questions);
   // TODO divide this fck big function
   const answerHandler = (answer: boolean) => {
     const isCorrect = compareAnswers(currentQuestion.isCorrect, answer);
@@ -133,7 +138,7 @@ const useSprintQuestion = (
 
   return {
     word: currentQuestion.word,
-    answer: currentQuestion.answer,
+    answer: currentQuestion.fakeAnswer,
     confirm: confirmAnswer,
     decline: declineAnswer,
     group,

@@ -1,6 +1,5 @@
 import {
   WordWithCustomProps,
-  Word,
   WordsRequestData,
 } from '../../services/words/wordsServiceTypes';
 import { UserWordResponse } from '../../services/user-words/userWordsServiceTypes';
@@ -17,7 +16,8 @@ export type SprintStatus =
   | SprintGameStatus.END;
 
 export interface SprintState {
-  words: Word[] | WordWithCustomProps[];
+  words: WordWithCustomProps[];
+  allAnswers: string[];
   gameStatus: SprintStatus;
   request: boolean;
   group: number;
@@ -73,7 +73,7 @@ export interface RequestSprintDataAction {
 
 export interface SetSprintDataAction {
   type: SprintGameActions.SET_SPRINT_DATA;
-  payload: Word[] | WordWithCustomProps[];
+  payload: { wordsForQuestion: WordWithCustomProps[]; answers: string[] };
 }
 
 export interface SetWordsSectionAction {
