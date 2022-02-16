@@ -7,7 +7,6 @@ const StyledSprintInGameUpAssets = styled(Box)`
   align-self: center;
   justify-content: space-around;
   column-gap: 1rem;
-  margin-bottom: 12vh;
   border-radius: 2em;
   padding: 1em 2em;
 `;

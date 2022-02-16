@@ -22,7 +22,7 @@ const StyledBox = styled(Box)<{ group: number }>(({ group }) => ({
 }));
 
 const StyledProgress = styled(CircularProgress)`
-  color: #202026;
+  color: white;
   width: 100px;
   height: 100px;
 `;
