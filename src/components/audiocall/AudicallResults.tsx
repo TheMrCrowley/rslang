@@ -7,8 +7,8 @@ import {
   darkIncorrectColor,
 } from '../e-book/cosnstants';
 import MainPageLayoutButton from '../pages/MainPageLayoutButton';
-import { AudioCallQuestionItem } from './audioCallModel';
 import ResultLine from '../sprint/ResultLine';
+import { AudioCallQuestionItem } from '../../helpers/gameHelpers';
 
 const ResultsWrapper = styled(Box)`
   height: 65vh;

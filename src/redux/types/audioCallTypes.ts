@@ -17,6 +17,7 @@ export type AudioCallStatus =
 
 export interface AudioCallState {
   words: WordWithCustomProps[];
+  allAnswers: string[];
   gameStatus: AudioCallStatus;
   request: boolean;
   correctAnswers: number;
@@ -38,6 +39,12 @@ export enum AudioCallGameActions {
   AUDIOCALL_INCORRECT_ANSWER = 'AUDIOCALL_INCORRECT_ANSWER',
   SET_AUDIOCALL_BOOK = 'SET_AUDIOCALL_BOOK',
   CHANGE_AUDIOCALL_CURRENT_PAGE = 'CHANGE_AUDIOCALL_CURRENT_PAGE',
+  REQUEST_AUDIOCALL_HARD_WORDS = 'REQUEST_AUDIOCALL_HARD_WORDS',
+}
+
+export interface RequestAudiocallHardWords {
+  type: AudioCallGameActions.REQUEST_AUDIOCALL_HARD_WORDS;
+  payload: { userId: string };
 }
 
 export interface ChangeAudiocallCurrentPageAction {
@@ -73,7 +80,7 @@ export interface RequestAucioCallDataAction {
 
 export interface SetAucioCallDataAction {
   type: AudioCallGameActions.SET_AUDIOCALL_DATA;
-  payload: WordWithCustomProps[];
+  payload: { wordsForQuestions: WordWithCustomProps[]; answers: string[] };
 }
 
 export interface SetWordsAucioCallAction {
@@ -109,4 +116,5 @@ export type AudioCallGameAction =
   | AudioCallCorrectAction
   | AudioCallInCorrectAction
   | SetAudiocallBookAction
-  | ChangeAudiocallCurrentPageAction;
+  | ChangeAudiocallCurrentPageAction
+  | RequestAudiocallHardWords;

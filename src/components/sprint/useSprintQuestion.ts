@@ -58,7 +58,7 @@ const useSprintQuestion = (
     setQuestions(getSprintQuestions(words, allAnswers));
     nextQuestion();
   }, [words]);
-
+  // TODO try move this function on helpers
   const checkPrevPage = (prevPage: number, userId: string) => {
     if (prevPage < 0) {
       dispatch(changeSprintStatusAction(SprintGameStatus.END));
@@ -119,7 +119,6 @@ const useSprintQuestion = (
       checkPrevPage(newPage, userId);
     }
   };
-  console.log('group from game hook', group);
 
   const confirmAnswer = () => answerHandler(true);
   const declineAnswer = () => answerHandler(false);

@@ -1,6 +1,10 @@
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { requestAudioCallDataAction } from '../../redux/store/reducers/audioCallReducer';
+import {
+  requestAudioCallDataAction,
+  requestAudiocallHardWordsAction,
+} from '../../redux/store/reducers/audioCallReducer';
+import { DIFFICULT_GROUP } from '../e-book/cosnstants';
 
 const useAudiocallFromBook = (
   isAuth: boolean,
@@ -13,19 +17,21 @@ const useAudiocallFromBook = (
 
   return () => {
     navigate('/games/audiocall');
-    if (isAuth && userId) {
-      dispatch(
-        requestAudioCallDataAction({
-          group: group - 1,
-          page: page - 1,
-          book: true,
-          userId,
-        })
-      );
+    if (isAuth) {
+      if (group === DIFFICULT_GROUP && userId) {
+        dispatch(requestAudiocallHardWordsAction({ userId }));
+      } else {
+        dispatch(
+          requestAudioCallDataAction({
+            group,
+            page,
+            book: true,
+            userId,
+          })
+        );
+      }
     } else {
-      dispatch(
-        requestAudioCallDataAction({ group: group - 1, page: page - 1 })
-      );
+      dispatch(requestAudioCallDataAction({ group, page }));
     }
   };
 };

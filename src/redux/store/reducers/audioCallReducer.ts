@@ -14,6 +14,7 @@ import {
 
 const audioCallInitialState: AudioCallState = {
   words: [],
+  allAnswers: [],
   correctAnswers: 0,
   request: false,
   gameStatus: AudioCallGameStatus.PREPARE,
@@ -33,7 +34,11 @@ export const audioCallGameReducer = (
     case AudioCallGameActions.AUDIOCALL_REQUEST_END:
       return { ...state, request: false };
     case AudioCallGameActions.SET_AUDIOCALL_DATA:
-      return { ...state, words: [...action.payload] };
+      return {
+        ...state,
+        words: [...action.payload.wordsForQuestions],
+        allAnswers: [...action.payload.answers],
+      };
     case AudioCallGameActions.CHNAGE_AUDIOCALL_STATUS:
       return { ...state, gameStatus: action.payload };
     case AudioCallGameActions.SET_AUDIOCALL_WORDS_SECTION: {
@@ -72,10 +77,10 @@ export const requestAudioCallDataAction = (payload: {
   payload,
 });
 
-export const setAudioCallDataAction = (
-  payload: WordWithCustomProps[]
-): AudioCallGameAction => {
-  console.log('payload', payload[0]);
+export const setAudioCallDataAction = (payload: {
+  wordsForQuestions: WordWithCustomProps[];
+  answers: string[];
+}): AudioCallGameAction => {
   return {
     type: AudioCallGameActions.SET_AUDIOCALL_DATA,
     payload,
@@ -128,4 +133,11 @@ export const audiocallInCorrectAction = (payload: {
 
 export const setAudiocallBookAction = (): AudioCallGameAction => ({
   type: AudioCallGameActions.SET_AUDIOCALL_BOOK,
+});
+
+export const requestAudiocallHardWordsAction = (payload: {
+  userId: string;
+}): AudioCallGameAction => ({
+  type: AudioCallGameActions.REQUEST_AUDIOCALL_HARD_WORDS,
+  payload,
 });

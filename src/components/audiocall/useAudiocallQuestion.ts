@@ -4,10 +4,6 @@ import { AuthState } from '../../redux/types/authTypes';
 import useTypedSelector from '../../hooks/useTypedSelector';
 import useAudio from '../../hooks/useAudio';
 import getAssetsUrl from '../../helpers/getAssetsUrl';
-import {
-  AudioCallQuestionItem,
-  getAudiCallQuestionItems,
-} from './audioCallModel';
 import { isNewWord } from '../../helpers/statisticHandlers';
 import { changeAudioCallNewWordAction } from '../../redux/store/reducers/statisticReducer';
 import {
@@ -18,9 +14,17 @@ import {
 } from '../../redux/store/reducers/audioCallReducer';
 import WordsService from '../../services/words/wordsService';
 import { AudioCallGameStatus } from '../../redux/types/audioCallTypes';
-import { darkColors, darkCorrectColor } from '../e-book/cosnstants';
-import { WordWithCustomProps } from '../../services/words/wordsServiceTypes';
-import { compareAnswers } from '../../helpers/gameHelpers';
+import {
+  darkColors,
+  darkCorrectColor,
+  DIFFICULT_GROUP,
+} from '../e-book/cosnstants';
+import {
+  AudioCallQuestionItem,
+  compareAnswers,
+  getAllTranslates,
+  getAudioCallQuestions,
+} from '../../helpers/gameHelpers';
 
 const useAudiocallQuestion = (
   auth: AuthState,
@@ -36,7 +40,7 @@ const useAudiocallQuestion = (
 
   const dispatch = useDispatch();
 
-  const { words, group, book, currentPage } = useTypedSelector(
+  const { words, group, book, currentPage, allAnswers } = useTypedSelector(
     store => store.audioCallGame
   );
 
@@ -66,16 +70,41 @@ const useAudiocallQuestion = (
 
   useEffect(() => {
     if (words.length) {
-      setQuestions(getAudiCallQuestionItems(words));
+      setQuestions(getAudioCallQuestions(words, allAnswers));
       nextQuestion();
     }
   }, []);
-
   useEffect(() => {
     if (currentQuestion.audio) {
       currentAudio();
     }
   }, [currentQuestion]);
+
+  const checkPrevPage = (prevPage: number, userId: string) => {
+    if (prevPage < 0) {
+      dispatch(changeAudioCallStatusAction(AudioCallGameStatus.END));
+    }
+    if (book) {
+      Promise.all([
+        WordsService.getNotStudiedWords(userId, group, prevPage),
+        WordsService.getWords(group, prevPage),
+      ]).then(data => {
+        if (data[0].length) {
+          setQuestions(
+            getAudioCallQuestions(data[0], getAllTranslates(data[1]))
+          );
+          setAfterAnswerState(true);
+        } else {
+          dispatch(changeAudiocallPageAction());
+          checkPrevPage(prevPage - 1, userId);
+        }
+      });
+    } else {
+      WordsService.getWords(group, prevPage).then(data => {
+        setQuestions(getAudioCallQuestions(data, getAllTranslates(data)));
+      });
+    }
+  };
 
   const answerHandler = (answer: string) => {
     const isCorrect = compareAnswers(currentQuestion.answer, answer);
@@ -102,34 +131,12 @@ const useAudiocallQuestion = (
     }
     if (questions.length) {
       setAfterAnswerState(true);
+    } else if (group === DIFFICULT_GROUP) {
+      dispatch(changeAudioCallStatusAction(AudioCallGameStatus.END));
     } else {
       const newPage = currentPage - 1;
       dispatch(changeAudiocallPageAction());
-      if (newPage >= 0) {
-        if (book) {
-          WordsService.getNotStudiedWords(userId, group, newPage).then(data => {
-            if (data.length) {
-              setQuestions(getAudiCallQuestionItems(data));
-              nextQuestion();
-            } else {
-              dispatch(changeAudioCallStatusAction(AudioCallGameStatus.END));
-            }
-          });
-        } else {
-          WordsService.getWords(group, newPage).then(data => {
-            if (data.length) {
-              setQuestions(
-                getAudiCallQuestionItems(data as WordWithCustomProps[])
-              );
-              nextQuestion();
-            } else {
-              dispatch(changeAudioCallStatusAction(AudioCallGameStatus.END));
-            }
-          });
-        }
-      } else {
-        dispatch(changeAudioCallStatusAction(AudioCallGameStatus.END));
-      }
+      checkPrevPage(newPage, userId);
     }
   };
 

@@ -98,6 +98,21 @@ export default class WordsService {
     return response.data[0].paginatedResults;
   };
 
+  static getTwentyHardWords = async (
+    userId: string
+  ): Promise<WordWithCustomProps[]> => {
+    const response = await $api.get<AggregatedWordsItem[]>(
+      `/users/${userId}/aggregatedWords`,
+      {
+        params: {
+          wordsPerPage: 20,
+          filter: { $and: [{ 'userWord.difficulty': 'hard' }] },
+        },
+      }
+    );
+    return response.data[0].paginatedResults;
+  };
+
   static getWord = async (wordId: string): Promise<Word> => {
     const response = await $api.get<Word>(`${WordsEndpoints.WORDS}/${wordId}`);
     return response.data;

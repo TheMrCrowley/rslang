@@ -3,14 +3,16 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useCallback, useEffect, useState } from 'react';
 import useTypedSelector from '../../hooks/useTypedSelector';
-import { AudioCallQuestionItem } from './audioCallModel';
 import getRandomNumber from '../../helpers/getRandomNumber';
 import {
   changeAudioCallStatusAction,
   requestAudioCallDataAction,
+  requestAudiocallHardWordsAction,
   resetAudioCallStateAction,
 } from '../../redux/store/reducers/audioCallReducer';
 import { AudioCallGameStatus } from '../../redux/types/audioCallTypes';
+import { DIFFICULT_GROUP } from '../e-book/cosnstants';
+import { AudioCallQuestionItem } from '../../helpers/gameHelpers';
 
 const useAudiocallGame = () => {
   const authState = useTypedSelector(store => store.auth);
@@ -27,18 +29,30 @@ const useAudiocallGame = () => {
 
   const startHandler = (group: number) => {
     const randomPage = getRandomNumber(0, 29);
-    dispatch(requestAudioCallDataAction({ group, page: randomPage }));
+    if (group === DIFFICULT_GROUP) {
+      dispatch(
+        requestAudiocallHardWordsAction({ userId: authState.userData.userId })
+      );
+    } else {
+      dispatch(requestAudioCallDataAction({ group, page: randomPage }));
+    }
   };
 
   const restartHandler = useCallback(() => {
     setInCorrectAnswers([]);
     setCorrectAnswers([]);
-    dispatch(
-      requestAudioCallDataAction({
-        group: audioCallState.group,
-        page: audioCallState.initialPage,
-      })
-    );
+    if (audioCallState.group === DIFFICULT_GROUP) {
+      dispatch(
+        requestAudiocallHardWordsAction({ userId: authState.userData.userId })
+      );
+    } else {
+      dispatch(
+        requestAudioCallDataAction({
+          group: audioCallState.group,
+          page: audioCallState.initialPage,
+        })
+      );
+    }
   }, [audioCallState.group, audioCallState.initialPage]);
 
   const backHandler = () => {

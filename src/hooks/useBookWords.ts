@@ -1,5 +1,5 @@
 import { useDispatch } from 'react-redux';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import useTypedSelector from './useTypedSelector';
 import {
   requestHardWordsAction,
@@ -11,6 +11,7 @@ import { DIFFICULT_GROUP } from '../components/e-book/cosnstants';
 
 const useBookWords = (isAuth: boolean, userId?: string) => {
   const { words, request, hardWords } = useTypedSelector(state => state.words);
+  const [cards, setCards] = useState(words);
   const { group, page } = useBookParams();
   const dispatch = useDispatch();
 
@@ -35,7 +36,13 @@ const useBookWords = (isAuth: boolean, userId?: string) => {
     }
   }, [page, group, isAuth]);
 
-  const cards = useMemo(() => words, [words]);
+  useEffect(() => {
+    if (words.length) {
+      setCards(words);
+    }
+  }, [words]);
+
+  // const cards = useMemo(() => words, [words]);
   const hardCards = useMemo(() => hardWords, [hardWords]);
 
   if (group === DIFFICULT_GROUP) {

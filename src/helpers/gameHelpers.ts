@@ -11,6 +11,15 @@ export interface SprintQuestionItem {
   audio: string;
 }
 
+export interface AudioCallQuestionItem {
+  wordId: string;
+  word: string;
+  answer: string;
+  answers: string[];
+  audio: string;
+  imgSrc: string;
+}
+
 export const compareAnswers = (
   expect: boolean | string,
   actual: boolean | string
@@ -60,7 +69,6 @@ export const getSprintQuestions = (
   wordsForQuestions: WordWithCustomProps[],
   answersFromPage: string[]
 ): SprintQuestionItem[] => {
-  console.log('words length', wordsForQuestions.length);
   return shuffle<SprintQuestionItem>(
     wordsForQuestions.map(wordItem => {
       const random = getRandomNumber(0, 1);
@@ -68,6 +76,39 @@ export const getSprintQuestions = (
         return getSprintCorrectQuestion(wordItem);
       }
       return getSprintIncorrectQuestions(wordItem, answersFromPage);
+    })
+  );
+};
+
+const getAudicallQuestionAnswers = (
+  correctAnswer: string,
+  otherAnswers: string[]
+): string[] => {
+  const answers = new Set<string>();
+  answers.add(correctAnswer);
+  while (answers.size < 4) {
+    answers.add(otherAnswers[getRandomNumber(0, otherAnswers.length - 1)]);
+  }
+  return shuffle(Array.from(answers));
+};
+
+export const getAudioCallQuestions = (
+  wordsForQuestions: WordWithCustomProps[],
+  answersFromPage: string[]
+): AudioCallQuestionItem[] => {
+  return shuffle(
+    wordsForQuestions.map(wordItem => {
+      return {
+        wordId: wordItem._id || wordItem.id,
+        word: wordItem.word,
+        audio: wordItem.audio,
+        imgSrc: wordItem.image,
+        answer: wordItem.wordTranslate,
+        answers: getAudicallQuestionAnswers(
+          wordItem.wordTranslate,
+          answersFromPage
+        ),
+      };
     })
   );
 };
