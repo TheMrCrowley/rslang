@@ -3,12 +3,12 @@ import React, { FC } from 'react';
 import { styled } from '@mui/material/styles';
 import { AuthState } from '../../redux/types/authTypes';
 import MainPageLayoutButton from '../pages/MainPageLayoutButton';
-import { SprintQuestionItem } from './SprintModel';
 import SprintTimer from './SprintTimer';
 import useSprintQuestion from './useSprintQuestion';
 import SprintQuestionText from './SprintQuestionText';
 import { darkColors } from '../e-book/cosnstants';
 import SprintInGameUpAssets from '../ui/SprintInGameUpAssets';
+import { SprintQuestionItem } from '../../helpers/gameHelpers';
 
 interface SprintQuestionProps {
   auth: AuthState;

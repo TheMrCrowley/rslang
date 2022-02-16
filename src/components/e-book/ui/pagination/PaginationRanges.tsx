@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FC } from 'react';
+import React, { ChangeEvent, FC, useState } from 'react';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import { useNavigate } from 'react-router-dom';
@@ -19,14 +19,14 @@ const PaginationRanges: FC = () => {
   const TOTAL_PAGES = 30;
 
   const handleChangePage = (e: ChangeEvent<unknown>, current: number) => {
-    navigate(`${group}/${current}`);
+    navigate(`${group}/${current - 1}`);
   };
 
   return (
     <Stack spacing={2}>
       <Pagination
         count={TOTAL_PAGES}
-        defaultPage={page}
+        defaultPage={page + 1}
         siblingCount={2}
         size={winWith < 780 ? PageNumberSize.small : PageNumberSize.large}
         color="primary"

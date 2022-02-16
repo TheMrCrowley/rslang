@@ -42,7 +42,9 @@ const createAucioCallQuestionItem = (
 export const getAudiCallQuestionItems = (
   words: WordWithCustomProps[]
 ): AudioCallQuestionItem[] => {
+  console.log(1);
   const allAnswers = getAllAnswers(words);
+  console.log(allAnswers);
   return shuffle(
     words.map(word => createAucioCallQuestionItem(word, allAnswers))
   );

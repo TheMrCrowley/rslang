@@ -123,3 +123,10 @@ export const sprintInCorrectAction = (payload: {
 export const setSprintBookAction = (): SprintGameAction => ({
   type: SprintGameActions.SET_SPRINT_BOOK,
 });
+
+export const requestSprintHardWordsAction = (payload: {
+  userId: string;
+}): SprintGameAction => ({
+  type: SprintGameActions.REQUEST_SPRINT_HARD_WORDS,
+  payload,
+});

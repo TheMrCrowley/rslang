@@ -38,6 +38,12 @@ export enum SprintGameActions {
   SPRINT_INCORRECT_ANSWER = 'SPRINT_INCORRECT_ANSWER',
   SET_SPRINT_BOOK = 'SET_SPRINT_BOOK',
   CHANGE_SPRINT_CURRENT_PAGE = 'CHANGE_SPRINT_CURRENT_PAGE',
+  REQUEST_SPRINT_HARD_WORDS = 'REQUEST_SPRINT_HARD_WORDS',
+}
+
+export interface RequestSprintHardWordsAction {
+  type: SprintGameActions.REQUEST_SPRINT_HARD_WORDS;
+  payload: { userId: string };
 }
 
 interface ChangeCurrentPageAction {
@@ -109,4 +115,5 @@ export type SprintGameAction =
   | SprintCorrectAction
   | SprintInCorrectAction
   | SetSprintBookAction
-  | ChangeCurrentPageAction;
+  | ChangeCurrentPageAction
+  | RequestSprintHardWordsAction;

@@ -1,11 +1,6 @@
 import { useDispatch } from 'react-redux';
 import { useEffect, useMemo, useState } from 'react';
 import useTypedSelector from '../../hooks/useTypedSelector';
-import {
-  compareAnswers,
-  getQuestionItems,
-  // SprintQuestionItem,
-} from './SprintModel';
 import { isNewWord } from '../../helpers/statisticHandlers';
 import { changeSprintNewWordAction } from '../../redux/store/reducers/statisticReducer';
 import {
@@ -19,9 +14,12 @@ import { SprintGameStatus } from '../../redux/types/sprintTypes';
 import { AuthState } from '../../redux/types/authTypes';
 import useAudio from '../../hooks/useAudio';
 import {
+  compareAnswers,
+  getAllTranslates,
   getSprintQuestions,
   SprintQuestionItem,
 } from '../../helpers/gameHelpers';
+import { DIFFICULT_GROUP } from '../e-book/cosnstants';
 
 const useSprintQuestion = (
   auth: AuthState,
@@ -58,10 +56,34 @@ const useSprintQuestion = (
 
   useEffect(() => {
     setQuestions(getSprintQuestions(words, allAnswers));
-
     nextQuestion();
   }, [words]);
-  console.log(questions);
+
+  const checkPrevPage = (prevPage: number, userId: string) => {
+    if (prevPage < 0) {
+      dispatch(changeSprintStatusAction(SprintGameStatus.END));
+    }
+    if (book) {
+      Promise.all([
+        WordsService.getNotStudiedWords(userId, group, prevPage),
+        WordsService.getWords(group, prevPage),
+      ]).then(data => {
+        if (data[0].length) {
+          setQuestions(getSprintQuestions(data[0], getAllTranslates(data[1])));
+          nextQuestion();
+        } else {
+          dispatch(changeSprintPageAction());
+          checkPrevPage(prevPage - 1, userId);
+        }
+      });
+    } else {
+      WordsService.getWords(group, prevPage).then(data => {
+        setQuestions(getSprintQuestions(data, getAllTranslates(data)));
+        nextQuestion();
+      });
+    }
+  };
+
   // TODO divide this fck big function
   const answerHandler = (answer: boolean) => {
     const isCorrect = compareAnswers(currentQuestion.isCorrect, answer);
@@ -89,34 +111,15 @@ const useSprintQuestion = (
     }
     if (questions.length) {
       nextQuestion();
+    } else if (group === DIFFICULT_GROUP) {
+      dispatch(changeSprintStatusAction(SprintGameStatus.END));
     } else {
       const newPage = currentPage - 1;
       dispatch(changeSprintPageAction());
-      if (newPage >= 0) {
-        if (book) {
-          WordsService.getNotStudiedWords(userId, group, newPage).then(data => {
-            if (data.length) {
-              setQuestions(getQuestionItems(data));
-              nextQuestion();
-            } else {
-              dispatch(changeSprintStatusAction(SprintGameStatus.END));
-            }
-          });
-        } else {
-          WordsService.getWords(group, newPage).then(data => {
-            if (data.length) {
-              setQuestions(getQuestionItems(data));
-              nextQuestion();
-            } else {
-              dispatch(changeSprintStatusAction(SprintGameStatus.END));
-            }
-          });
-        }
-      } else {
-        dispatch(changeSprintStatusAction(SprintGameStatus.END));
-      }
+      checkPrevPage(newPage, userId);
     }
   };
+  console.log('group from game hook', group);
 
   const confirmAnswer = () => answerHandler(true);
   const declineAnswer = () => answerHandler(false);

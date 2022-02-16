@@ -1,6 +1,10 @@
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { requestSprintDataAction } from '../../redux/store/reducers/sprintGameReducer';
+import {
+  requestSprintDataAction,
+  requestSprintHardWordsAction,
+} from '../../redux/store/reducers/sprintGameReducer';
+import { DIFFICULT_GROUP } from '../e-book/cosnstants';
 
 const useSprintFromBook = (
   isAuth: boolean,
@@ -13,16 +17,21 @@ const useSprintFromBook = (
   return () => {
     navigate('/games/sprint');
     if (isAuth) {
-      dispatch(
-        requestSprintDataAction({
-          group: group - 1,
-          page: page - 1,
-          book: true,
-          userId,
-        })
-      );
+      // TODO magic number
+      if (group === DIFFICULT_GROUP && userId) {
+        dispatch(requestSprintHardWordsAction({ userId }));
+      } else {
+        dispatch(
+          requestSprintDataAction({
+            group,
+            page,
+            book: true,
+            userId,
+          })
+        );
+      }
     } else {
-      dispatch(requestSprintDataAction({ group: group - 1, page: page - 1 }));
+      dispatch(requestSprintDataAction({ group, page }));
     }
   };
 };

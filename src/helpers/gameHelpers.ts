@@ -1,5 +1,6 @@
 import { WordWithCustomProps } from '../services/words/wordsServiceTypes';
 import getRandomNumber from './getRandomNumber';
+import shuffle from './shuffleArray';
 
 export interface SprintQuestionItem {
   wordId: string;
@@ -7,7 +8,15 @@ export interface SprintQuestionItem {
   fakeAnswer: string;
   isCorrect: boolean;
   correctAnswer: string;
+  audio: string;
 }
+
+export const compareAnswers = (
+  expect: boolean | string,
+  actual: boolean | string
+): boolean => {
+  return expect === actual;
+};
 
 export const getAllTranslates = (words: WordWithCustomProps[]): string[] => {
   return words.map(word => word.wordTranslate);
@@ -22,6 +31,7 @@ const getSprintCorrectQuestion = (
     fakeAnswer: wordItem.wordTranslate,
     isCorrect: true,
     correctAnswer: wordItem.wordTranslate,
+    audio: wordItem.audio,
   };
 };
 
@@ -42,6 +52,7 @@ const getSprintIncorrectQuestions = (
     fakeAnswer,
     isCorrect: false,
     correctAnswer: wordItem.wordTranslate,
+    audio: wordItem.audio,
   };
 };
 
@@ -50,11 +61,13 @@ export const getSprintQuestions = (
   answersFromPage: string[]
 ): SprintQuestionItem[] => {
   console.log('words length', wordsForQuestions.length);
-  return wordsForQuestions.map(wordItem => {
-    const random = getRandomNumber(0, 1);
-    if (random === 0) {
-      return getSprintCorrectQuestion(wordItem);
-    }
-    return getSprintIncorrectQuestions(wordItem, answersFromPage);
-  });
+  return shuffle<SprintQuestionItem>(
+    wordsForQuestions.map(wordItem => {
+      const random = getRandomNumber(0, 1);
+      if (random === 0) {
+        return getSprintCorrectQuestion(wordItem);
+      }
+      return getSprintIncorrectQuestions(wordItem, answersFromPage);
+    })
+  );
 };

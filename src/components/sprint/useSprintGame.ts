@@ -1,13 +1,15 @@
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import useTypedSelector from '../../hooks/useTypedSelector';
-import { SprintQuestionItem } from './SprintModel';
 import getRandomNumber from '../../helpers/getRandomNumber';
 import {
   requestSprintDataAction,
+  requestSprintHardWordsAction,
   resetSprintStateAction,
 } from '../../redux/store/reducers/sprintGameReducer';
+import { SprintQuestionItem } from '../../helpers/gameHelpers';
+import { DIFFICULT_GROUP } from '../e-book/cosnstants';
 
 const useSprintGame = () => {
   const authState = useTypedSelector(store => store.auth);
@@ -24,18 +26,31 @@ const useSprintGame = () => {
 
   const startHandler = (group: number) => {
     const randomPage = getRandomNumber(0, 29);
-    dispatch(requestSprintDataAction({ group, page: randomPage }));
+    // TODO magic number
+    if (group === 6) {
+      dispatch(
+        requestSprintHardWordsAction({ userId: authState.userData.userId })
+      );
+    } else {
+      dispatch(requestSprintDataAction({ group, page: randomPage }));
+    }
   };
 
   const restartHandler = useCallback(() => {
     setCorrectAnswers([]);
     setInCorrectAnswers([]);
-    dispatch(
-      requestSprintDataAction({
-        group: sprintGameState.group,
-        page: sprintGameState.initialPage,
-      })
-    );
+    if (sprintGameState.group === DIFFICULT_GROUP) {
+      dispatch(
+        requestSprintHardWordsAction({ userId: authState.userData.userId })
+      );
+    } else {
+      dispatch(
+        requestSprintDataAction({
+          group: sprintGameState.group,
+          page: sprintGameState.initialPage,
+        })
+      );
+    }
   }, [sprintGameState.group, sprintGameState.initialPage]);
 
   const backHandler = () => {

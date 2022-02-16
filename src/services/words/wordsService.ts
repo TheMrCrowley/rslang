@@ -7,13 +7,19 @@ import {
 } from './wordsServiceTypes';
 
 export default class WordsService {
-  static getWords = async (group = 0, page = 0): Promise<Word[]> => {
-    const response = await $api.get<Word[]>(WordsEndpoints.WORDS, {
-      params: {
-        group,
-        page,
-      },
-    });
+  static getWords = async (
+    group = 0,
+    page = 0
+  ): Promise<WordWithCustomProps[]> => {
+    const response = await $api.get<WordWithCustomProps[]>(
+      WordsEndpoints.WORDS,
+      {
+        params: {
+          group,
+          page,
+        },
+      }
+    );
     return response.data;
   };
 

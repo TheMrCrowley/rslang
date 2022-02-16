@@ -7,8 +7,8 @@ import {
   darkIncorrectColor,
 } from '../e-book/cosnstants';
 import ResultLine from './ResultLine';
-import { SprintQuestionItem } from './SprintModel';
 import MainPageLayoutButton from '../pages/MainPageLayoutButton';
+import { SprintQuestionItem } from '../../helpers/gameHelpers';
 
 const ResultsWrapper = styled(Box)`
   height: 65vh;
@@ -51,7 +51,7 @@ const Results: FC<ResultsProps> = ({
   const correct = correctAnswers.map(item => (
     <ResultLine
       audio={item.audio}
-      translate={item.translate}
+      translate={item.correctAnswer}
       word={item.word}
       key={item.wordId}
       color={darkCorrectColor}
@@ -60,7 +60,7 @@ const Results: FC<ResultsProps> = ({
   const incorrect = inCorrectAnswers.map(item => (
     <ResultLine
       audio={item.audio}
-      translate={item.translate}
+      translate={item.correctAnswer}
       word={item.word}
       key={item.wordId}
       color={darkIncorrectColor}

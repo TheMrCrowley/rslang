@@ -15,7 +15,7 @@ const StyledTypo = styled(Typography)`
 
 const SprintTimer = () => {
   // TODO switch to const
-  const [time, status] = useTimer(60);
+  const [time, status] = useTimer(10);
   const dispatch = useDispatch();
   useEffect(() => {
     if (!status) {

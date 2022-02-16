@@ -12,6 +12,7 @@ import WordsService from '../../services/words/wordsService';
 import { WordWithCustomProps } from '../../services/words/wordsServiceTypes';
 import {
   RequestSprintDataAction,
+  RequestSprintHardWordsAction,
   SprintCorrectAction,
   SprintGameActions,
   SprintGameStatus,
@@ -46,23 +47,28 @@ function* requestSprintDataWorker(data: RequestSprintDataAction) {
     yield put(sprintRequestStartAction());
     const { group, page, userId, book } = data.payload;
     yield put(setWordsSectionAction({ group, page }));
+    const wordsResponse: WordWithCustomProps[] = yield call(
+      WordsService.getWords,
+      group,
+      page
+    );
     if (book && userId) {
+      console.log('from book');
       yield put(setSprintBookAction());
-      const wordsResponse: WordWithCustomProps[] = yield call(
+      const notStudiedWords: WordWithCustomProps[] = yield call(
         WordsService.getNotStudiedWords,
         userId,
         group,
         page
       );
       yield put(
-        setSprintDataAction({ wordsForQuestion: wordsResponse, answers: [] })
+        setSprintDataAction({
+          wordsForQuestion: notStudiedWords,
+          answers: getAllTranslates(wordsResponse),
+        })
       );
     } else {
-      const wordsResponse: WordWithCustomProps[] = yield call(
-        WordsService.getWords,
-        group,
-        page
-      );
+      console.log('not userId');
       yield put(
         setSprintDataAction({
           wordsForQuestion: wordsResponse,
@@ -70,6 +76,29 @@ function* requestSprintDataWorker(data: RequestSprintDataAction) {
         })
       );
     }
+    yield put(sprintRequestEndAction());
+    yield put(changeSprintStatusAction(SprintGameStatus.INRUN));
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+function* requestSprintHardWordsAction(data: RequestSprintHardWordsAction) {
+  try {
+    yield put(sprintRequestStartAction());
+    // TODO magic number
+    yield put(setWordsSectionAction({ group: 6, page: 77 }));
+    const { userId } = data.payload;
+    const hardWordsResponse: WordWithCustomProps[] = yield call(
+      WordsService.getHardWords,
+      userId
+    );
+    yield put(
+      setSprintDataAction({
+        wordsForQuestion: hardWordsResponse,
+        answers: getAllTranslates(hardWordsResponse),
+      })
+    );
     yield put(sprintRequestEndAction());
     yield put(changeSprintStatusAction(SprintGameStatus.INRUN));
   } catch (e) {
@@ -165,6 +194,10 @@ function* sprintGameWatcher() {
   yield takeEvery(
     SprintGameActions.SPRINT_INCORRECT_ANSWER,
     sprintInCorrectAnswerWorker
+  );
+  yield takeEvery(
+    SprintGameActions.REQUEST_SPRINT_HARD_WORDS,
+    requestSprintHardWordsAction
   );
 }
 

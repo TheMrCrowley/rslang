@@ -40,32 +40,33 @@ const AudiocallQuestion: FC<AudiocallQuestionProps> = ({
     currentAudio,
   } = useAudiocallQuestion(auth, correctAnswer, incorrectAnswer);
 
-  const answerButtons = useMemo(() => {
-    return answers.map(answerItem => (
-      <MainPageLayoutButton
-        key={answerItem}
-        onClick={() => giveAnswer(answerItem)}
-        color={changeButtonColor(answerItem)}
-        text={answerItem}
-        disabled={afterAnswerState}
-      />
-    ));
-  }, [answers, afterAnswerState, changeButtonColor]);
+  //
+  // const answerButtons = useMemo(() => {
+  //   return answers.map(answerItem => (
+  //     <MainPageLayoutButton
+  //       key={answerItem}
+  //       onClick={() => giveAnswer(answerItem)}
+  //       color={changeButtonColor(answerItem)}
+  //       text={answerItem}
+  //       disabled={afterAnswerState}
+  //     />
+  //   ));
+  // }, [answers, afterAnswerState, changeButtonColor]);
   return (
     <>
-      <AudiocallInGameUpAssets
-        status={afterAnswerState}
-        onClick={currentAudio}
-        color={darkColors[group]}
-        image={image}
-        word={word}
-      />
-      <ButtonWrapper>{answerButtons}</ButtonWrapper>
-      <AudiocallInGameBottomAssets
-        disabled={!afterAnswerState}
-        onClick={nextQuestion}
-        group={group}
-      />
+      {/* <AudiocallInGameUpAssets */}
+      {/*  status={afterAnswerState} */}
+      {/*  onClick={currentAudio} */}
+      {/*  color={darkColors[group]} */}
+      {/*  image={image} */}
+      {/*  word={word} */}
+      {/* /> */}
+      {/* <ButtonWrapper>{answerButtons}</ButtonWrapper> */}
+      {/* <AudiocallInGameBottomAssets */}
+      {/*  disabled={!afterAnswerState} */}
+      {/*  onClick={nextQuestion} */}
+      {/*  group={group} */}
+      {/* /> */}
     </>
   );
 };

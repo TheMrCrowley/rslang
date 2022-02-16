@@ -29,13 +29,13 @@ const BasicSelect: FC<SelectProps> = ({ isAuth }) => {
           label="Age"
           onChange={handleChange}
         >
-          <MenuItem value={1}>1</MenuItem>
-          <MenuItem value={2}>2</MenuItem>
-          <MenuItem value={3}>3</MenuItem>
-          <MenuItem value={4}>4</MenuItem>
-          <MenuItem value={5}>5</MenuItem>
-          <MenuItem value={6}>6</MenuItem>
-          {isAuth ? <MenuItem value={7}>7</MenuItem> : null}
+          <MenuItem value={0}>1</MenuItem>
+          <MenuItem value={1}>2</MenuItem>
+          <MenuItem value={2}>3</MenuItem>
+          <MenuItem value={3}>4</MenuItem>
+          <MenuItem value={4}>5</MenuItem>
+          <MenuItem value={5}>6</MenuItem>
+          {isAuth ? <MenuItem value={6}>Hard words</MenuItem> : null}
         </Select>
       </FormControl>
     </Box>

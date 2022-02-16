@@ -1,5 +1,5 @@
 import { useDispatch } from 'react-redux';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { AuthState } from '../../redux/types/authTypes';
 import useTypedSelector from '../../hooks/useTypedSelector';
 import useAudio from '../../hooks/useAudio';
@@ -8,7 +8,6 @@ import {
   AudioCallQuestionItem,
   getAudiCallQuestionItems,
 } from './audioCallModel';
-import { compareAnswers } from '../sprint/SprintModel';
 import { isNewWord } from '../../helpers/statisticHandlers';
 import { changeAudioCallNewWordAction } from '../../redux/store/reducers/statisticReducer';
 import {
@@ -21,6 +20,7 @@ import WordsService from '../../services/words/wordsService';
 import { AudioCallGameStatus } from '../../redux/types/audioCallTypes';
 import { darkColors, darkCorrectColor } from '../e-book/cosnstants';
 import { WordWithCustomProps } from '../../services/words/wordsServiceTypes';
+import { compareAnswers } from '../../helpers/gameHelpers';
 
 const useAudiocallQuestion = (
   auth: AuthState,
@@ -70,7 +70,7 @@ const useAudiocallQuestion = (
       nextQuestion();
     }
   }, []);
-  //
+
   useEffect(() => {
     if (currentQuestion.audio) {
       currentAudio();

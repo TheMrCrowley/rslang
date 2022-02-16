@@ -31,7 +31,7 @@ const NavItem: FC<NavItemProps> = ({ innerText, children }) => {
       button
       onClick={() => {
         if (innerText.toLocaleLowerCase() === 'book') {
-          navigate('/book/1/1');
+          navigate('/book/0/0');
         } else {
           navigate(innerText.toLocaleLowerCase());
         }

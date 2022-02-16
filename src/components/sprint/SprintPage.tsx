@@ -51,7 +51,7 @@ const SprintPage: FC = () => {
       </StyledBox>
     );
   }
-
+  console.log('group from game wrapper', group);
   return (
     <GamePageWrapper color={colors[group]}>
       {gameState.gameStatus === SprintGameStatus.PREPARE && (

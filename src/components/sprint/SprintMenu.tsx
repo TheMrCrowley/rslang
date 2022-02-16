@@ -11,7 +11,7 @@ interface MenuProps {
 }
 
 const SprintMenu: FC<MenuProps> = ({ onClick, isAuth }) => {
-  const [group, setGroup] = useState(1);
+  const [group, setGroup] = useState(0);
   const clickHandler = () => {
     onClick(group);
   };
