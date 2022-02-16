@@ -8,7 +8,6 @@ import { darkBgColor } from '../e-book/cosnstants';
 const Footer = () => {
   const location = useLocation();
   useEffect(() => {}, [location]);
-  console.log(location);
 
   const StyledRsLogo = styled(RsLogo)`
     width: 3.5em;

@@ -23,6 +23,7 @@ const BasicCard: FC<BasicCardProps> = ({ isAuth, cardData }) => {
   // TODO закинуть эти данные в стейт и попробовать обновлять по одной карточке
   const {
     _id,
+    id,
     group,
     image,
     word,
@@ -91,7 +92,7 @@ const BasicCard: FC<BasicCardProps> = ({ isAuth, cardData }) => {
       </CardContent>
       {isAuth && (
         <AuthorizedCardContent
-          wordId={_id}
+          wordId={_id || id}
           color={colors[group]}
           progress={userWord?.optional.correctStreak as number}
           isDifficult={userWord?.difficulty === 'hard'}

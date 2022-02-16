@@ -26,6 +26,12 @@ import {
   changeToStudied,
   updateUserWordsState,
 } from '../../helpers/updateUserWordBody';
+import WordsService from '../../services/words/wordsService';
+import { WordWithCustomProps } from '../../services/words/wordsServiceTypes';
+import {
+  removeOneHardWordAction,
+  setOneWordAction,
+} from '../store/reducers/wordsReducer';
 
 function* getUserWordsWorker(data: GetUserWordsAction) {
   try {
@@ -51,6 +57,12 @@ function* createHardUserWordWorker(data: CreateHardUserWordAction) {
       hardUserWord
     );
     yield put(setOneUserWordAction(userWord));
+    const newWord: WordWithCustomProps = yield call(
+      WordsService.getOneWordWithCustomProps,
+      userId,
+      wordId
+    );
+    yield put(setOneWordAction(newWord));
   } catch (e) {
     console.log(e);
   }
@@ -68,6 +80,12 @@ function* createStudiedUserWordWroker(data: CreateStudiedUserWordAction) {
     );
     yield put(increaseLearnedWordsAtion());
     yield put(setOneUserWordAction(userWord));
+    const newWord: WordWithCustomProps = yield call(
+      WordsService.getOneWordWithCustomProps,
+      userId,
+      wordId
+    );
+    yield put(setOneWordAction(newWord));
   } catch (e) {
     console.log(e);
   }
@@ -88,6 +106,12 @@ function* changeToHardWorker(data: ChangeToHardAction) {
       updatedUserWord
     );
     yield put(setUserWordsAction(updatedUserWords));
+    const newWord: WordWithCustomProps = yield call(
+      WordsService.getOneWordWithCustomProps,
+      userId,
+      wordId
+    );
+    yield put(setOneWordAction(newWord));
   } catch (e) {
     console.log(e);
   }
@@ -109,6 +133,13 @@ function* changeToStudiedWorker(data: ChangeToStudiedAction) {
     );
     yield put(increaseLearnedWordsAtion());
     yield put(setUserWordsAction(updatedUserWords));
+    const newWord: WordWithCustomProps = yield call(
+      WordsService.getOneWordWithCustomProps,
+      userId,
+      wordId
+    );
+    yield put(setOneWordAction(newWord));
+    yield put(removeOneHardWordAction(newWord));
   } catch (e) {
     console.log(e);
   }

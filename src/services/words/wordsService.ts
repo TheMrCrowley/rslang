@@ -35,6 +35,16 @@ export default class WordsService {
     return response.data[0].paginatedResults;
   };
 
+  static getOneWordWithCustomProps = async (
+    userId: string,
+    wordId: string
+  ): Promise<WordWithCustomProps> => {
+    const response = await $api.get<WordWithCustomProps[]>(
+      `/users/${userId}/aggregatedWords/${wordId}`
+    );
+    return response.data[0];
+  };
+
   static getNotStudiedWords = async (
     userId: string,
     group: number,

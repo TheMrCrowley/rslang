@@ -5,18 +5,18 @@ import { useNavigate } from 'react-router-dom';
 import useWindowWidth from '../../../../hooks/useWindowWidth';
 import useBookParams from '../../../../hooks/useBookParams';
 
+const enum PageNumberSize {
+  small = 'small',
+  medium = 'medium',
+  large = 'large',
+  string = 'string',
+}
+
 const PaginationRanges: FC = () => {
   const winWith = useWindowWidth();
   const navigate = useNavigate();
-  const { group } = useBookParams();
+  const { group, page } = useBookParams();
   const TOTAL_PAGES = 30;
-  const START_PAGE = 1;
-  const enum PageNumberSize {
-    small = 'small',
-    medium = 'medium',
-    large = 'large',
-    string = 'string',
-  }
 
   const handleChangePage = (e: ChangeEvent<unknown>, current: number) => {
     navigate(`${group}/${current}`);
@@ -26,7 +26,7 @@ const PaginationRanges: FC = () => {
     <Stack spacing={2}>
       <Pagination
         count={TOTAL_PAGES}
-        defaultPage={START_PAGE}
+        defaultPage={page}
         siblingCount={2}
         size={winWith < 780 ? PageNumberSize.small : PageNumberSize.large}
         color="primary"

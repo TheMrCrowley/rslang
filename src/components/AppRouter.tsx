@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
 import { Typography } from '@mui/material';
@@ -23,6 +23,7 @@ import AudioCallPage from './audiocall/AudioCallPage';
 import CardList from './e-book/CardList';
 import StatisticPage from './statistic/StatisticPage';
 import useAuth from '../hooks/useAuth';
+import WordsService from '../services/words/wordsService';
 
 const AppRouter = () => {
   const dispatch = useDispatch();
@@ -48,7 +49,7 @@ const AppRouter = () => {
     }
   }, [statisticState]);
 
-  useMemo(() => {
+  useEffect(() => {
     if (isAuth) {
       dispatch(getUserWordsAction({ userId }));
       dispatch(requestStatisticAction({ userId }));
