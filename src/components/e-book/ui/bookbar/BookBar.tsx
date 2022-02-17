@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
-import { Button, Typography } from '@mui/material';
+import { Button, Tooltip, Typography } from '@mui/material';
 import BasicSelect from '../select/BasicSelect';
 import PaginationRanges from '../pagination/PaginationRanges';
 import { DIFFICULT_GROUP } from '../../cosnstants';
@@ -29,6 +29,16 @@ const StyledBarContainer = styled(Container)({
   height: '4.5em',
 });
 
+const GameButton = styled(Button)`
+  color: #202026;
+  background-color: white;
+  border-radius: 2rem;
+  &: hover {
+    color: white;
+    background-color: #202026;
+  }
+`;
+
 const BookBar: React.FC<ResponsiveAppBarProps> = ({
   isAuth,
   children,
@@ -39,15 +49,20 @@ const BookBar: React.FC<ResponsiveAppBarProps> = ({
   const audioCallHandler = useAudiocallFromBook(isAuth, group, page, userId);
   return (
     <StyledBarContainer maxWidth="xl">
-      <Button sx={{ color: '#202026' }} onClick={sprintHandler}>
-        Sprint
-      </Button>
-      <Button sx={{ color: '#202026' }} onClick={audioCallHandler}>
-        Audiocall
-      </Button>
+      <Tooltip title="Play game with unstudied words from this page">
+        <GameButton onClick={sprintHandler}>Sprint</GameButton>
+      </Tooltip>
+      <Tooltip title="Play game with unstudied words from this page">
+        <GameButton onClick={audioCallHandler}>Audiocall</GameButton>
+      </Tooltip>
       <ThemeProvider theme={theme}>
         {group === DIFFICULT_GROUP ? (
-          <Typography variant="h2" component="h2">
+          <Typography
+            variant="h4"
+            component="h2"
+            color="white"
+            fontWeight="bold"
+          >
             Difficult words
           </Typography>
         ) : (

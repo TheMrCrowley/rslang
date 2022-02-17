@@ -1,15 +1,23 @@
+import { Box } from '@mui/material';
 import React, { FC } from 'react';
 import {
   Bar,
   BarChart,
   CartesianGrid,
   Legend,
+  ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
 } from 'recharts';
 import useWordsShortData from '../../hooks/useWordsShortData';
 import { WordStatisticItem } from '../../services/statistic/statisticServiceTypes';
+import {
+  chartDarkPurpleColor,
+  chartGreenColor,
+  chartSkyBlueColor,
+} from '../e-book/cosnstants';
+import { statHeight, statWidht } from './statContstants';
 
 interface WordsShortStatisticProps {
   wordsStatistic: WordStatisticItem;
@@ -20,16 +28,28 @@ const WordsShortStatistic: FC<WordsShortStatisticProps> = ({
 }) => {
   const graphData = useWordsShortData(wordsStatistic);
   return (
-    <BarChart width={730} height={250} data={graphData}>
-      <CartesianGrid strokeDasharray="3 3" />
-      <XAxis dataKey="name" />
-      <YAxis />
-      <Tooltip />
-      <Legend />
-      <Bar dataKey="newWords" name="new words" fill="#8884d8" />
-      <Bar dataKey="learnedWords" name="learned words" fill="#82ca9d" />
-      <Bar dataKey="procent" fill="#82ca9d" />
-    </BarChart>
+    <Box sx={{ width: '100%', height: '300px' }}>
+      <ResponsiveContainer>
+        <BarChart width={statWidht} height={statHeight} data={graphData}>
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="name" />
+          <YAxis />
+          <Tooltip />
+          <Legend />
+          <Bar dataKey="newWords" name="New words" fill={chartSkyBlueColor} />
+          <Bar
+            dataKey="learnedWords"
+            name="Learned words"
+            fill={chartGreenColor}
+          />
+          <Bar
+            dataKey="procent"
+            name="Learned from new, %"
+            fill={chartDarkPurpleColor}
+          />
+        </BarChart>
+      </ResponsiveContainer>
+    </Box>
   );
 };
 

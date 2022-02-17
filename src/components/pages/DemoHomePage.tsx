@@ -1,4 +1,4 @@
-import { Box, Fade, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -19,7 +19,7 @@ const HomePageWrapper = styled(Box)`
   gap: 1rem;
   background-image: url(${Bg});
   background-size: cover;
-  padding: 1rem;
+  padding: 2rem 5rem 5rem 5rem;
 `;
 
 const StyledHeaderWrapper = styled(Box)`
@@ -72,14 +72,20 @@ const DemoHomePage = () => {
       </StyledHeaderWrapper>
       <Typography variant="h3">Play and study English for free</Typography>
       <ButtonWrapper>
-        <MainPageLayoutButton onClick={() => navigate('/book')} text="E-book">
+        <MainPageLayoutButton
+          onClick={() => navigate('/book/0/0')}
+          text="E-book"
+        >
           <MenuBookIcon fontSize="large" />
         </MainPageLayoutButton>
-        <MainPageLayoutButton onClick={() => navigate('/sprint')} text="Sprint">
+        <MainPageLayoutButton
+          onClick={() => navigate('/games/sprint')}
+          text="Sprint"
+        >
           <DirectionsRunIcon fontSize="large" />
         </MainPageLayoutButton>
         <MainPageLayoutButton
-          onClick={() => navigate('/audiocall')}
+          onClick={() => navigate('/games/audiocall')}
           text="Audiocall"
         >
           <CampaignIcon fontSize="large" />
@@ -90,7 +96,7 @@ const DemoHomePage = () => {
             text="Registration"
           />
         )}
-        <MainPageLayoutButton text="About" />
+        <MainPageLayoutButton onClick={() => navigate('/team')} text="About" />
       </ButtonWrapper>
       <ButtonWrapper>
         <TypografyBold variant="h5">More than 3500 words!</TypografyBold>

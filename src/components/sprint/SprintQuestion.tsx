@@ -6,7 +6,11 @@ import MainPageLayoutButton from '../pages/MainPageLayoutButton';
 import SprintTimer from './SprintTimer';
 import useSprintQuestion from './useSprintQuestion';
 import SprintQuestionText from './SprintQuestionText';
-import { darkColors } from '../e-book/cosnstants';
+import {
+  darkColors,
+  darkCorrectColor,
+  darkIncorrectColor,
+} from '../e-book/cosnstants';
 import SprintInGameUpAssets from '../ui/SprintInGameUpAssets';
 import { SprintQuestionItem } from '../../helpers/gameHelpers';
 
@@ -34,7 +38,15 @@ const SprintQuestion: FC<SprintQuestionProps> = ({
   );
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        height: '70vh',
+        mb: 'auto',
+      }}
+    >
       <SprintInGameUpAssets color={darkColors[group]}>
         <Typography
           variant="h4"
@@ -50,12 +62,12 @@ const SprintQuestion: FC<SprintQuestionProps> = ({
       <SprintQuestionText word={word} answer={answer} />
       <StyledButtonWrapper>
         <MainPageLayoutButton
-          color="#ff1744"
+          color={darkIncorrectColor}
           onClick={decline}
           text="incorrect"
         />
         <MainPageLayoutButton
-          color="#00e576"
+          color={darkCorrectColor}
           onClick={confirm}
           text="correct"
         />

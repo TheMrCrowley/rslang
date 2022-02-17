@@ -25,6 +25,8 @@ const LevelInnerWrapper = styled(Box)`
   min-width: 400px;
 `;
 
+// TODO  fix BG color
+
 const LevelSelecContainer: React.FC<LevelSelecContainerProps> = ({
   children,
   color = mainBgColor,

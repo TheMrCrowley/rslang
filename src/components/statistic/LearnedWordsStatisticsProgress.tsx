@@ -11,18 +11,18 @@ import {
 } from 'recharts';
 import { Box } from '@mui/material';
 import { WordStatisticType } from '../../services/statistic/statisticServiceTypes';
-import useWordsLongData from '../../hooks/useWordsLongData';
 import { statHeight, statWidht } from './statContstants';
 import { chartGreenColor } from '../e-book/cosnstants';
+import useLearnedWordData from '../../hooks/useLearnedWordData';
 
 interface WordsLongStatisticProps {
   wordsStatistic: WordStatisticType;
 }
 
-const WordsLongStatistic: FC<WordsLongStatisticProps> = ({
+const LearnedWordsStatisticsProgress: FC<WordsLongStatisticProps> = ({
   wordsStatistic,
 }) => {
-  const graphData = useWordsLongData(wordsStatistic);
+  const graphData = useLearnedWordData(wordsStatistic);
   return (
     <Box sx={{ width: '100%', height: '300px' }}>
       <ResponsiveContainer>
@@ -33,7 +33,7 @@ const WordsLongStatistic: FC<WordsLongStatisticProps> = ({
           <Tooltip />
           <Legend />
           <Bar
-            dataKey="newWords"
+            dataKey="learnedWord"
             name="New words per day"
             fill={chartGreenColor}
           />
@@ -43,4 +43,4 @@ const WordsLongStatistic: FC<WordsLongStatisticProps> = ({
   );
 };
 
-export default WordsLongStatistic;
+export default LearnedWordsStatisticsProgress;

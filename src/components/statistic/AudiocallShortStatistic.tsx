@@ -1,15 +1,24 @@
+import { Box } from '@mui/material';
 import React, { FC } from 'react';
 import {
   Bar,
   BarChart,
   CartesianGrid,
+  Label,
   Legend,
+  ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
 } from 'recharts';
 import useAudiocallShortData from '../../hooks/useAudiocallShortData';
 import { GameStatisticItem } from '../../services/statistic/statisticServiceTypes';
+import {
+  chartDarkBlueColor,
+  chartLemonGreenColor,
+  chartSkyBlueColor,
+} from '../e-book/cosnstants';
+import { statHeight, statWidht } from './statContstants';
 
 interface AudiocallStatisticProps {
   audiocallStatistic: GameStatisticItem;
@@ -20,16 +29,28 @@ const AudiocallShortStatistic: FC<AudiocallStatisticProps> = ({
 }) => {
   const graphData = useAudiocallShortData(audiocallStatistic);
   return (
-    <BarChart width={730} height={250} data={graphData}>
-      <CartesianGrid strokeDasharray="3 3" />
-      <XAxis dataKey="name" />
-      <YAxis />
-      <Tooltip />
-      <Legend />
-      <Bar dataKey="newWords" name="new words" fill="#8884d8" />
-      <Bar dataKey="streak" fill="#82ca9d" />
-      <Bar dataKey="procent" fill="#82ca9d" />
-    </BarChart>
+    <Box sx={{ width: '100%', height: '300px' }}>
+      <ResponsiveContainer>
+        <BarChart width={statWidht} height={statHeight} data={graphData}>
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="name" />
+          <YAxis />
+          <Tooltip />
+          <Legend />
+          <Bar dataKey="newWords" name="New words" fill={chartSkyBlueColor} />
+          <Bar
+            dataKey="procent"
+            name="Correct answers, %"
+            fill={chartLemonGreenColor}
+          />
+          <Bar
+            dataKey="streak"
+            name="max. successful answers in a row"
+            fill={chartDarkBlueColor}
+          />
+        </BarChart>
+      </ResponsiveContainer>
+    </Box>
   );
 };
 

@@ -23,8 +23,30 @@ interface WordChartItem {
 
 interface WordLongChardData {
   name: string;
-  learnedWords: number;
+  newWords: number;
 }
+
+interface LearnedLongStatistics {
+  name: string;
+  learnedWord: number;
+}
+
+export const learnedLongStatistics = (
+  wordsData: WordStatisticType
+): LearnedLongStatistics[] => {
+  const res: LearnedLongStatistics[] = [];
+
+  Object.entries(wordsData).reduce((acc, current) => {
+    // eslint-disable-next-line no-param-reassign
+    acc += current[1].learnedWords || 0;
+    res.push({
+      name: current[0],
+      learnedWord: acc,
+    });
+    return acc;
+  }, 0);
+  return res;
+};
 
 export const longGameStatistic = (
   gameData: GameStatisticType
@@ -69,7 +91,7 @@ export const longWordStatistic = (
   return datas.map(dataKey => {
     return {
       name: dataKey,
-      learnedWords: wordData[dataKey].learnedWords || 0,
+      newWords: wordData[dataKey].newWords || 0,
     };
   });
 };

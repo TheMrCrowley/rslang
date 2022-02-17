@@ -14,6 +14,7 @@ const StyledWrapper = styled(Box)`
   display: flex;
   justify-content: space-around;
   align-items: center;
+  background-color: ${lightBgColor};
 `;
 
 const LinksWrapper = styled(Box)`
@@ -23,7 +24,7 @@ const LinksWrapper = styled(Box)`
   justify-content: space-evenly;
   align-items: center;
   padding: 4em;
-  background-color: ${lightBgColor};
+  background-color: white;
   border-radius: 3em;
 `;
 

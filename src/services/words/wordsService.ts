@@ -117,4 +117,16 @@ export default class WordsService {
     const response = await $api.get<Word>(`${WordsEndpoints.WORDS}/${wordId}`);
     return response.data;
   };
+
+  static getStudiedWordCount = async (userId: string): Promise<number> => {
+    const response = await $api.get<AggregatedWordsItem[]>(
+      `/users/${userId}/aggregatedWords`,
+      {
+        params: {
+          filter: { $and: [{ 'userWord.difficulty': 'studied' }] },
+        },
+      }
+    );
+    return response.data[0].totalCount[0].count;
+  };
 }

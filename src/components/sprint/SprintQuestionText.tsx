@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Box, Divider, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
 interface SprintQuestionTextProps {
@@ -15,17 +15,14 @@ const StyledTextWrapper = styled(Box)`
   color: #fff;
 `;
 
-const StyledDivider = styled(Divider)``;
-
 const SprintQuestionText: FC<SprintQuestionTextProps> = ({ word, answer }) => {
   return (
     <StyledTextWrapper>
-      <Typography variant="h2" fontWeight="bold">
+      <Typography variant="h2" component="p" fontWeight="bold">
         {word}
       </Typography>
-      <Divider />
-      <Typography variant="h2" fontWeight="bold">
-        {answer}?
+      <Typography variant="h2" component="p" fontWeight="bold">
+        {answer}
       </Typography>
     </StyledTextWrapper>
   );
