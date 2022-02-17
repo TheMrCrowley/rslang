@@ -1,4 +1,5 @@
 import { StatisticState } from '../redux/types/statisticTypes';
+import StatisticService from '../services/statistic/statisticService';
 import {
   StatisticRequest,
   StatisticResponse,
@@ -11,7 +12,8 @@ import {
   UserWordResponse,
 } from '../services/user-words/userWordsServiceTypes';
 
-export const getDate = () => new Date().toLocaleDateString();
+// export const getDate = () => new Date().toLocaleDateString();
+export const getDate = () => new Date().getMinutes();
 
 const getStatisticFromResponse = (
   statistic: StatisticResponse
@@ -105,6 +107,7 @@ export const getStatisticState = (
     wordStatistic: { ...word },
     sprintCurrentStreak: 0,
     audiocallCurrentStreak: 0,
+    saveTracker: 0,
   };
 };
 
@@ -282,4 +285,19 @@ export const changeAudioCallIncorrectAnswersHelper = (
       totalAnswers: statistic.audiocallStatistic.totalAnswers + 1,
     },
   };
+};
+
+export const checkStatisticDataKey = async (
+  userId: string
+): Promise<StatisticState> => {
+  const statResponse = await StatisticService.getStatistic(userId);
+  if (!statResponse.optional.wordStatistic[getDate()]) {
+    const newStatistic = updateStatisticAfterSignIn(statResponse);
+    const updatedStat = await StatisticService.updateStatistic(
+      userId,
+      newStatistic
+    );
+    return getStatisticState(updatedStat);
+  }
+  return getStatisticState(statResponse);
 };

@@ -26,6 +26,7 @@ const statisticInitialState: StatisticState = {
   wordStatistic: createWordStatisticItem(),
   sprintCurrentStreak: 0,
   audiocallCurrentStreak: 0,
+  saveTracker: 0,
 };
 
 export const statisticReducer = (
@@ -60,10 +61,16 @@ export const statisticReducer = (
       return { ...changeAudioCallCorrectAnswersHelper(state) };
     case StatisticActionTypes.CHANGE_AUDIOCALL_INCORRECT_ANSWER:
       return { ...changeAudioCallIncorrectAnswersHelper(state) };
+    case StatisticActionTypes.INCREASE_SAVE_TRACKER:
+      return { ...state, saveTracker: state.saveTracker + 1 };
     default:
       return state;
   }
 };
+
+export const increaseSaveTrackerAction = (): StatisticAction => ({
+  type: StatisticActionTypes.INCREASE_SAVE_TRACKER,
+});
 
 export const requestStatisticAction = (payload: {
   userId: string;

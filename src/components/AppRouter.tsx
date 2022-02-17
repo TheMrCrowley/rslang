@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
 import { Typography } from '@mui/material';
@@ -18,12 +18,17 @@ import { darkBgColor } from './e-book/cosnstants';
 import {
   requestStatisticAction,
   saveStatisticAction,
+  setStatisticAction,
 } from '../redux/store/reducers/statisticReducer';
 import AudioCallPage from './audiocall/AudioCallPage';
 import CardList from './e-book/CardList';
 import StatisticPage from './statistic/StatisticPage';
 import useAuth from '../hooks/useAuth';
-import WordsService from '../services/words/wordsService';
+import StatisticService from '../services/statistic/statisticService';
+import {
+  getStatisticState,
+  updateStatistic,
+} from '../helpers/statisticHandlers';
 
 const AppRouter = () => {
   const dispatch = useDispatch();
@@ -36,7 +41,7 @@ const AppRouter = () => {
     }
   }, []);
 
-  useEffect(() => {
+  useMemo(() => {
     if (isAuth && userId) {
       if (Object.keys(statisticState.wordStatistic).length) {
         dispatch(
@@ -47,8 +52,8 @@ const AppRouter = () => {
         );
       }
     }
-  }, [statisticState]);
-
+  }, [statisticState.saveTracker]);
+  console.log('first', statisticState.wordStatistic);
   useEffect(() => {
     if (isAuth) {
       dispatch(getUserWordsAction({ userId }));

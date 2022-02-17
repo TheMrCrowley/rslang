@@ -1,5 +1,10 @@
 import { call, put, takeEvery } from 'redux-saga/effects';
-import { increaseLearnedWordsAtion } from '../store/reducers/statisticReducer';
+import {
+  increaseSaveTrackerAction,
+  increaseLearnedWordsAtion,
+  setStatisticAction,
+} from '../store/reducers/statisticReducer';
+
 import {
   ChangeToHardAction,
   ChangeToStudiedAction,
@@ -32,6 +37,8 @@ import {
   removeOneHardWordAction,
   setOneWordAction,
 } from '../store/reducers/wordsReducer';
+import { checkStatisticDataKey } from '../../helpers/statisticHandlers';
+import { StatisticState } from '../types/statisticTypes';
 
 function* getUserWordsWorker(data: GetUserWordsAction) {
   try {
@@ -78,14 +85,20 @@ function* createStudiedUserWordWroker(data: CreateStudiedUserWordAction) {
       wordId,
       studiedUserWord
     );
-    yield put(increaseLearnedWordsAtion());
     yield put(setOneUserWordAction(userWord));
     const newWord: WordWithCustomProps = yield call(
       WordsService.getOneWordWithCustomProps,
       userId,
       wordId
     );
+    const statisticStatus: StatisticState = yield call(
+      checkStatisticDataKey,
+      userId
+    );
+    yield put(setStatisticAction(statisticStatus));
     yield put(setOneWordAction(newWord));
+    yield put(increaseLearnedWordsAtion());
+    yield put(increaseSaveTrackerAction());
   } catch (e) {
     console.log(e);
   }

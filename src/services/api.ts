@@ -1,7 +1,8 @@
 import axios from 'axios';
 import getAccessToken from '../helpers/getAccessToken';
 
-const API_URL = 'https://react-rslang-test.herokuapp.com/';
+// const API_URL = 'https://react-rslang-test.herokuapp.com/';
+const API_URL = 'http://localhost:5000/';
 
 const $api = axios.create({
   withCredentials: true,

@@ -12,6 +12,7 @@ export interface StatisticState {
   wordStatistic: WordStatisticItem;
   sprintCurrentStreak: number;
   audiocallCurrentStreak: number;
+  saveTracker: number;
 }
 
 export enum StatisticActionTypes {
@@ -26,8 +27,12 @@ export enum StatisticActionTypes {
   CHANGE_AUDIOCALL_NEW_WORD = 'CHANGE_AUDIOCALL_NEW_WORD',
   CHANGE_AUDIOCALL_CORRECT_ANSWERS = 'CHANGE_AUDIOCALL_CORRECT_ANSWERS',
   CHANGE_AUDIOCALL_INCORRECT_ANSWER = 'CHANGE_AUDIOCALL_INCORRECT_ANSWER',
+  INCREASE_SAVE_TRACKER = 'INCREASE_SAVE_TRACKER',
 }
 
+export interface IncreaseSaveTrackerAction {
+  type: StatisticActionTypes.INCREASE_SAVE_TRACKER;
+}
 export interface RequestStatisticAction {
   type: StatisticActionTypes.REQUEST_STATISTIC;
   payload: { userId: string };
@@ -91,4 +96,5 @@ export type StatisticAction =
   | ChangeAudioCallNewWordAction
   | ChangeAudioCallCorrectAnswerAction
   | ChangeAudioCallInCorrectAnswerAction
-  | ChangeSprintNewWord;
+  | ChangeSprintNewWord
+  | IncreaseSaveTrackerAction;

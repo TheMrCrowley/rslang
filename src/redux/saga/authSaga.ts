@@ -19,14 +19,18 @@ import LocalStorageService from '../../services/localStorageService';
 import { LoginResponseData } from '../../services/auth/authServiceTypes';
 import StatisticService from '../../services/statistic/statisticService';
 import {
+  checkStatisticDataKey,
   createAfterRegistration,
   getDate,
+  getStatisticState,
   updateStatisticAfterSignIn,
 } from '../../helpers/statisticHandlers';
 import {
   StatisticRequest,
   StatisticResponse,
 } from '../../services/statistic/statisticServiceTypes';
+import { setStatisticAction } from '../store/reducers/statisticReducer';
+import { StatisticState } from '../types/statisticTypes';
 
 function* registrationWorker(data: RegistrationAction) {
   try {
@@ -72,7 +76,6 @@ function* signInWorker(data: SigninAction) {
       StatisticService.getStatistic,
       signinResponse.userId
     );
-    console.log(statistic);
     if (!statistic.optional.wordStatistic[getDate()]) {
       const newStatistic: StatisticRequest = yield call(
         updateStatisticAfterSignIn,
@@ -101,6 +104,11 @@ function* checkAuth() {
       yield LocalStorageService.getParsedItem<LoginResponseData>(
         StorageKeys.USER_DATA
       );
+    const statisticStatus: StatisticState = yield call(
+      checkStatisticDataKey,
+      userId
+    );
+    yield put(setStatisticAction(statisticStatus));
     yield put(setUserDataAction(userData));
     yield put(setIsAuthAction());
     yield put(authRequestEndAction());
