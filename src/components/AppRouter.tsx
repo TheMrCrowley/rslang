@@ -18,12 +18,21 @@ import { darkBgColor } from './e-book/cosnstants';
 import {
   requestStatisticAction,
   saveStatisticAction,
+  setStatisticAction,
 } from '../redux/store/reducers/statisticReducer';
 import AudioCallPage from './audiocall/AudioCallPage';
+import CardList from './e-book/CardList';
+import StatisticPage from './statistic/StatisticPage';
+import useAuth from '../hooks/useAuth';
+import StatisticService from '../services/statistic/statisticService';
+import {
+  getStatisticState,
+  updateStatistic,
+} from '../helpers/statisticHandlers';
 
 const AppRouter = () => {
   const dispatch = useDispatch();
-  const authState = useTypedSelector(store => store.auth);
+  const { isAuth, userId } = useAuth();
   const statisticState = useTypedSelector(store => store.statistic);
 
   useEffect(() => {
@@ -32,46 +41,40 @@ const AppRouter = () => {
     }
   }, []);
 
-  useEffect(() => {
-    if (authState.userData.userId && authState.isAuth) {
-      dispatch(
-        saveStatisticAction({
-          newStatistic: statisticState,
-          userId: authState.userData.userId,
-        })
-      );
-      const { sprint } =
-        statisticState.completeStatistic.optional.gameStatistic;
-      console.log(sprint);
-    }
-  }, [statisticState]);
-
   useMemo(() => {
-    if (authState.isAuth) {
-      dispatch(getUserWordsAction({ userId: authState.userData.userId }));
-      dispatch(requestStatisticAction({ userId: authState.userData.userId }));
+    if (isAuth && userId) {
+      if (Object.keys(statisticState.wordStatistic).length) {
+        dispatch(
+          saveStatisticAction({
+            newStatistic: statisticState,
+            userId,
+          })
+        );
+      }
     }
-  }, [authState.isAuth]);
+  }, [statisticState.saveTracker]);
+  console.log('first', statisticState.wordStatistic);
+  useEffect(() => {
+    if (isAuth) {
+      dispatch(getUserWordsAction({ userId }));
+      dispatch(requestStatisticAction({ userId }));
+    }
+  }, [isAuth]);
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
+        <Route index element={<DemoHomePage />} />
         <Route path="home" element={<DemoHomePage />} />
         <Route path="registration" element={<RegistrationPage />} />
         <Route path="login" element={<LoginPage />} />
-        <Route
-          path="book/"
-          element={
-            <EBook
-              isAuth={authState.isAuth}
-              userId={authState.userData.userId}
-            />
-          }
-        />
+        <Route path="book/" element={<EBook />}>
+          <Route path=":group/:page" element={<CardList />} />
+        </Route>
         <Route path="games" element={<GamesPage />} />
-        <Route path="sprint" element={<SprintPage />} />
-        <Route path="audiocall" element={<AudioCallPage />} />
-        {/* <Route path="statistics" element={<StatisticsPage />} />
-        <Route path="team" element={<TeamPage />} /> */}
+        <Route path="games/sprint" element={<SprintPage />} />
+        <Route path="games/audiocall" element={<AudioCallPage />} />
+        <Route path="statistics" element={<StatisticPage />} />
+        {/* <Route path="team" element={<TeamPage />} /> *!/ */}
         <Route
           path="*"
           element={

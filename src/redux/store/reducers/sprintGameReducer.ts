@@ -1,26 +1,26 @@
 /* eslint-disable @typescript-eslint/default-param-last */
-
 import {
-  Word,
   WordsRequestData,
   WordWithCustomProps,
 } from '../../../services/words/wordsServiceTypes';
 import {
-  SprintGameStatus,
-  SprintState,
   SprintGameAction,
   SprintGameActions,
+  SprintGameStatus,
+  SprintState,
   SprintStatus,
 } from '../../types/sprintTypes';
 import { UserWordResponse } from '../../../services/user-words/userWordsServiceTypes';
 
 const sprintGameInitialState: SprintState = {
-  words: [] as Word[],
-  correctAnswers: 0,
+  words: [],
+  allAnswers: [],
   request: false,
   gameStatus: SprintGameStatus.PREPARE,
   group: 0,
-  page: 0,
+  initialPage: 0,
+  currentPage: 0,
+  book: false,
 };
 
 export const sprintGameReducer = (
@@ -28,42 +28,52 @@ export const sprintGameReducer = (
   action: SprintGameAction
 ): SprintState => {
   switch (action.type) {
-    case SprintGameActions.REQUEST_SPRINT_DATA:
-      return state;
     case SprintGameActions.SPRINT_REQUEST_START:
       return { ...state, request: true };
     case SprintGameActions.SPRINT_REQUEST_END:
       return { ...state, request: false };
-    case SprintGameActions.INCREASE_CORRECT_ANSWERS:
-      return { ...state, correctAnswers: state.correctAnswers + 1 };
     case SprintGameActions.SET_SPRINT_DATA:
-      return { ...state, words: [...action.payload] };
+      return {
+        ...state,
+        words: [...action.payload.wordsForQuestion],
+        allAnswers: [...action.payload.answers],
+      };
     case SprintGameActions.CHANGE_SPRINT_STATUS:
       return { ...state, gameStatus: action.payload };
     case SprintGameActions.SET_WORDS_SECTION: {
       return {
         ...state,
         group: action.payload.group,
-        page: action.payload.page,
+        initialPage: action.payload.page,
+        currentPage: action.payload.page,
       };
+    }
+    case SprintGameActions.CHANGE_SPRINT_CURRENT_PAGE: {
+      return { ...state, currentPage: state.currentPage - 1 };
     }
     case SprintGameActions.RESET_SPRINT_STATE:
       return { ...sprintGameInitialState };
+    case SprintGameActions.SET_SPRINT_BOOK:
+      return { ...state, book: true };
     default:
       return state;
   }
 };
 
-export const requestSprintDataAction = (
-  payload: WordsRequestData
-): SprintGameAction => ({
+export const requestSprintDataAction = (payload: {
+  group: number;
+  page: number;
+  book?: boolean;
+  userId?: string;
+}): SprintGameAction => ({
   type: SprintGameActions.REQUEST_SPRINT_DATA,
   payload,
 });
 
-export const setSprintDataAction = (
-  payload: Word[] | WordWithCustomProps[]
-): SprintGameAction => ({ type: SprintGameActions.SET_SPRINT_DATA, payload });
+export const setSprintDataAction = (payload: {
+  wordsForQuestion: WordWithCustomProps[];
+  answers: string[];
+}): SprintGameAction => ({ type: SprintGameActions.SET_SPRINT_DATA, payload });
 
 export const changeSprintStatusAction = (
   payload: SprintStatus
@@ -76,16 +86,16 @@ export const setWordsSectionAction = (
   payload: WordsRequestData
 ): SprintGameAction => ({ type: SprintGameActions.SET_WORDS_SECTION, payload });
 
+export const changeSprintPageAction = (): SprintGameAction => ({
+  type: SprintGameActions.CHANGE_SPRINT_CURRENT_PAGE,
+});
+
 export const sprintRequestStartAction = (): SprintGameAction => ({
   type: SprintGameActions.SPRINT_REQUEST_START,
 });
 
 export const sprintRequestEndAction = (): SprintGameAction => ({
   type: SprintGameActions.SPRINT_REQUEST_END,
-});
-
-export const sprintIncreaseAnswerAction = (): SprintGameAction => ({
-  type: SprintGameActions.INCREASE_CORRECT_ANSWERS,
 });
 
 export const resetSprintStateAction = (): SprintGameAction => ({
@@ -107,5 +117,16 @@ export const sprintInCorrectAction = (payload: {
   words: UserWordResponse[];
 }): SprintGameAction => ({
   type: SprintGameActions.SPRINT_INCORRECT_ANSWER,
+  payload,
+});
+
+export const setSprintBookAction = (): SprintGameAction => ({
+  type: SprintGameActions.SET_SPRINT_BOOK,
+});
+
+export const requestSprintHardWordsAction = (payload: {
+  userId: string;
+}): SprintGameAction => ({
+  type: SprintGameActions.REQUEST_SPRINT_HARD_WORDS,
   payload,
 });

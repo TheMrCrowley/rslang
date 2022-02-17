@@ -1,6 +1,5 @@
 import {
   WordWithCustomProps,
-  Word,
   WordsRequestData,
 } from '../../services/words/wordsServiceTypes';
 import { UserWordResponse } from '../../services/user-words/userWordsServiceTypes';
@@ -17,12 +16,14 @@ export type SprintStatus =
   | SprintGameStatus.END;
 
 export interface SprintState {
-  words: Word[] | WordWithCustomProps[];
+  words: WordWithCustomProps[];
+  allAnswers: string[];
   gameStatus: SprintStatus;
   request: boolean;
-  correctAnswers: number;
   group: number;
-  page: number;
+  initialPage: number;
+  currentPage: number;
+  book: boolean;
 }
 
 export enum SprintGameActions {
@@ -30,12 +31,27 @@ export enum SprintGameActions {
   SET_SPRINT_DATA = 'SET_SPRINT_DATA',
   SPRINT_REQUEST_START = 'SPRINT_REQUEST_START',
   SPRINT_REQUEST_END = 'SPRINT_REQUEST_END',
-  INCREASE_CORRECT_ANSWERS = 'INCREASE_CORRECT_ANSWERS',
   CHANGE_SPRINT_STATUS = 'CHANGE_SPRINT_STATUS',
   RESET_SPRINT_STATE = 'RESET_SPRINT_STATE',
   SET_WORDS_SECTION = 'SET_WORDS_SECTION',
   SPRINT_CORRECT_ANSWER = 'SPRINT_CORRECT_ANSWER',
   SPRINT_INCORRECT_ANSWER = 'SPRINT_INCORRECT_ANSWER',
+  SET_SPRINT_BOOK = 'SET_SPRINT_BOOK',
+  CHANGE_SPRINT_CURRENT_PAGE = 'CHANGE_SPRINT_CURRENT_PAGE',
+  REQUEST_SPRINT_HARD_WORDS = 'REQUEST_SPRINT_HARD_WORDS',
+}
+
+export interface RequestSprintHardWordsAction {
+  type: SprintGameActions.REQUEST_SPRINT_HARD_WORDS;
+  payload: { userId: string };
+}
+
+interface ChangeCurrentPageAction {
+  type: SprintGameActions.CHANGE_SPRINT_CURRENT_PAGE;
+}
+
+export interface SetSprintBookAction {
+  type: SprintGameActions.SET_SPRINT_BOOK;
 }
 
 export interface SprintCorrectAction {
@@ -58,12 +74,12 @@ export interface SprintInCorrectAction {
 
 export interface RequestSprintDataAction {
   type: SprintGameActions.REQUEST_SPRINT_DATA;
-  payload: WordsRequestData;
+  payload: { group: number; page: number; book?: boolean; userId?: string };
 }
 
 export interface SetSprintDataAction {
   type: SprintGameActions.SET_SPRINT_DATA;
-  payload: Word[] | WordWithCustomProps[];
+  payload: { wordsForQuestion: WordWithCustomProps[]; answers: string[] };
 }
 
 export interface SetWordsSectionAction {
@@ -77,10 +93,6 @@ export interface SprintRequestStartAction {
 
 export interface SprintRequestEndAction {
   type: SprintGameActions.SPRINT_REQUEST_END;
-}
-
-export interface IncreaseCorrectAnswersAction {
-  type: SprintGameActions.INCREASE_CORRECT_ANSWERS;
 }
 
 export interface ChangeGameStatusAction {
@@ -97,9 +109,11 @@ export type SprintGameAction =
   | SetSprintDataAction
   | SprintRequestStartAction
   | SprintRequestEndAction
-  | IncreaseCorrectAnswersAction
   | ChangeGameStatusAction
   | ResetSprintStateAction
   | SetWordsSectionAction
   | SprintCorrectAction
-  | SprintInCorrectAction;
+  | SprintInCorrectAction
+  | SetSprintBookAction
+  | ChangeCurrentPageAction
+  | RequestSprintHardWordsAction;

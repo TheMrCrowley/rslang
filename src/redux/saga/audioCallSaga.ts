@@ -1,8 +1,12 @@
 import { call, put, takeEvery } from 'redux-saga/effects';
-import { compareDiff } from '../../helpers/statisticHandlers';
 import {
-  userWordFromAudioCallInCorrect,
+  checkStatisticDataKey,
+  compareDiff,
+  isNewWord,
+} from '../../helpers/statisticHandlers';
+import {
   userWordFromAudioCallCorrect,
+  userWordFromAudioCallInCorrect,
 } from '../../helpers/createUserWordBody';
 
 import requestMethodChoiser from '../../helpers/requestMethodChoiser';
@@ -16,38 +20,71 @@ import {
   UserWordResponse,
 } from '../../services/user-words/userWordsServiceTypes';
 import WordsService from '../../services/words/wordsService';
-import { Word } from '../../services/words/wordsServiceTypes';
+import { WordWithCustomProps } from '../../services/words/wordsServiceTypes';
 import {
   audioCallRequestEndAction,
   audioCallRequestStartAction,
+  changeAudioCallStatusAction,
+  setAudiocallBookAction,
   setAudioCallDataAction,
   setAudioCallWordsSectionAction,
 } from '../store/reducers/audioCallReducer';
 import {
   changeAudioCallCorrectAnswerAction,
   changeAudioCallIncorrectAnswerAction,
+  changeAudioCallNewWordAction,
   decreaseLearnedWordsAtion,
   increaseLearnedWordsAtion,
+  increaseSaveTrackerAction,
+  setStatisticAction,
 } from '../store/reducers/statisticReducer';
 import {
   AudioCallCorrectAction,
   AudioCallGameActions,
+  AudioCallGameStatus,
   AudioCallInCorrectAction,
   RequestAucioCallDataAction,
+  RequestAudiocallHardWords,
 } from '../types/audioCallTypes';
+import { setOneUserWordAction } from '../store/reducers/userWordsReducer';
+import { getAllTranslates } from '../../helpers/gameHelpers';
+import { DIFFICULT_GROUP } from '../../components/e-book/cosnstants';
+import { StatisticState } from '../types/statisticTypes';
 
 function* requestAudioCallDataWorker(data: RequestAucioCallDataAction) {
   try {
     yield put(audioCallRequestStartAction());
-    const { group, page } = data.payload;
+    const { group, page, userId, book } = data.payload;
     yield put(setAudioCallWordsSectionAction({ group, page }));
-    const wordsResponse: Word[] = yield call(
+    const wordsResponse: WordWithCustomProps[] = yield call(
       WordsService.getWords,
       group,
       page
     );
-    yield put(setAudioCallDataAction(wordsResponse));
+    if (book && userId) {
+      yield put(setAudiocallBookAction());
+      const notStudiedWords: WordWithCustomProps[] = yield call(
+        WordsService.getNotStudiedWords,
+        userId,
+        group,
+        page
+      );
+      yield put(
+        setAudioCallDataAction({
+          wordsForQuestions: notStudiedWords,
+          answers: getAllTranslates(wordsResponse),
+        })
+      );
+    } else {
+      yield put(
+        setAudioCallDataAction({
+          wordsForQuestions: wordsResponse,
+          answers: getAllTranslates(wordsResponse),
+        })
+      );
+    }
     yield put(audioCallRequestEndAction());
+    yield put(changeAudioCallStatusAction(AudioCallGameStatus.INRUN));
   } catch (e) {
     console.log(e);
   }
@@ -57,14 +94,25 @@ function* audiocallCorrectAnswerWorker(data: AudioCallCorrectAction) {
   try {
     const { userId, wordId, words } = data.payload;
     const method = requestMethodChoiser(words, wordId);
+    //
+    const statisticStatus: StatisticState = yield call(
+      checkStatisticDataKey,
+      userId
+    );
+    yield put(setStatisticAction(statisticStatus));
+    //
+    if (isNewWord(words, wordId)) {
+      yield put(changeAudioCallNewWordAction());
+    }
     yield put(changeAudioCallCorrectAnswerAction());
     if (method === 'POST') {
-      yield call(
+      const newWord: UserWordResponse = yield call(
         UserWordsService.setUserWord,
         userId,
         wordId,
         userWordFromAudioCallCorrect()
       );
+      yield put(setOneUserWordAction(newWord));
     } else {
       const chosenWord = words.find(
         wordItem => wordItem.wordId === wordId
@@ -74,7 +122,7 @@ function* audiocallCorrectAnswerWorker(data: AudioCallCorrectAction) {
         chosenWord,
         'audiocall'
       );
-      yield call(
+      const updatedWord: UserWordResponse = yield call(
         UserWordsService.updateUserWord,
         userId,
         wordId,
@@ -83,7 +131,9 @@ function* audiocallCorrectAnswerWorker(data: AudioCallCorrectAction) {
       if (!compareDiff(chosenWord, updatedUserWord)) {
         yield put(increaseLearnedWordsAtion());
       }
+      yield put(setOneUserWordAction(updatedWord));
     }
+    yield put(increaseSaveTrackerAction());
   } catch (e) {
     console.log(e);
   }
@@ -93,14 +143,25 @@ function* audiocallInCorrectAnswerWorker(data: AudioCallInCorrectAction) {
   try {
     const { words, userId, wordId } = data.payload;
     const method = requestMethodChoiser(words, wordId);
+    //
+    const statisticStatus: StatisticState = yield call(
+      checkStatisticDataKey,
+      userId
+    );
+    yield put(setStatisticAction(statisticStatus));
+    //
+    if (isNewWord(words, wordId)) {
+      yield put(changeAudioCallNewWordAction());
+    }
     yield put(changeAudioCallIncorrectAnswerAction());
     if (method === 'POST') {
-      yield call(
+      const newWord: UserWordResponse = yield call(
         UserWordsService.setUserWord,
         userId,
         wordId,
         userWordFromAudioCallInCorrect()
       );
+      yield put(setOneUserWordAction(newWord));
     } else {
       const chosenWord = words.find(
         wordItem => wordItem.wordId === wordId
@@ -110,7 +171,7 @@ function* audiocallInCorrectAnswerWorker(data: AudioCallInCorrectAction) {
         chosenWord,
         'audiocall'
       );
-      yield call(
+      const updatedWord: UserWordResponse = yield call(
         UserWordsService.updateUserWord,
         userId,
         wordId,
@@ -119,7 +180,37 @@ function* audiocallInCorrectAnswerWorker(data: AudioCallInCorrectAction) {
       if (!compareDiff(chosenWord, updatedUserWord)) {
         yield put(decreaseLearnedWordsAtion());
       }
+      yield put(setOneUserWordAction(updatedWord));
     }
+    yield put(increaseSaveTrackerAction());
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+function* requestAudioCallHardWordsWorker(data: RequestAudiocallHardWords) {
+  try {
+    yield put(audioCallRequestStartAction());
+    yield put(
+      setAudioCallWordsSectionAction({
+        group: DIFFICULT_GROUP,
+        page: DIFFICULT_GROUP,
+      })
+    );
+    const { userId } = data.payload;
+    const hardWordsResponse: WordWithCustomProps[] = yield call(
+      WordsService.getTwentyHardWords,
+      userId
+    );
+    yield put(
+      setAudioCallDataAction({
+        wordsForQuestions: hardWordsResponse,
+        answers: getAllTranslates(hardWordsResponse),
+      })
+    );
+    console.log(hardWordsResponse);
+    yield put(audioCallRequestEndAction());
+    yield put(changeAudioCallStatusAction(AudioCallGameStatus.INRUN));
   } catch (e) {
     console.log(e);
   }
@@ -137,6 +228,10 @@ function* audioCallGameWatcher() {
   yield takeEvery(
     AudioCallGameActions.AUDIOCALL_INCORRECT_ANSWER,
     audiocallInCorrectAnswerWorker
+  );
+  yield takeEvery(
+    AudioCallGameActions.REQUEST_AUDIOCALL_HARD_WORDS,
+    requestAudioCallHardWordsWorker
   );
 }
 

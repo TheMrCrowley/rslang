@@ -3,27 +3,30 @@ import {
   WordsActionTypes,
   RequestWordsAction,
   RequestWordsWithPropsAction,
+  RequestHardWordsAction,
 } from '../types/wordsTypes';
 import WordsService from '../../services/words/wordsService';
 import { requestActionCreator } from '../store/reducers/requestReducer';
 import { RequestActionTypes } from '../types/requestTypes';
-import { setWordsAction } from '../store/reducers/wordsReducer';
 import {
-  Word,
-  WordWithCustomProps,
-} from '../../services/words/wordsServiceTypes';
+  setHardWordsAction,
+  setWordsAction,
+  wordsRequestEndAction,
+  wordsRequestStartAction,
+} from '../store/reducers/wordsReducer';
+import { WordWithCustomProps } from '../../services/words/wordsServiceTypes';
 
 function* requestWordsWorker(data: RequestWordsAction) {
   try {
-    yield put(requestActionCreator(RequestActionTypes.REQUEST_START));
+    yield put(wordsRequestStartAction());
     const { group, page } = data.payload;
-    const wordsResponse: Word[] = yield call(
+    const wordsResponse: WordWithCustomProps[] = yield call(
       WordsService.getWords,
       group,
       page
     );
     yield put(setWordsAction(wordsResponse));
-    yield put(requestActionCreator(RequestActionTypes.REQUEST_SUCCESS));
+    yield put(wordsRequestEndAction());
   } catch (e) {
     yield put(requestActionCreator(RequestActionTypes.REQUEST_ERROR));
   }
@@ -31,7 +34,7 @@ function* requestWordsWorker(data: RequestWordsAction) {
 
 function* requestWordsWithCustomProps(data: RequestWordsWithPropsAction) {
   try {
-    yield put(requestActionCreator(RequestActionTypes.REQUEST_START));
+    yield put(wordsRequestStartAction());
     const { userId, group, page } = data.payload;
     const wordsResponse: WordWithCustomProps[] = yield call(
       WordsService.getWordsWithCustomProps,
@@ -40,9 +43,24 @@ function* requestWordsWithCustomProps(data: RequestWordsWithPropsAction) {
       page
     );
     yield put(setWordsAction(wordsResponse));
-    yield put(requestActionCreator(RequestActionTypes.REQUEST_SUCCESS));
+    yield put(wordsRequestEndAction());
   } catch (e) {
     yield put(requestActionCreator(RequestActionTypes.REQUEST_ERROR));
+  }
+}
+
+function* requestHardWordsWorker(data: RequestHardWordsAction) {
+  try {
+    yield put(wordsRequestStartAction());
+    const { userId } = data.payload;
+    const wordsResponse: WordWithCustomProps[] = yield call(
+      WordsService.getHardWords,
+      userId
+    );
+    yield put(setHardWordsAction(wordsResponse));
+    yield put(wordsRequestEndAction());
+  } catch (e) {
+    console.log(e);
   }
 }
 
@@ -52,6 +70,7 @@ function* wordsWatcher() {
     WordsActionTypes.REQUEST_WORDS_PROPS,
     requestWordsWithCustomProps
   );
+  yield takeEvery(WordsActionTypes.REQUEST_HARD_WORDS, requestHardWordsWorker);
 }
 
 export default wordsWatcher;

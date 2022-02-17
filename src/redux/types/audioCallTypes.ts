@@ -1,7 +1,6 @@
 import { UserWordResponse } from '../../services/user-words/userWordsServiceTypes';
 import {
   WordWithCustomProps,
-  Word,
   WordsRequestData,
 } from '../../services/words/wordsServiceTypes';
 
@@ -17,12 +16,15 @@ export type AudioCallStatus =
   | AudioCallGameStatus.END;
 
 export interface AudioCallState {
-  words: Word[] | WordWithCustomProps[];
+  words: WordWithCustomProps[];
+  allAnswers: string[];
   gameStatus: AudioCallStatus;
   request: boolean;
   correctAnswers: number;
   group: number;
-  page: number;
+  initialPage: number;
+  currentPage: number;
+  book: boolean;
 }
 
 export enum AudioCallGameActions {
@@ -30,12 +32,27 @@ export enum AudioCallGameActions {
   SET_AUDIOCALL_DATA = 'SET_AUDIOCALL_DATA',
   AUDIOCALL_REQUEST_START = 'AUDIOCALL_REQUEST_START',
   AUDIOCALL_REQUEST_END = 'AUDIOCALL_REQUEST_END',
-  INCREASE_AUDIOCALL_CORRECT_ASWERS = 'INCREASE_AUDIOCALL_CORRECT_ASWERS',
   CHNAGE_AUDIOCALL_STATUS = 'CHNAGE_AUDIOCALL_STATUS',
   RESET_AUDIOCALL_STATE = 'RESET_AUDIOCALL_STATE',
   SET_AUDIOCALL_WORDS_SECTION = 'SET_AUDIOCALL_WORDS_SECTION',
   AUDIOCALL_CORRECT_ANSWER = 'AUDIOCALL_CORRECT_ANSWER',
   AUDIOCALL_INCORRECT_ANSWER = 'AUDIOCALL_INCORRECT_ANSWER',
+  SET_AUDIOCALL_BOOK = 'SET_AUDIOCALL_BOOK',
+  CHANGE_AUDIOCALL_CURRENT_PAGE = 'CHANGE_AUDIOCALL_CURRENT_PAGE',
+  REQUEST_AUDIOCALL_HARD_WORDS = 'REQUEST_AUDIOCALL_HARD_WORDS',
+}
+
+export interface RequestAudiocallHardWords {
+  type: AudioCallGameActions.REQUEST_AUDIOCALL_HARD_WORDS;
+  payload: { userId: string };
+}
+
+export interface ChangeAudiocallCurrentPageAction {
+  type: AudioCallGameActions.CHANGE_AUDIOCALL_CURRENT_PAGE;
+}
+
+export interface SetAudiocallBookAction {
+  type: AudioCallGameActions.SET_AUDIOCALL_BOOK;
 }
 
 export interface AudioCallCorrectAction {
@@ -58,12 +75,12 @@ export interface AudioCallInCorrectAction {
 
 export interface RequestAucioCallDataAction {
   type: AudioCallGameActions.REQUEST_AUDIOCALL_DATA;
-  payload: WordsRequestData;
+  payload: { group: number; page: number; book?: boolean; userId?: string };
 }
 
 export interface SetAucioCallDataAction {
   type: AudioCallGameActions.SET_AUDIOCALL_DATA;
-  payload: Word[] | WordWithCustomProps[];
+  payload: { wordsForQuestions: WordWithCustomProps[]; answers: string[] };
 }
 
 export interface SetWordsAucioCallAction {
@@ -77,10 +94,6 @@ export interface AucioCallRequestStartAction {
 
 export interface AucioCallRequestEndAction {
   type: AudioCallGameActions.AUDIOCALL_REQUEST_END;
-}
-
-export interface IncreaseAucioCallCorrectAnswersAction {
-  type: AudioCallGameActions.INCREASE_AUDIOCALL_CORRECT_ASWERS;
 }
 
 export interface ChangeAucioCallGameStatusAction {
@@ -98,8 +111,10 @@ export type AudioCallGameAction =
   | SetWordsAucioCallAction
   | AucioCallRequestStartAction
   | AucioCallRequestEndAction
-  | IncreaseAucioCallCorrectAnswersAction
   | ChangeAucioCallGameStatusAction
   | ResetAucioCallStateAction
   | AudioCallCorrectAction
-  | AudioCallInCorrectAction;
+  | AudioCallInCorrectAction
+  | SetAudiocallBookAction
+  | ChangeAudiocallCurrentPageAction
+  | RequestAudiocallHardWords;

@@ -11,7 +11,7 @@ interface WordProps {
   userWord?: UserWord;
 }
 
-const Word: FC<WordProps> = ({ word, color, isAuth, userWord }) => {
+const WordItem: FC<WordProps> = ({ word, color, isAuth, userWord }) => {
   return (
     // eslint-disable-next-line react/jsx-no-useless-fragment
     <>
@@ -58,4 +58,4 @@ const Word: FC<WordProps> = ({ word, color, isAuth, userWord }) => {
   );
 };
 
-export default Word;
+export default WordItem;

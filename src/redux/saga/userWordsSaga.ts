@@ -1,5 +1,10 @@
 import { call, put, takeEvery } from 'redux-saga/effects';
-import { increaseLearnedWordsAtion } from '../store/reducers/statisticReducer';
+import {
+  increaseSaveTrackerAction,
+  increaseLearnedWordsAtion,
+  setStatisticAction,
+} from '../store/reducers/statisticReducer';
+
 import {
   ChangeToHardAction,
   ChangeToStudiedAction,
@@ -26,6 +31,14 @@ import {
   changeToStudied,
   updateUserWordsState,
 } from '../../helpers/updateUserWordBody';
+import WordsService from '../../services/words/wordsService';
+import { WordWithCustomProps } from '../../services/words/wordsServiceTypes';
+import {
+  removeOneHardWordAction,
+  setOneWordAction,
+} from '../store/reducers/wordsReducer';
+import { checkStatisticDataKey } from '../../helpers/statisticHandlers';
+import { StatisticState } from '../types/statisticTypes';
 
 function* getUserWordsWorker(data: GetUserWordsAction) {
   try {
@@ -51,6 +64,12 @@ function* createHardUserWordWorker(data: CreateHardUserWordAction) {
       hardUserWord
     );
     yield put(setOneUserWordAction(userWord));
+    const newWord: WordWithCustomProps = yield call(
+      WordsService.getOneWordWithCustomProps,
+      userId,
+      wordId
+    );
+    yield put(setOneWordAction(newWord));
   } catch (e) {
     console.log(e);
   }
@@ -66,8 +85,20 @@ function* createStudiedUserWordWroker(data: CreateStudiedUserWordAction) {
       wordId,
       studiedUserWord
     );
-    yield put(increaseLearnedWordsAtion());
     yield put(setOneUserWordAction(userWord));
+    const newWord: WordWithCustomProps = yield call(
+      WordsService.getOneWordWithCustomProps,
+      userId,
+      wordId
+    );
+    const statisticStatus: StatisticState = yield call(
+      checkStatisticDataKey,
+      userId
+    );
+    yield put(setStatisticAction(statisticStatus));
+    yield put(setOneWordAction(newWord));
+    yield put(increaseLearnedWordsAtion());
+    yield put(increaseSaveTrackerAction());
   } catch (e) {
     console.log(e);
   }
@@ -88,6 +119,12 @@ function* changeToHardWorker(data: ChangeToHardAction) {
       updatedUserWord
     );
     yield put(setUserWordsAction(updatedUserWords));
+    const newWord: WordWithCustomProps = yield call(
+      WordsService.getOneWordWithCustomProps,
+      userId,
+      wordId
+    );
+    yield put(setOneWordAction(newWord));
   } catch (e) {
     console.log(e);
   }
@@ -109,6 +146,20 @@ function* changeToStudiedWorker(data: ChangeToStudiedAction) {
     );
     yield put(increaseLearnedWordsAtion());
     yield put(setUserWordsAction(updatedUserWords));
+    const newWord: WordWithCustomProps = yield call(
+      WordsService.getOneWordWithCustomProps,
+      userId,
+      wordId
+    );
+    const statisticStatus: StatisticState = yield call(
+      checkStatisticDataKey,
+      userId
+    );
+    yield put(setStatisticAction(statisticStatus));
+    yield put(setOneWordAction(newWord));
+    yield put(increaseLearnedWordsAtion());
+    yield put(increaseSaveTrackerAction());
+    yield put(removeOneHardWordAction(newWord));
   } catch (e) {
     console.log(e);
   }

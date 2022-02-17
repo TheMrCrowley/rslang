@@ -1,52 +1,25 @@
 /* eslint-disable jsx-a11y/media-has-caption */
-import { Box, Typography } from '@mui/material';
-import React, {
-  FC,
-  LegacyRef,
-  MutableRefObject,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
-import { useDispatch } from 'react-redux';
+import React, { FC } from 'react';
 import { styled } from '@mui/material/styles';
 import CircularProgress from '@mui/material/CircularProgress';
-import useTypedSelector from '../../hooks/useTypedSelector';
-import getRandomNumber from '../../helpers/getRandomNumber';
-import {
-  compareAnswers,
-  getQuestionItems,
-  SprintQuestionItem,
-} from './SprintModel';
+import { Box } from '@mui/material';
 
-import {
-  changeSprintStatusAction,
-  requestSprintDataAction,
-  resetSprintStateAction,
-  sprintCorrectAction,
-  sprintInCorrectAction,
-} from '../../redux/store/reducers/sprintGameReducer';
 import { SprintGameStatus } from '../../redux/types/sprintTypes';
 import SprintMenu from './SprintMenu';
-import ResultLine from './ResultLine';
 import Results from './Results';
-import getAssetsUrl from '../../helpers/getAssetsUrl';
-import MainPageLayoutButton from '../pages/MainPageLayoutButton';
-import {
-  colors,
-  darkColors,
-  darkCorrectColor,
-  darkIncorrectColor,
-} from '../e-book/cosnstants';
-import { isNewWord } from '../../helpers/statisticHandlers';
-import { changeSprintNewWordAction } from '../../redux/store/reducers/statisticReducer';
-import ElementsToCenterWrapper from '../ui/ElementsToCenterWrapper';
-import GameWhiteContent from '../ui/GameWhiteContent';
-import CountDown from '../ui/CountDown';
+import { colors } from '../e-book/cosnstants';
 import GamePageWrapper from '../ui/GamePageWrapper';
-import SprintInGameUpAssets from '../ui/SprintInGameUpAssets';
+import SprintQuestion from './SprintQuestion';
+import useSprintGame from './useSprintGame';
+
+const StyledBox = styled(Box)<{ group: number }>(({ group }) => ({
+  width: '100%',
+  display: 'flex',
+  flex: '1 1 auto',
+  justifyContent: 'center',
+  alignItems: 'center',
+  backgroundColor: colors[group],
+}));
 
 const StyledProgress = styled(CircularProgress)`
   color: #202026;
@@ -55,192 +28,50 @@ const StyledProgress = styled(CircularProgress)`
 `;
 
 const SprintPage: FC = () => {
-  const correctAudio = useRef<HTMLAudioElement>();
-  const inCorrectAudio = useRef<HTMLAudioElement>();
-  // redux
-  const { userWords } = useTypedSelector(store => store.userWords);
-  const authState = useTypedSelector(store => store.auth);
-  const sprintGameState = useTypedSelector(store => store.sprintGame);
-  const dispatch = useDispatch();
-  //
-  const [currentQuestion, setCurrentQuestion] = useState<SprintQuestionItem>(
-    {} as SprintQuestionItem
-  );
-  const [gameQuestions, setGameQuestions] = useState<SprintQuestionItem[]>([
-    {} as SprintQuestionItem,
-  ] as SprintQuestionItem[]);
-  const [correctAnswers, setCorrectAnswers] = useState<SprintQuestionItem[]>(
-    [] as SprintQuestionItem[]
-  );
-  const [inCorrectAnswers, setInCorrectAnswers] = useState<
-    SprintQuestionItem[]
-  >([] as SprintQuestionItem[]);
+  // TODO switch src to const's
+  // TODO add description to the game
+  // TODO remove to hook
+  const {
+    gameState,
+    authState,
+    correctAnswers,
+    inCorrectAnswers,
+    handleInCorrectAnswer,
+    restartHandler,
+    startHandler,
+    backHandler,
+    handleCorrectAnswer,
+    group,
+  } = useSprintGame();
 
-  const startHandler = (group: number) => {
-    const randomPage = getRandomNumber(0, 29);
-    dispatch(requestSprintDataAction({ group, page: randomPage }));
-  };
-
-  const restartHandler = useCallback(() => {
-    const { group, page } = sprintGameState;
-    dispatch(requestSprintDataAction({ group, page }));
-  }, [sprintGameState.group, sprintGameState.page]);
-
-  const nextQuestion = () => {
-    setGameQuestions(prev => {
-      setCurrentQuestion(prev.pop() as SprintQuestionItem);
-      return prev;
-    });
-  };
-
-  const showResults = () => {
-    dispatch(changeSprintStatusAction(SprintGameStatus.END));
-  };
-
-  const playHandler = (ref: MutableRefObject<HTMLAudioElement>) => {
-    if (ref.current) {
-      ref.current.play();
-    }
-  };
-
-  const answerHandler = (answer: boolean) => {
-    const isCorrect = compareAnswers(currentQuestion.isCorrect, answer);
-    if (authState.isAuth) {
-      const { userId } = authState.userData;
-      const { wordId } = currentQuestion;
-      if (isNewWord(userWords, wordId)) {
-        dispatch(changeSprintNewWordAction());
-      }
-      if (isCorrect) {
-        dispatch(sprintCorrectAction({ userId, wordId, words: userWords }));
-      } else {
-        dispatch(sprintInCorrectAction({ userId, wordId, words: userWords }));
-      }
-    }
-    if (isCorrect) {
-      setCorrectAnswers(prev => [...prev, { ...currentQuestion }]);
-      playHandler(correctAudio as MutableRefObject<HTMLAudioElement>);
-    } else {
-      setInCorrectAnswers(prev => [...prev, { ...currentQuestion }]);
-      playHandler(inCorrectAudio as MutableRefObject<HTMLAudioElement>);
-    }
-    if (gameQuestions.length) {
-      nextQuestion();
-    } else {
-      showResults();
-    }
-  };
-
-  useEffect(() => {
-    if (gameQuestions.length) {
-      dispatch(changeSprintStatusAction(SprintGameStatus.INRUN));
-    }
-  }, [gameQuestions.length, dispatch]);
-
-  useEffect(() => {
-    return () => {
-      dispatch(resetSprintStateAction());
-    };
-  }, []);
-
-  useMemo(() => {
-    setGameQuestions(getQuestionItems(sprintGameState.words));
-    nextQuestion();
-  }, [sprintGameState.words]);
-
-  const { group } = sprintGameState;
-
-  if (sprintGameState.request) {
-    return <StyledProgress />;
+  if (gameState.request) {
+    return (
+      <StyledBox group={group}>
+        <StyledProgress size={100} />
+      </StyledBox>
+    );
   }
-
+  console.log('group from game wrapper', group);
   return (
     <GamePageWrapper color={colors[group]}>
-      <>
-        <audio
-          src={getAssetsUrl('files/01_0001.mp3')}
-          ref={correctAudio as LegacyRef<HTMLAudioElement>}
-        />
-        <audio
-          src={getAssetsUrl('files/01_0002.mp3')}
-          ref={inCorrectAudio as LegacyRef<HTMLAudioElement>}
-        />
-      </>
-      {sprintGameState.gameStatus === SprintGameStatus.PREPARE && (
-        <SprintMenu onClick={startHandler} />
+      {gameState.gameStatus === SprintGameStatus.PREPARE && (
+        <SprintMenu isAuth={authState.isAuth} onClick={startHandler} />
       )}
-      {sprintGameState.gameStatus === SprintGameStatus.INRUN && (
-        <>
-          <SprintInGameUpAssets color={darkColors[group]}>
-            <Typography
-              variant="h4"
-              color="white"
-              fontWeight="bold"
-              component="span"
-            >
-              Points: 0
-            </Typography>
-            <CountDown />
-          </SprintInGameUpAssets>
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '1rem',
-              mb: '2rem',
-            }}
-          >
-            <ElementsToCenterWrapper>
-              <GameWhiteContent>{currentQuestion.word}</GameWhiteContent>
-            </ElementsToCenterWrapper>
-            <ElementsToCenterWrapper>
-              <GameWhiteContent>{currentQuestion.answer}</GameWhiteContent>
-            </ElementsToCenterWrapper>
-          </Box>
-          <ElementsToCenterWrapper>
-            <MainPageLayoutButton
-              color={darkIncorrectColor}
-              onClick={() => answerHandler(false)}
-              text="incorrect"
-            />
-            <MainPageLayoutButton
-              color={darkCorrectColor}
-              onClick={() => answerHandler(true)}
-              text="correct"
-            />
-          </ElementsToCenterWrapper>
-        </>
+      {gameState.gameStatus === SprintGameStatus.INRUN && (
+        <SprintQuestion
+          correctAnswer={handleCorrectAnswer}
+          incorrectAnswer={handleInCorrectAnswer}
+          auth={authState}
+        />
       )}
-      {sprintGameState.gameStatus === SprintGameStatus.END && (
-        <>
-          <Results
-            correct={correctAnswers.map(item => (
-              <ResultLine
-                audio={item.audio}
-                translate={item.translate}
-                word={item.word}
-                key={item.wordId}
-                color={darkCorrectColor}
-              />
-            ))}
-            incorrect={inCorrectAnswers.map(item => (
-              <ResultLine
-                audio={item.audio}
-                translate={item.translate}
-                word={item.word}
-                key={item.wordId}
-                color={darkIncorrectColor}
-              />
-            ))}
-            correctNum={correctAnswers.length}
-            incorrectNum={inCorrectAnswers.length}
-          />
-          <MainPageLayoutButton
-            color={darkColors[group]}
-            onClick={restartHandler}
-            text="Play again"
-          />
-        </>
+      {gameState.gameStatus === SprintGameStatus.END && (
+        <Results
+          correctAnswers={correctAnswers}
+          inCorrectAnswers={inCorrectAnswers}
+          restartHandler={restartHandler}
+          group={group}
+          backHandler={backHandler}
+        />
       )}
     </GamePageWrapper>
   );

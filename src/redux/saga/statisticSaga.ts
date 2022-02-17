@@ -31,12 +31,18 @@ function* requestStatisticWorker(data: RequestStatisticAction) {
 function* updateStatisticWorker(data: SaveStatisticAction) {
   try {
     const { newStatistic, userId } = data.payload;
+    console.log('in redux old', newStatistic.wordStatistic);
     const updatedStatistic: StatisticRequest = yield call(
       updateStatistic,
       newStatistic
     );
-    console.log(updatedStatistic);
-    yield call(StatisticService.updateStatistic, userId, updatedStatistic);
+    const statisticToSet: StatisticResponse = yield call(
+      StatisticService.updateStatistic,
+      userId,
+      updatedStatistic
+    );
+    yield put(setStatisticAction(getStatisticState(statisticToSet)));
+    console.log('in redux now', statisticToSet.optional.wordStatistic);
   } catch (e) {
     console.log(e);
   }

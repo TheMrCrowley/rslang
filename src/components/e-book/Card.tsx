@@ -5,26 +5,25 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { Divider } from '@mui/material';
 import AuthorizedCardContent from './ui/authorized-content/AuthorizedCardContent';
-import handleTagInText from './utils';
-// **** TO DO ***** join isAuth to original source
-import { colors, isAuth } from './cosnstants';
-// import {isDifficult, isStudied} from './cosnstants';
+import handleTagInText from '../../helpers/handleTagInText';
+import { colors } from './cosnstants';
 import Player from './Player';
-import Word from './Word';
+import WordItem from './Word';
 import Meaning from './Meaning';
 import Example from './Example';
 import { WordWithCustomProps } from '../../services/words/wordsServiceTypes';
+import getAssetsUrl from '../../helpers/getAssetsUrl';
 
 export interface BasicCardProps {
+  isAuth: boolean;
   cardData: WordWithCustomProps;
 }
 
-export const BASE_CONTENT_URL =
-  'https://github.com/rolling-scopes-school/react-rslang-be/blob/main/';
-
-const BasicCard: FC<BasicCardProps> = ({ cardData }) => {
+const BasicCard: FC<BasicCardProps> = ({ isAuth, cardData }) => {
+  // TODO закинуть эти данные в стейт и попробовать обновлять по одной карточке
   const {
     _id,
+    id,
     group,
     image,
     word,
@@ -52,13 +51,9 @@ const BasicCard: FC<BasicCardProps> = ({ cardData }) => {
         height: 'auto',
       }}
     >
-      <CardMedia
-        component="img"
-        height="140"
-        image={`${BASE_CONTENT_URL}/${image}?raw=true`}
-      />
+      <CardMedia component="img" height="140" image={getAssetsUrl(image)} />
       <CardContent sx={{ textAlign: 'right' }}>
-        <Word
+        <WordItem
           word={word}
           color={colors[group]}
           isAuth={isAuth}
@@ -72,8 +67,8 @@ const BasicCard: FC<BasicCardProps> = ({ cardData }) => {
         >
           {wordTranslate} {transcription}
           <Player
-            urls={[audio, audioMeaning, audioExample].map(
-              url => `${BASE_CONTENT_URL}/${url}?raw=true`
+            urls={[audio, audioMeaning, audioExample].map(url =>
+              getAssetsUrl(url)
             )}
           />
         </Typography>
@@ -97,7 +92,7 @@ const BasicCard: FC<BasicCardProps> = ({ cardData }) => {
       </CardContent>
       {isAuth && (
         <AuthorizedCardContent
-          wordId={_id}
+          wordId={_id || id}
           color={colors[group]}
           progress={userWord?.optional.correctStreak as number}
           isDifficult={userWord?.difficulty === 'hard'}

@@ -18,8 +18,6 @@ export const userWordsReducer = (
   action: UserWordsAction
 ): UserWordsState => {
   switch (action.type) {
-    case UserWordsActionTypes.GET_USER_WORDS:
-      return state;
     case UserWordsActionTypes.SET_ONE_USER_WORD:
       return { userWords: [...state.userWords, action.payload] };
     case UserWordsActionTypes.SET_USER_WORDS:

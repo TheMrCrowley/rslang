@@ -1,7 +1,14 @@
-import React, { ReactNode, ReactElement, FC } from 'react';
+import React, { FC } from 'react';
 import { styled } from '@mui/material/styles';
 import { Box, Divider, Typography } from '@mui/material';
-import { darkCorrectColor, darkIncorrectColor } from '../e-book/cosnstants';
+import {
+  darkColors,
+  darkCorrectColor,
+  darkIncorrectColor,
+} from '../e-book/cosnstants';
+import ResultLine from './ResultLine';
+import MainPageLayoutButton from '../pages/MainPageLayoutButton';
+import { SprintQuestionItem } from '../../helpers/gameHelpers';
 
 const ResultsWrapper = styled(Box)`
   height: 65vh;
@@ -9,6 +16,7 @@ const ResultsWrapper = styled(Box)`
   padding: 2.5rem 1rem 2.5rem 2.5rem;
   background-color: white;
   border-radius: 2em;
+  min-width: 25%;
 `;
 
 const StyledBox = styled(Box)`
@@ -20,32 +28,72 @@ const StyledBox = styled(Box)`
   overflow: auto;
 `;
 
+const ButtonWrapper = styled(Box)`
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+`;
+
 interface ResultsProps {
-  correct: ReactNode[] | ReactElement[];
-  incorrect: ReactNode[] | ReactElement[];
-  incorrectNum: number;
-  correctNum: number;
+  correctAnswers: SprintQuestionItem[];
+  inCorrectAnswers: SprintQuestionItem[];
+  restartHandler: () => void;
+  backHandler: () => void;
+  group: number;
 }
 const Results: FC<ResultsProps> = ({
-  correct,
-  incorrect,
-  correctNum,
-  incorrectNum,
+  correctAnswers,
+  inCorrectAnswers,
+  restartHandler,
+  group,
+  backHandler,
 }) => {
+  const correct = correctAnswers.map(item => (
+    <ResultLine
+      audio={item.audio}
+      translate={item.correctAnswer}
+      word={item.word}
+      key={item.wordId}
+      color={darkCorrectColor}
+    />
+  ));
+  const incorrect = inCorrectAnswers.map(item => (
+    <ResultLine
+      audio={item.audio}
+      translate={item.correctAnswer}
+      word={item.word}
+      key={item.wordId}
+      color={darkIncorrectColor}
+    />
+  ));
   return (
-    <ResultsWrapper>
-      <StyledBox>
-        <Typography variant="h4" color={darkCorrectColor}>
-          Correct: {correctNum}
-        </Typography>
-        {correct}
-        <Divider />
-        <Typography variant="h4" color={darkIncorrectColor}>
-          Incorrect: {incorrectNum}
-        </Typography>
-        {incorrect}
-      </StyledBox>
-    </ResultsWrapper>
+    <>
+      <ResultsWrapper>
+        <StyledBox>
+          <Typography variant="h4" color={darkCorrectColor}>
+            Correct: {correctAnswers.length}
+          </Typography>
+          {correct}
+          <Divider />
+          <Typography variant="h4" color={darkIncorrectColor}>
+            Incorrect: {inCorrectAnswers.length}
+          </Typography>
+          {incorrect}
+        </StyledBox>
+      </ResultsWrapper>
+      <ButtonWrapper>
+        <MainPageLayoutButton
+          color={darkColors[group]}
+          onClick={restartHandler}
+          text="Play again"
+        />
+        <MainPageLayoutButton
+          color={darkColors[group]}
+          onClick={backHandler}
+          text="Back to games"
+        />
+      </ButtonWrapper>
+    </>
   );
 };
 

@@ -1,25 +1,45 @@
-import { ListItem, ListItemIcon, ListItemText } from '@mui/material';
+import {
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+} from '@mui/material';
 import React, { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { styled } from '@mui/material/styles';
 
 type NavItemProps = {
   innerText: string;
-  onClick: () => void;
 };
 
-const NavItem: FC<NavItemProps> = ({ innerText, onClick, children }) => {
+const StyledListItem = styled(ListItem)`
+  @media (max-width: 750px) {
+    padding: 0.5rem 0;
+  }
+`;
+
+const StyledIcon = styled(ListItemIcon)`
+  @media (max-width: 840px) {
+    min-width: 30px;
+  }
+`;
+
+const NavItem: FC<NavItemProps> = ({ innerText, children }) => {
   const navigate = useNavigate();
   return (
-    <ListItem
+    <StyledListItem
       button
       onClick={() => {
-        onClick();
-        navigate(innerText.toLocaleLowerCase());
+        if (innerText.toLocaleLowerCase() === 'book') {
+          navigate('/book/0/0');
+        } else {
+          navigate(innerText.toLocaleLowerCase());
+        }
       }}
     >
-      <ListItemIcon>{children}</ListItemIcon>
+      <StyledIcon>{children}</StyledIcon>
       <ListItemText>{innerText}</ListItemText>
-    </ListItem>
+    </StyledListItem>
   );
 };
 

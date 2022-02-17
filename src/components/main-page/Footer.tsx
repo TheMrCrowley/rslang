@@ -28,11 +28,11 @@ const Footer = () => {
         alignItems: 'center',
         justifyContent: 'space-evenly',
         height: '4em',
-        color: window.location.pathname !== '/book' ? 'black' : 'white',
+        color: location.pathname !== '/book' ? 'black' : 'white',
         backgroundColor:
-          window.location.pathname !== '/book' &&
-          window.location.pathname !== '/sprint' &&
-          window.location.pathname !== '/audiocall'
+          !location.pathname.includes('/book') &&
+          location.pathname !== '/sprint' &&
+          location.pathname !== '/audiocall'
             ? darkBgColor
             : 'white',
         mb: 'auto',

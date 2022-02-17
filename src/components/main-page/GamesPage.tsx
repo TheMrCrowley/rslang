@@ -9,45 +9,44 @@ const StyledLink = styled(Link)`
   text-decoration: none;
 `;
 
+const StyledWrapper = styled(Box)`
+  flex: 1 1 auto;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+`;
+
+const LinksWrapper = styled(Box)`
+  display: flex;
+  flex-flow: row wrap;
+  gap: 2rem;
+  justify-content: space-evenly;
+  align-items: center;
+  padding: 4em;
+  background-color: ${lightBgColor};
+  border-radius: 3em;
+`;
+
 const GamesPage = () => {
   return (
-    <Box
-      sx={{
-        flex: '1',
-        display: 'flex',
-        justifyContent: 'space-around',
-        alignItems: 'center',
-        pl: '3.5rem',
-      }}
-    >
-      <Box
-        sx={{
-          display: 'flex',
-          flexFlow: 'row wrap',
-          gap: '2rem',
-          justifyContent: 'space-evenly',
-          alignItems: 'center',
-          p: '4em',
-          backgroundColor: lightBgColor,
-          borderRadius: '3em',
-        }}
-      >
-        <StyledLink to="/sprint">
+    <StyledWrapper>
+      <LinksWrapper>
+        <StyledLink to="sprint">
           <MainPageLayoutButton>
             <Typography variant="h2" fontWeight="bold">
               Sprint
             </Typography>
           </MainPageLayoutButton>
         </StyledLink>
-        <StyledLink to="/audiocall">
+        <StyledLink to="audiocall">
           <MainPageLayoutButton>
             <Typography variant="h2" fontWeight="bold">
               Audiocall
             </Typography>
           </MainPageLayoutButton>
         </StyledLink>
-      </Box>
-    </Box>
+      </LinksWrapper>
+    </StyledWrapper>
   );
 };
 

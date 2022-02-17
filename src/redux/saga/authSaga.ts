@@ -2,6 +2,8 @@ import { put, takeEvery, call } from 'redux-saga/effects';
 import { StorageKeys } from '../../services/enum';
 import AuthService from '../../services/auth/authService';
 import {
+  authRequestEndAction,
+  authRequestStartAction,
   setIsAuthAction,
   setUserDataAction,
 } from '../store/reducers/authReducer';
@@ -17,17 +19,24 @@ import LocalStorageService from '../../services/localStorageService';
 import { LoginResponseData } from '../../services/auth/authServiceTypes';
 import StatisticService from '../../services/statistic/statisticService';
 import {
+  checkStatisticDataKey,
   createAfterRegistration,
   getDate,
+  getStatisticState,
   updateStatisticAfterSignIn,
 } from '../../helpers/statisticHandlers';
-import { StatisticResponse } from '../../services/statistic/statisticServiceTypes';
+import {
+  StatisticRequest,
+  StatisticResponse,
+} from '../../services/statistic/statisticServiceTypes';
+import { setStatisticAction } from '../store/reducers/statisticReducer';
+import { StatisticState } from '../types/statisticTypes';
 
 function* registrationWorker(data: RegistrationAction) {
   try {
-    yield put(requestActionCreator(RequestActionTypes.REQUEST_START));
+    yield put(authRequestStartAction());
     const { name, email, password } = data.payload;
-    yield AuthService.registration({ name, email, password });
+    yield call(AuthService.registration, { name, email, password });
     const signinResponse: LoginResponseData = yield call(AuthService.login, {
       email,
       password,
@@ -43,7 +52,7 @@ function* registrationWorker(data: RegistrationAction) {
       signinResponse.userId,
       createAfterRegistration()
     );
-    yield put(requestActionCreator(RequestActionTypes.REQUEST_SUCCESS));
+    yield put(authRequestEndAction());
   } catch (e) {
     yield put(requestActionCreator(RequestActionTypes.REQUEST_ERROR));
   }
@@ -51,7 +60,7 @@ function* registrationWorker(data: RegistrationAction) {
 
 function* signInWorker(data: SigninAction) {
   try {
-    yield put(requestActionCreator(RequestActionTypes.REQUEST_START));
+    yield put(authRequestStartAction());
     const { email, password } = data.payload;
     const signinResponse: LoginResponseData = yield call(AuthService.login, {
       email,
@@ -68,13 +77,17 @@ function* signInWorker(data: SigninAction) {
       signinResponse.userId
     );
     if (!statistic.optional.wordStatistic[getDate()]) {
+      const newStatistic: StatisticRequest = yield call(
+        updateStatisticAfterSignIn,
+        statistic
+      );
       yield call(
         StatisticService.updateStatistic,
         signinResponse.userId,
-        updateStatisticAfterSignIn(statistic)
+        newStatistic
       );
     }
-    yield put(requestActionCreator(RequestActionTypes.REQUEST_SUCCESS));
+    yield put(authRequestEndAction());
   } catch (e) {
     yield put(requestActionCreator(RequestActionTypes.REQUEST_ERROR));
   }
@@ -82,6 +95,7 @@ function* signInWorker(data: SigninAction) {
 
 function* checkAuth() {
   try {
+    yield put(authRequestStartAction());
     const { userId } = LocalStorageService.getParsedItem<LoginResponseData>(
       StorageKeys.USER_DATA
     );
@@ -90,8 +104,14 @@ function* checkAuth() {
       yield LocalStorageService.getParsedItem<LoginResponseData>(
         StorageKeys.USER_DATA
       );
+    const statisticStatus: StatisticState = yield call(
+      checkStatisticDataKey,
+      userId
+    );
+    yield put(setStatisticAction(statisticStatus));
     yield put(setUserDataAction(userData));
     yield put(setIsAuthAction());
+    yield put(authRequestEndAction());
   } catch (e) {
     console.log(e);
   }
