@@ -12,8 +12,8 @@ import {
   UserWordResponse,
 } from '../services/user-words/userWordsServiceTypes';
 
-// export const getDate = () => new Date().toLocaleDateString();
-export const getDate = () => new Date().getMinutes();
+export const getDate = () => new Date().toLocaleDateString();
+// export const getDate = () => new Date().getMinutes();
 
 const getStatisticFromResponse = (
   statistic: StatisticResponse

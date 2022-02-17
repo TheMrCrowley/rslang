@@ -111,9 +111,6 @@ const useAudiocallQuestion = (
     const { userId } = auth.userData;
     if (auth.isAuth) {
       const { wordId } = currentQuestion;
-      if (isNewWord(userWords, wordId)) {
-        dispatch(changeAudioCallNewWordAction());
-      }
       if (isCorrect) {
         dispatch(audiocallCorrectAction({ userId, wordId, words: userWords }));
       } else {

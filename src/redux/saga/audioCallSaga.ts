@@ -1,5 +1,9 @@
 import { call, put, takeEvery } from 'redux-saga/effects';
-import { compareDiff } from '../../helpers/statisticHandlers';
+import {
+  checkStatisticDataKey,
+  compareDiff,
+  isNewWord,
+} from '../../helpers/statisticHandlers';
 import {
   userWordFromAudioCallCorrect,
   userWordFromAudioCallInCorrect,
@@ -28,8 +32,11 @@ import {
 import {
   changeAudioCallCorrectAnswerAction,
   changeAudioCallIncorrectAnswerAction,
+  changeAudioCallNewWordAction,
   decreaseLearnedWordsAtion,
   increaseLearnedWordsAtion,
+  increaseSaveTrackerAction,
+  setStatisticAction,
 } from '../store/reducers/statisticReducer';
 import {
   AudioCallCorrectAction,
@@ -42,7 +49,7 @@ import {
 import { setOneUserWordAction } from '../store/reducers/userWordsReducer';
 import { getAllTranslates } from '../../helpers/gameHelpers';
 import { DIFFICULT_GROUP } from '../../components/e-book/cosnstants';
-import { sprintRequestEndAction } from '../store/reducers/sprintGameReducer';
+import { StatisticState } from '../types/statisticTypes';
 
 function* requestAudioCallDataWorker(data: RequestAucioCallDataAction) {
   try {
@@ -87,6 +94,16 @@ function* audiocallCorrectAnswerWorker(data: AudioCallCorrectAction) {
   try {
     const { userId, wordId, words } = data.payload;
     const method = requestMethodChoiser(words, wordId);
+    //
+    const statisticStatus: StatisticState = yield call(
+      checkStatisticDataKey,
+      userId
+    );
+    yield put(setStatisticAction(statisticStatus));
+    //
+    if (isNewWord(words, wordId)) {
+      yield put(changeAudioCallNewWordAction());
+    }
     yield put(changeAudioCallCorrectAnswerAction());
     if (method === 'POST') {
       const newWord: UserWordResponse = yield call(
@@ -116,6 +133,7 @@ function* audiocallCorrectAnswerWorker(data: AudioCallCorrectAction) {
       }
       yield put(setOneUserWordAction(updatedWord));
     }
+    yield put(increaseSaveTrackerAction());
   } catch (e) {
     console.log(e);
   }
@@ -125,6 +143,16 @@ function* audiocallInCorrectAnswerWorker(data: AudioCallInCorrectAction) {
   try {
     const { words, userId, wordId } = data.payload;
     const method = requestMethodChoiser(words, wordId);
+    //
+    const statisticStatus: StatisticState = yield call(
+      checkStatisticDataKey,
+      userId
+    );
+    yield put(setStatisticAction(statisticStatus));
+    //
+    if (isNewWord(words, wordId)) {
+      yield put(changeAudioCallNewWordAction());
+    }
     yield put(changeAudioCallIncorrectAnswerAction());
     if (method === 'POST') {
       const newWord: UserWordResponse = yield call(
@@ -154,6 +182,7 @@ function* audiocallInCorrectAnswerWorker(data: AudioCallInCorrectAction) {
       }
       yield put(setOneUserWordAction(updatedWord));
     }
+    yield put(increaseSaveTrackerAction());
   } catch (e) {
     console.log(e);
   }

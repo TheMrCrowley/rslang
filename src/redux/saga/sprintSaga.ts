@@ -1,5 +1,9 @@
 import { call, put, takeEvery } from 'redux-saga/effects';
-import { compareDiff } from '../../helpers/statisticHandlers';
+import {
+  checkStatisticDataKey,
+  compareDiff,
+  isNewWord,
+} from '../../helpers/statisticHandlers';
 import {
   setWordsSectionAction,
   sprintRequestEndAction,
@@ -36,11 +40,15 @@ import requestMethodChoiser from '../../helpers/requestMethodChoiser';
 import {
   changeSprintCorrectAnswersAction,
   changeSprintIncorrectAnswersAction,
+  changeSprintNewWordAction,
   decreaseLearnedWordsAtion,
   increaseLearnedWordsAtion,
+  increaseSaveTrackerAction,
+  setStatisticAction,
 } from '../store/reducers/statisticReducer';
 import { setOneUserWordAction } from '../store/reducers/userWordsReducer';
 import { getAllTranslates } from '../../helpers/gameHelpers';
+import { StatisticState } from '../types/statisticTypes';
 
 function* requestSprintDataWorker(data: RequestSprintDataAction) {
   try {
@@ -110,6 +118,16 @@ function* sprintCorrectAnswerWorker(data: SprintCorrectAction) {
   try {
     const { words, userId, wordId } = data.payload;
     const method = requestMethodChoiser(words, wordId);
+    //
+    const statisticStatus: StatisticState = yield call(
+      checkStatisticDataKey,
+      userId
+    );
+    yield put(setStatisticAction(statisticStatus));
+    //
+    if (isNewWord(words, wordId)) {
+      yield put(changeSprintNewWordAction());
+    }
     yield put(changeSprintCorrectAnswersAction());
     if (method === 'POST') {
       const newWord: UserWordResponse = yield call(
@@ -139,6 +157,7 @@ function* sprintCorrectAnswerWorker(data: SprintCorrectAction) {
       }
       yield put(setOneUserWordAction(updatedWord));
     }
+    yield put(increaseSaveTrackerAction());
   } catch (e) {
     console.log(e);
   }
@@ -148,6 +167,16 @@ function* sprintInCorrectAnswerWorker(data: SprintInCorrectAction) {
   try {
     const { words, userId, wordId } = data.payload;
     const method = requestMethodChoiser(words, wordId);
+    //
+    const statisticStatus: StatisticState = yield call(
+      checkStatisticDataKey,
+      userId
+    );
+    yield put(setStatisticAction(statisticStatus));
+    //
+    if (isNewWord(words, wordId)) {
+      yield put(changeSprintNewWordAction());
+    }
     yield put(changeSprintIncorrectAnswersAction());
     if (method === 'POST') {
       const newWord: UserWordResponse = yield call(
@@ -177,6 +206,7 @@ function* sprintInCorrectAnswerWorker(data: SprintInCorrectAction) {
       }
       yield put(setOneUserWordAction(updatedWord));
     }
+    yield put(increaseSaveTrackerAction());
   } catch (e) {
     console.log(e);
   }

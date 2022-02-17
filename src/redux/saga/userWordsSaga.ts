@@ -151,7 +151,14 @@ function* changeToStudiedWorker(data: ChangeToStudiedAction) {
       userId,
       wordId
     );
+    const statisticStatus: StatisticState = yield call(
+      checkStatisticDataKey,
+      userId
+    );
+    yield put(setStatisticAction(statisticStatus));
     yield put(setOneWordAction(newWord));
+    yield put(increaseLearnedWordsAtion());
+    yield put(increaseSaveTrackerAction());
     yield put(removeOneHardWordAction(newWord));
   } catch (e) {
     console.log(e);
