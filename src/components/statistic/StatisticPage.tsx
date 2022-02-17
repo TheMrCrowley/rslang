@@ -10,6 +10,8 @@ import ChartWrapper from '../ui/ChartWrapper';
 import { darkBgColor } from '../e-book/cosnstants';
 import NewWordsStatistics from './NewWordsStatistics';
 import WordCountStatistic from './WordCountStatistic';
+import useLearnedWordData from '../../hooks/useLearnedWordData';
+import LearnedWordsStatisticsProgress from './LearnedWordsStatisticsProgress';
 
 const StatisticsWrapper = styled(Box)`
   flex: 1 1;
@@ -22,6 +24,11 @@ const StatisticsWrapper = styled(Box)`
 const StatisticPage: FC = () => {
   const { isAuth, userId } = useAuth();
   const statistic = useStatistic(isAuth, userId);
+  // const chartData = useLearnedWordData(
+  //   statistic?.completeStatistic?.optional?.wordStatistic
+  // );
+  // console.log("heiilskdjfkas",chartData);
+
   if (!isAuth) {
     return (
       <Typography
@@ -34,6 +41,7 @@ const StatisticPage: FC = () => {
       </Typography>
     );
   }
+
   return (
     <StatisticsWrapper>
       {statistic.wordStatistic && (
@@ -75,7 +83,16 @@ const StatisticPage: FC = () => {
       {statistic.learnedWords && (
         // TODO connent chart to real data
         <ChartWrapper text="Current words">
-          <WordCountStatistic studied={100} difficult={500} />
+          <WordCountStatistic userId={userId} />
+        </ChartWrapper>
+      )}
+      {statistic?.completeStatistic?.optional?.wordStatistic && (
+        <ChartWrapper text="Day to day progress">
+          <LearnedWordsStatisticsProgress
+            wordsStatistic={
+              statistic?.completeStatistic?.optional?.wordStatistic
+            }
+          />
         </ChartWrapper>
       )}
     </StatisticsWrapper>

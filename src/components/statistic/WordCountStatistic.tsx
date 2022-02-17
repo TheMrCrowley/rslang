@@ -1,27 +1,67 @@
 import { Box } from '@mui/material';
-import React, { FC } from 'react';
-import { PieChart, Pie, Cell, ResponsiveContainer, Legend } from 'recharts';
+import React, { FC, useEffect, useState } from 'react';
+import {
+  PieChart,
+  Pie,
+  Cell,
+  ResponsiveContainer,
+  Legend,
+  Tooltip,
+} from 'recharts';
+import WordsService from '../../services/words/wordsService';
 import {
   chartGreenColor,
-  chartLemonGreenColor,
   chartPurpleColor,
   chartSkyBlueColor,
-  colors,
 } from '../e-book/cosnstants';
 
 interface NewWordsStatisticsProps {
-  studied: number;
-  difficult: number;
+  userId: string;
 }
-
-const WordCountStatistic: FC<NewWordsStatisticsProps> = ({
-  studied,
-  difficult,
+const renderCustomizedLabel = ({
+  cx,
+  cy,
+  midAngle,
+  innerRadius,
+  outerRadius,
+  percent,
+  index,
 }) => {
+  const RADIAN = Math.PI / 180;
+  const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+  const x = cx + radius * Math.cos(-midAngle * RADIAN);
+  const y = cy + radius * Math.sin(-midAngle * RADIAN);
+
+  return (
+    <text
+      x={x}
+      y={y}
+      fill="white"
+      textAnchor={x > cx ? 'start' : 'end'}
+      dominantBaseline="central"
+    >
+      {`${(percent * 100).toFixed(0)}%`}
+    </text>
+  );
+};
+
+const WordCountStatistic: FC<NewWordsStatisticsProps> = ({ userId }) => {
+  const [studied, setStudied] = useState(0);
+  const [difficult, setDifficult] = useState(0);
+
+  useEffect(() => {
+    WordsService.getStudiedWordCount(userId).then(data => {
+      setStudied(data);
+    });
+
+    WordsService.getHardWords(userId).then(data => {
+      setDifficult(data.length);
+    });
+  }, []);
+
   const TOTAL_WORDS = 3600;
   const COLORS = [chartGreenColor, chartPurpleColor, chartSkyBlueColor];
   const WordsTypes = ['Learned', 'Difficult', 'Rest'];
-  const RADIAN = Math.PI / 180;
 
   const studiedDataItem = {
     name: WordsTypes[0],
@@ -40,32 +80,6 @@ const WordCountStatistic: FC<NewWordsStatisticsProps> = ({
 
   const data = [studiedDataItem, difficulltDataItem, restDataItem];
   console.log(data);
-
-  const renderCustomizedLabel = ({
-    cx,
-    cy,
-    midAngle,
-    innerRadius,
-    outerRadius,
-    percent,
-    index,
-  }) => {
-    const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-    const x = cx + radius * Math.cos(-midAngle * RADIAN);
-    const y = cy + radius * Math.sin(-midAngle * RADIAN);
-
-    return (
-      <text
-        x={x}
-        y={y}
-        fill="white"
-        textAnchor={x > cx ? 'start' : 'end'}
-        dominantBaseline="central"
-      >
-        {`${(percent * 100).toFixed(0)}%`}
-      </text>
-    );
-  };
 
   return (
     <Box sx={{ width: '100%', height: '300px' }}>

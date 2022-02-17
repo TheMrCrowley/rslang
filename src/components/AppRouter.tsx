@@ -30,6 +30,7 @@ import {
   updateStatistic,
 } from '../helpers/statisticHandlers';
 import TeamPage from './pages/TeamPage';
+import WordsService from '../services/words/wordsService';
 
 const AppRouter = () => {
   const dispatch = useDispatch();
