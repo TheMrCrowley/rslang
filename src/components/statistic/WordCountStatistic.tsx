@@ -58,6 +58,8 @@ const WordCountStatistic: FC<NewWordsStatisticsProps> = ({ userId }) => {
       setDifficult(data.length);
     });
   }, []);
+  
+  //TODO implement function and move code below
 
   const TOTAL_WORDS = 3600;
   const COLORS = [chartGreenColor, chartPurpleColor, chartSkyBlueColor];
