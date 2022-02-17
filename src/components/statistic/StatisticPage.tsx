@@ -8,12 +8,15 @@ import useAuth from '../../hooks/useAuth';
 import WordsLongStatistic from './WordsLongStatistic';
 import ChartWrapper from '../ui/ChartWrapper';
 import { darkBgColor } from '../e-book/cosnstants';
+import NewWordsStatistics from './NewWordsStatistics';
+import WordCountStatistic from './WordCountStatistic';
 
 const StatisticsWrapper = styled(Box)`
   flex: 1 1;
   display: flex;
   flex-flow: row wrap;
   justify-content: space-around;
+  row-gap: 1rem;
 `;
 
 const StatisticPage: FC = () => {
@@ -39,7 +42,7 @@ const StatisticPage: FC = () => {
         </ChartWrapper>
       )}
       {statistic?.completeStatistic?.optional?.wordStatistic && (
-        <ChartWrapper text="Total progress">
+        <ChartWrapper text="Day to day progress">
           <WordsLongStatistic
             wordsStatistic={
               statistic?.completeStatistic?.optional?.wordStatistic
@@ -57,6 +60,22 @@ const StatisticPage: FC = () => {
           <AudiocallShortStatistic
             audiocallStatistic={statistic.audiocallStatistic}
           />
+        </ChartWrapper>
+      )}
+      {statistic.audiocallStatistic && statistic.sprintStatistic && (
+        <ChartWrapper text="New words per game, %">
+          <NewWordsStatistics
+            rawData={[
+              statistic.sprintStatistic.newWords,
+              statistic.audiocallStatistic.newWords,
+            ]}
+          />
+        </ChartWrapper>
+      )}
+      {statistic.learnedWords && (
+        // TODO connent chart to real data
+        <ChartWrapper text="Current words">
+          <WordCountStatistic studied={100} difficult={500} />
         </ChartWrapper>
       )}
     </StatisticsWrapper>
