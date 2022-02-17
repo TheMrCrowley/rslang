@@ -34,7 +34,12 @@ module.exports = {
     path: path.join(__dirname, 'dist'),
     filename: '[name].[contenthash].js',
     assetModuleFilename: 'assets/[hash][ext][query]',
-    clean: true
+    // clean: true
+  },
+  optimization: {
+    splitChunks: {
+      chunks: 'all'
+    }
   },
   resolve: {
     extensions: ['.ts', '.tsx', '.js']

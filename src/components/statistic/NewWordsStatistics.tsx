@@ -1,47 +1,52 @@
 import { Box } from '@mui/material';
 import React, { FC } from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend } from 'recharts';
-import { chartBlueColor, chartDarkPurpleColor, colors } from '../e-book/cosnstants';
+import {
+  chartBlueColor,
+  chartDarkPurpleColor,
+  colors,
+} from '../e-book/cosnstants';
 
 interface NewWordsStatisticsProps {
   rawData: number[];
 }
 
+const renderCustomizedLabel = ({
+  cx,
+  cy,
+  midAngle,
+  innerRadius,
+  outerRadius,
+  percent,
+  index,
+}) => {
+  const RADIAN = Math.PI / 180;
+  const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+  const x = cx + radius * Math.cos(-midAngle * RADIAN);
+  const y = cy + radius * Math.sin(-midAngle * RADIAN);
+
+  return (
+    <text
+      x={x}
+      y={y}
+      fill="white"
+      textAnchor={x > cx ? 'start' : 'end'}
+      dominantBaseline="central"
+    >
+      {`${(percent * 100).toFixed(0)}%`}
+    </text>
+  );
+};
+
 const NewWordsStatistics: FC<NewWordsStatisticsProps> = ({ rawData }) => {
   const COLORS = [chartBlueColor, chartDarkPurpleColor];
   const GAMES = ['Sprint', 'AudioCall'];
-  const RADIAN = Math.PI / 180;
+
   const data = rawData.map((val, index) => {
     return { name: GAMES[index], value: val };
   });
-  
-  //TODO move to other component 
 
-  const renderCustomizedLabel = ({
-    cx,
-    cy,
-    midAngle,
-    innerRadius,
-    outerRadius,
-    percent,
-    index,
-  }) => {
-    const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-    const x = cx + radius * Math.cos(-midAngle * RADIAN);
-    const y = cy + radius * Math.sin(-midAngle * RADIAN);
-
-    return (
-      <text
-        x={x}
-        y={y}
-        fill="white"
-        textAnchor={x > cx ? 'start' : 'end'}
-        dominantBaseline="central"
-      >
-        {`${(percent * 100).toFixed(0)}%`}
-      </text>
-    );
-  };
+  // TODO move to other component
 
   return (
     <Box sx={{ width: '100%', height: '300px' }}>

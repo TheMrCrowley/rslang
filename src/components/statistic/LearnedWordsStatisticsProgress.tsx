@@ -34,7 +34,7 @@ const LearnedWordsStatisticsProgress: FC<WordsLongStatisticProps> = ({
           <Legend />
           <Bar
             dataKey="learnedWord"
-            name="New words per day"
+            name="Learned words"
             fill={chartGreenColor}
           />
         </BarChart>

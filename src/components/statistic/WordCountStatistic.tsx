@@ -25,7 +25,6 @@ const renderCustomizedLabel = ({
   innerRadius,
   outerRadius,
   percent,
-  index,
 }) => {
   const RADIAN = Math.PI / 180;
   const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
@@ -58,8 +57,8 @@ const WordCountStatistic: FC<NewWordsStatisticsProps> = ({ userId }) => {
       setDifficult(data.length);
     });
   }, []);
-  
-  //TODO implement function and move code below
+
+  // TODO implement function and move code below
 
   const TOTAL_WORDS = 3600;
   const COLORS = [chartGreenColor, chartPurpleColor, chartSkyBlueColor];
