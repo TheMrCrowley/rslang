@@ -14,6 +14,8 @@ const NewWordsStatistics: FC<NewWordsStatisticsProps> = ({ rawData }) => {
   const data = rawData.map((val, index) => {
     return { name: GAMES[index], value: val };
   });
+  
+  //TODO move to other component 
 
   const renderCustomizedLabel = ({
     cx,
