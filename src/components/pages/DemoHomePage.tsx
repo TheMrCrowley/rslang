@@ -9,7 +9,7 @@ import { styled } from '@mui/material/styles';
 import { RootState } from '../../redux/store';
 import Bg from '../../assets/Untitled.png';
 import MainPageLayoutButton from './MainPageLayoutButton';
-import { darkBgColor, lightBgColor } from '../e-book/cosnstants';
+import { darkBgColor, lightBgColor, mainBgColor } from '../e-book/cosnstants';
 
 const HomePageWrapper = styled(Box)`
   flex: 1 1 auto;
@@ -19,38 +19,78 @@ const HomePageWrapper = styled(Box)`
   gap: 1rem;
   background-image: url(${Bg});
   background-size: cover;
-  padding: 2rem 5rem 5rem 5rem;
+  @media (max-width: 720px) {
+    background-image: none;
+    background-color: ${mainBgColor};
+    justify-content: space-between;
+  }
 `;
 
 const StyledHeaderWrapper = styled(Box)`
   display: flex;
   flex-wrap: wrap;
-  gap: 1em;
   justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1rem;
+  padding-left: 4rem;
+  @media (max-width: 1200px) {
+    justify-content: space-around;
+    padding-left: 0;
+  }
+  @media (max-width: 720px) {
+    justify-content: space-around;
+    padding-left: 0;
+  }
 `;
 
 const StyledTitle = styled(Typography)`
+  font-size: 6rem;
   background-color: ${lightBgColor};
   border-radius: 3em;
   padding: 0.4em 1em;
   text-align: center;
   font-weight: bold;
+  @media (max-width: 560px) {
+    font-size: 3.5rem;
+  }
 ` as typeof Typography;
 
 const StyledSubTitle = styled(Typography)`
+  align-self: flex-start;
   max-width: 13em;
   color: ${darkBgColor};
   font-weight: bold;
-  padding: 0.8em;
+  text-align: center;
+  padding: 0.65em;
   border-radius: 3em;
   background-color: #fff;
+  @media (max-width: 1280px) {
+    font-size: 2.5rem;
+  }
+  @media (max-width: 720px) {
+    display: none;
+  }
 `;
 
 const ButtonWrapper = styled(Box)`
   display: flex;
   flex-flow: row wrap;
-  justify-content: space-evenly;
   gap: 1em;
+  justify-content: space-evenly;
+  @media (max-width: 768px) {
+    margin-bottom: 1rem;
+  }
+`;
+
+const TextWrapper = styled(Box)`
+  display: flex;
+  flex-flow: row wrap;
+  gap: 1em;
+  justify-content: space-evenly;
+  margin-bottom: 1rem;
+  @media (max-width: 768px) {
+    display: none;
+  }
 `;
 
 const TypografyBold = styled(Typography)`
@@ -63,14 +103,14 @@ const DemoHomePage = () => {
   return (
     <HomePageWrapper>
       <StyledHeaderWrapper>
-        <StyledTitle variant="h1" component="h1">
-          RS Lang
-        </StyledTitle>
+        <StyledTitle component="h1">RS Lang</StyledTitle>
         <StyledSubTitle variant="h3">
           Create account and get more options!
         </StyledSubTitle>
       </StyledHeaderWrapper>
-      <Typography variant="h3">Play and study English for free</Typography>
+      <TextWrapper>
+        <Typography variant="h3">Play and study English for free</Typography>
+      </TextWrapper>
       <ButtonWrapper>
         <MainPageLayoutButton
           onClick={() => navigate('/book/0/0')}
@@ -98,13 +138,13 @@ const DemoHomePage = () => {
         )}
         <MainPageLayoutButton onClick={() => navigate('/team')} text="About" />
       </ButtonWrapper>
-      <ButtonWrapper>
+      <TextWrapper>
         <TypografyBold variant="h5">More than 3500 words!</TypografyBold>
         <TypografyBold variant="h5">Two amazing games!</TypografyBold>
         <TypografyBold variant="h5">
           Detailed progress statistics for authorized users!
         </TypografyBold>
-      </ButtonWrapper>
+      </TextWrapper>
     </HomePageWrapper>
   );
 };
