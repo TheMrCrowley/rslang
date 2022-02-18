@@ -2,8 +2,9 @@ import { put, takeEvery, call } from 'redux-saga/effects';
 import { StorageKeys } from '../../services/enum';
 import AuthService from '../../services/auth/authService';
 import {
-  authRequestEndAction,
+  authRequestErrorAction,
   authRequestStartAction,
+  authRequestSuccessAction,
   setIsAuthAction,
   setUserDataAction,
 } from '../store/reducers/authReducer';
@@ -22,7 +23,6 @@ import {
   checkStatisticDataKey,
   createAfterRegistration,
   getDate,
-  getStatisticState,
   updateStatisticAfterSignIn,
 } from '../../helpers/statisticHandlers';
 import {
@@ -33,9 +33,9 @@ import { setStatisticAction } from '../store/reducers/statisticReducer';
 import { StatisticState } from '../types/statisticTypes';
 
 function* registrationWorker(data: RegistrationAction) {
+  const { name, email, password } = data.payload;
   try {
     yield put(authRequestStartAction());
-    const { name, email, password } = data.payload;
     yield call(AuthService.registration, { name, email, password });
     const signinResponse: LoginResponseData = yield call(AuthService.login, {
       email,
@@ -52,9 +52,11 @@ function* registrationWorker(data: RegistrationAction) {
       signinResponse.userId,
       createAfterRegistration()
     );
-    yield put(authRequestEndAction());
+    yield put(authRequestSuccessAction());
   } catch (e) {
-    yield put(requestActionCreator(RequestActionTypes.REQUEST_ERROR));
+    if (e.response.status === 417) {
+      yield put(authRequestErrorAction());
+    }
   }
 }
 

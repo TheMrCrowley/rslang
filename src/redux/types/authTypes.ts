@@ -4,6 +4,12 @@ import {
   RegistrationRequestData,
 } from '../../services/auth/authServiceTypes';
 
+export interface AuthState {
+  isAuth: boolean;
+  userData: LoginResponseData;
+  request: 'ERROR' | 'SUCCESS' | 'EXIST' | 'NONE';
+}
+
 export enum AuthActionsTypes {
   REGISTRATION = 'REGISTRATION',
   SIGNIN = 'SIGNIN',
@@ -12,21 +18,25 @@ export enum AuthActionsTypes {
   CHECK_AUTH = 'CHECK_AUTH',
   SET_IS_AUTH = 'SET_IS_AUTH',
   AUTH_REQUEST_START = 'AUTH_REQUEST_START',
-  AUTH_REQUEST_END = 'AUTH_REQUEST_END',
+  AUTH_REQUEST_SUCCESS = 'AUTH_REQUEST_SUCCESS',
+  AUTH_REQUEST_ERROR = 'AUTH_REQUEST_ERROR',
+  AUTH_REQUEST_RESET = 'AUTH_REQUEST_RESET',
 }
 
 export interface AuthRequestStartAction {
   type: AuthActionsTypes.AUTH_REQUEST_START;
 }
 
-export interface AuthRequestEndAction {
-  type: AuthActionsTypes.AUTH_REQUEST_END;
+export interface AuthRequestSuccessAction {
+  type: AuthActionsTypes.AUTH_REQUEST_SUCCESS;
 }
 
-export interface AuthState {
-  isAuth: boolean;
-  userData: LoginResponseData;
-  request: boolean;
+export interface AuthRequestErrorAction {
+  type: AuthActionsTypes.AUTH_REQUEST_ERROR;
+}
+
+export interface AuthRequestResetAction {
+  type: AuthActionsTypes.AUTH_REQUEST_RESET;
 }
 
 export interface RegistrationAction {
@@ -64,4 +74,6 @@ export type AuthAction =
   | CheckAuthAction
   | SetIsAuthAction
   | AuthRequestStartAction
-  | AuthRequestEndAction;
+  | AuthRequestSuccessAction
+  | AuthRequestErrorAction
+  | AuthRequestResetAction;

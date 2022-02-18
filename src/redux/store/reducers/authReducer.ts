@@ -14,7 +14,7 @@ import {
 const authInitialState: AuthState = {
   isAuth: false,
   userData: {} as LoginResponseData,
-  request: false,
+  request: 'NONE',
 };
 
 export const authReducer = (
@@ -29,9 +29,13 @@ export const authReducer = (
     case AuthActionsTypes.SET_USER_DATA:
       return { ...state, userData: { ...(action as SetDataAction).payload } };
     case AuthActionsTypes.AUTH_REQUEST_START:
-      return { ...state, request: true };
-    case AuthActionsTypes.AUTH_REQUEST_END:
-      return { ...state, request: false };
+      return { ...state, request: 'EXIST' };
+    case AuthActionsTypes.AUTH_REQUEST_SUCCESS:
+      return { ...state, request: 'SUCCESS' };
+    case AuthActionsTypes.AUTH_REQUEST_ERROR:
+      return { ...state, request: 'ERROR' };
+    case AuthActionsTypes.AUTH_REQUEST_RESET:
+      return { ...state, request: 'NONE' };
     default:
       return state;
   }
@@ -70,6 +74,14 @@ export const authRequestStartAction = (): AuthAction => ({
   type: AuthActionsTypes.AUTH_REQUEST_START,
 });
 
-export const authRequestEndAction = (): AuthAction => ({
-  type: AuthActionsTypes.AUTH_REQUEST_END,
+export const authRequestSuccessAction = (): AuthAction => ({
+  type: AuthActionsTypes.AUTH_REQUEST_SUCCESS,
+});
+
+export const authRequestErrorAction = (): AuthAction => ({
+  type: AuthActionsTypes.AUTH_REQUEST_ERROR,
+});
+
+export const authRequestResetAction = (): AuthAction => ({
+  type: AuthActionsTypes.AUTH_REQUEST_RESET,
 });

@@ -5,33 +5,60 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material';
-import React, { FC, useState } from 'react';
+import React, { ChangeEvent, FC, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import SendIcon from '@mui/icons-material/Send';
 import { useNavigate } from 'react-router-dom';
-import { registrationAction } from '../../redux/store/reducers/authReducer';
+import {
+  authRequestResetAction,
+  registrationAction,
+} from '../../redux/store/reducers/authReducer';
 import AuthPageContainer from '../ui/AuthPageContainer';
 import { RegistrationRequestData } from '../../services/auth/authServiceTypes';
 import useTypedSelector from '../../hooks/useTypedSelector';
+import useInput from '../../hooks/useInput';
 
 const RegistrationPage: FC = () => {
   const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { request } = useTypedSelector(store => store.auth);
 
-  const createFormData = (): RegistrationRequestData => ({
-    name,
-    email,
-    password,
+  const email = useInput('', {
+    isEmpty: true,
+    isEmail: true,
+  });
+  const password = useInput('', {
+    isEmpty: true,
+    minLength: 8,
   });
 
-  if (request) {
+  const registrationHandler = () => {
+    const userData: RegistrationRequestData = {
+      name,
+      email: email.value,
+      password: password.value,
+    };
+    dispatch(registrationAction(userData));
+  };
+
+  const restartHandler = () => {
+    dispatch(authRequestResetAction());
+  };
+
+  if (request === 'EXIST') {
     return <CircularProgress />;
   }
-
+  if (request === 'ERROR') {
+    return (
+      <AuthPageContainer>
+        <Typography textAlign="center">User with this e-mail exists</Typography>
+        <Button onClick={restartHandler} variant="contained">
+          Try again
+        </Button>
+      </AuthPageContainer>
+    );
+  }
   return (
     <AuthPageContainer>
       <Typography variant="h4">Sign up</Typography>
@@ -47,10 +74,9 @@ const RegistrationPage: FC = () => {
         required
       />
       <TextField
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          setEmail(e.target.value)
-        }
-        value={email}
+        onChange={(e: ChangeEvent<HTMLInputElement>) => email.onChange(e)}
+        onBlur={email.onBlur}
+        value={email.value}
         label="E-mail"
         variant="outlined"
         type="email"
@@ -58,10 +84,9 @@ const RegistrationPage: FC = () => {
       />
       <Tooltip title="Password must be longer than 8 characters">
         <TextField
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setPassword(e.target.value)
-          }
-          value={password}
+          onChange={(e: ChangeEvent<HTMLInputElement>) => password.onChange(e)}
+          onBlur={password.onBlur}
+          value={password.value}
           label="Password"
           variant="outlined"
           type="password"
@@ -69,11 +94,8 @@ const RegistrationPage: FC = () => {
         />
       </Tooltip>
       <Button
-        onClick={() => {
-          const user = createFormData();
-          dispatch(registrationAction(user));
-          navigate('/home');
-        }}
+        onClick={registrationHandler}
+        disabled={!(email.inputValid && password.inputValid)}
         variant="contained"
         endIcon={<SendIcon />}
       >
