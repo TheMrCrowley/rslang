@@ -90,9 +90,7 @@ function* signInWorker(data: SigninAction) {
     }
     yield put(authRequestSuccessAction());
   } catch (e) {
-    if (e.response.status === 403) {
-      yield put(authRequestErrorAction());
-    }
+    yield put(authRequestErrorAction());
   }
 }
 

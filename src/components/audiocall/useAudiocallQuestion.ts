@@ -25,6 +25,7 @@ import {
   getAllTranslates,
   getAudioCallQuestions,
 } from '../../helpers/gameHelpers';
+import { getUserWordsAction } from '../../redux/store/reducers/userWordsReducer';
 
 const useAudiocallQuestion = (
   auth: AuthState,
@@ -69,10 +70,9 @@ const useAudiocallQuestion = (
   };
 
   useEffect(() => {
-    if (words.length) {
-      setQuestions(getAudioCallQuestions(words, allAnswers));
-      nextQuestion();
-    }
+    dispatch(getUserWordsAction({ userId: auth.userData.userId }));
+    setQuestions(getAudioCallQuestions(words, allAnswers));
+    nextQuestion();
   }, []);
   useEffect(() => {
     if (currentQuestion.audio) {

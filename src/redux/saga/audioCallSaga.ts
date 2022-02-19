@@ -50,6 +50,7 @@ import { setOneUserWordAction } from '../store/reducers/userWordsReducer';
 import { getAllTranslates } from '../../helpers/gameHelpers';
 import { DIFFICULT_GROUP } from '../../components/e-book/cosnstants';
 import { StatisticState } from '../types/statisticTypes';
+import getRandomNumber from '../../helpers/getRandomNumber';
 
 function* requestAudioCallDataWorker(data: RequestAucioCallDataAction) {
   try {
@@ -202,10 +203,15 @@ function* requestAudioCallHardWordsWorker(data: RequestAudiocallHardWords) {
       WordsService.getTwentyHardWords,
       userId
     );
+    const wordsResponse: WordWithCustomProps[] = yield call(
+      WordsService.getWords,
+      getRandomNumber(0, 5),
+      getRandomNumber(0, 29)
+    );
     yield put(
       setAudioCallDataAction({
         wordsForQuestions: hardWordsResponse,
-        answers: getAllTranslates(hardWordsResponse),
+        answers: getAllTranslates(wordsResponse),
       })
     );
     console.log(hardWordsResponse);

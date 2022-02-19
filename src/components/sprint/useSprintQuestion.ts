@@ -20,6 +20,7 @@ import {
   SprintQuestionItem,
 } from '../../helpers/gameHelpers';
 import { DIFFICULT_GROUP } from '../e-book/cosnstants';
+import { getUserWordsAction } from '../../redux/store/reducers/userWordsReducer';
 
 const useSprintQuestion = (
   auth: AuthState,
@@ -55,6 +56,7 @@ const useSprintQuestion = (
   };
 
   useEffect(() => {
+    dispatch(getUserWordsAction({ userId: auth.userData.userId }));
     setQuestions(getSprintQuestions(words, allAnswers));
     nextQuestion();
   }, [words]);
