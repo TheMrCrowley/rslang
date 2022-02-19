@@ -17,7 +17,7 @@ const StyledListBox = styled(Box)({
 });
 
 const StyledProgress = styled(CircularProgress)`
-  color: #202026;
+  color: white;
   align-self: center;
 `;
 
