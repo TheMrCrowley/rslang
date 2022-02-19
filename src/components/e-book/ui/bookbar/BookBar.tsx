@@ -27,6 +27,8 @@ const StyledBarContainer = styled(Container)({
   justifyContent: 'space-evenly',
   alignItems: 'center',
   height: '4.5em',
+  position: 'sticky',
+  top: '0px',
 });
 
 const GameButton = styled(Button)`

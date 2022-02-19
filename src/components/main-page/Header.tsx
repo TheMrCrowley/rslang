@@ -1,6 +1,7 @@
 import React from 'react';
 import { styled } from '@mui/material/styles';
 import Container from '@mui/material/Container';
+import { AppBar, Toolbar } from '@mui/material';
 import Nav from './Nav';
 import AuthButton from './AuthButton';
 
@@ -11,12 +12,12 @@ const StyledContainer = styled(Container)`
 `;
 const Header = () => {
   return (
-    <header>
+    <Toolbar component="header">
       <StyledContainer>
         <Nav />
         <AuthButton />
       </StyledContainer>
-    </header>
+    </Toolbar>
   );
 };
 
