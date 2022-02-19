@@ -3,6 +3,7 @@ import { StorageKeys } from '../../services/enum';
 import AuthService from '../../services/auth/authService';
 import {
   authRequestErrorAction,
+  authRequestResetAction,
   authRequestStartAction,
   authRequestSuccessAction,
   setIsAuthAction,
@@ -13,8 +14,6 @@ import {
   RegistrationAction,
   SigninAction,
 } from '../types/authTypes';
-import { RequestActionTypes } from '../types/requestTypes';
-import { requestActionCreator } from '../store/reducers/requestReducer';
 import LocalStorageService from '../../services/localStorageService';
 
 import { LoginResponseData } from '../../services/auth/authServiceTypes';
@@ -61,9 +60,9 @@ function* registrationWorker(data: RegistrationAction) {
 }
 
 function* signInWorker(data: SigninAction) {
+  const { email, password } = data.payload;
   try {
     yield put(authRequestStartAction());
-    const { email, password } = data.payload;
     const signinResponse: LoginResponseData = yield call(AuthService.login, {
       email,
       password,
@@ -89,9 +88,11 @@ function* signInWorker(data: SigninAction) {
         newStatistic
       );
     }
-    yield put(authRequestEndAction());
+    yield put(authRequestSuccessAction());
   } catch (e) {
-    yield put(requestActionCreator(RequestActionTypes.REQUEST_ERROR));
+    if (e.response.status === 403) {
+      yield put(authRequestErrorAction());
+    }
   }
 }
 
@@ -113,9 +114,10 @@ function* checkAuth() {
     yield put(setStatisticAction(statisticStatus));
     yield put(setUserDataAction(userData));
     yield put(setIsAuthAction());
-    yield put(authRequestEndAction());
+    yield put(authRequestSuccessAction());
   } catch (e) {
-    console.log(e);
+    yield call(LocalStorageService.remove, StorageKeys.USER_DATA);
+    yield put(authRequestResetAction());
   }
 }
 

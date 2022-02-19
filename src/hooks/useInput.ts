@@ -1,9 +1,13 @@
 import { ChangeEvent, useEffect, useState } from 'react';
 
-const useValidation = (
-  value: string,
-  validations: Record<string, boolean | number | string>
-) => {
+interface Validations {
+  isEmpty?: boolean;
+  minLength?: number;
+  maxLength?: number;
+  isEmail?: boolean;
+}
+
+const useValidation = (value: string, validations: Validations) => {
   const [isEmpty, setIsEmpty] = useState(true);
   const [minLength, setMinLength] = useState(false);
   const [maxLength, setMaxLength] = useState(false);
@@ -57,10 +61,7 @@ const useValidation = (
   };
 };
 
-const useInput = (
-  initialValue: string,
-  validations: Record<string, boolean | number | string>
-) => {
+const useInput = (initialValue: string, validations: Validations) => {
   const [value, setValue] = useState(initialValue);
   const [isDirty, setDirty] = useState(false);
   const valid = useValidation(value, validations);
