@@ -45,7 +45,7 @@ const StatisticPage: FC = () => {
         </ChartWrapper>
       )}
       {statistic?.completeStatistic?.optional?.wordStatistic && (
-        <ChartWrapper text="Day to day progress">
+        <ChartWrapper text="Learned words per day">
           <WordsLongStatistic
             wordsStatistic={
               statistic?.completeStatistic?.optional?.wordStatistic
@@ -76,7 +76,7 @@ const StatisticPage: FC = () => {
         </ChartWrapper>
       )}
       {statistic.learnedWords && (
-        <ChartWrapper text="Current words">
+        <ChartWrapper text="Words status,%">
           <WordCountStatistic userId={userId} />
         </ChartWrapper>
       )}
