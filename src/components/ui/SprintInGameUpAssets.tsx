@@ -4,11 +4,14 @@ import React, { FC } from 'react';
 const StyledSprintInGameUpAssets = styled(Box)`
   display: flex;
   flex-flow: row wrap;
-  align-self: center;
   justify-content: space-around;
   column-gap: 1rem;
   border-radius: 2em;
   padding: 1em 2em;
+  @media (max-width: 480px) {
+    margin: 0 2rem;
+    padding: 1em 1em;
+  }
 `;
 
 interface SprintInGameUpAssetsProps {

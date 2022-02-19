@@ -22,6 +22,7 @@ interface SprintQuestionProps {
 
 const StyledButtonWrapper = styled(Box)`
   display: flex;
+  flex-flow: row wrap;
   justify-content: center;
   gap: 1rem;
 `;

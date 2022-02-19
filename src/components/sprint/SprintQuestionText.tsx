@@ -7,23 +7,33 @@ interface SprintQuestionTextProps {
   answer: string;
 }
 
+const StyledText = styled(Typography)`
+  font-weght: bold;
+  font-size: 4.5rem;
+  text-align: center;
+  @media (max-width: 520px) {
+    font-size: 2.5rem;
+    word-break: break-all;
+    margin: 0 1rem;
+  }
+`;
+
 const StyledTextWrapper = styled(Box)`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
+  gap: 0.5rem;
   color: #fff;
+  @media (max-width: 520px) {
+    margin: 2rem 0;
+  }
 `;
 
 const SprintQuestionText: FC<SprintQuestionTextProps> = ({ word, answer }) => {
   return (
     <StyledTextWrapper>
-      <Typography variant="h2" component="p" fontWeight="bold">
-        {word}
-      </Typography>
-      <Typography variant="h2" component="p" fontWeight="bold">
-        {answer}
-      </Typography>
+      <StyledText component="p">{word}</StyledText>
+      <StyledText component="p">{answer}</StyledText>
     </StyledTextWrapper>
   );
 };

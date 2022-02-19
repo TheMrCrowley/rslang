@@ -17,6 +17,11 @@ const ResultsWrapper = styled(Box)`
   background-color: white;
   border-radius: 2em;
   min-width: 25%;
+  @media (max-width: 420px) {
+    height: 55vh;
+    margin: 0 0.5rem;
+    padding: 2rem 1rem 2rem 2rem;
+  }
 `;
 
 const StyledBox = styled(Box)`
@@ -30,6 +35,7 @@ const StyledBox = styled(Box)`
 
 const ButtonWrapper = styled(Box)`
   display: flex;
+  flex-flow: row wrap;
   justify-content: center;
   gap: 1rem;
 `;
