@@ -4,7 +4,6 @@ import {
   Bar,
   BarChart,
   CartesianGrid,
-  Label,
   Legend,
   ResponsiveContainer,
   Tooltip,
@@ -34,7 +33,7 @@ const AudiocallShortStatistic: FC<AudiocallStatisticProps> = ({
         <BarChart width={statWidht} height={statHeight} data={graphData}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="name" />
-          <YAxis />
+          <YAxis width={40} />
           <Tooltip />
           <Legend />
           <Bar dataKey="newWords" name="New words" fill={chartSkyBlueColor} />

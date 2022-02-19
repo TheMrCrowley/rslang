@@ -10,6 +10,8 @@ import MainPageLayoutButton from '../pages/MainPageLayoutButton';
 import ResultLine from '../sprint/ResultLine';
 import { AudioCallQuestionItem } from '../../helpers/gameHelpers';
 
+// TODO  replace this file and sprint/Results.tsx with one file
+
 const ResultsWrapper = styled(Box)`
   height: 65vh;
   margin-bottom: 1rem;
@@ -17,6 +19,11 @@ const ResultsWrapper = styled(Box)`
   background-color: white;
   border-radius: 2em;
   min-width: 25%;
+  @media (max-width: 420px) {
+    height: 55vh;
+    margin: 0 0.5rem;
+    padding: 2rem 1rem 2rem 2rem;
+  }
 `;
 
 const StyledBox = styled(Box)`
@@ -30,6 +37,7 @@ const StyledBox = styled(Box)`
 
 const ButtonWrapper = styled(Box)`
   display: flex;
+  flex-flow: row wrap;
   justify-content: center;
   gap: 1rem;
 `;

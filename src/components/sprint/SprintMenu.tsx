@@ -1,4 +1,4 @@
-import { Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import React, { FC, useState } from 'react';
 import { colors } from '../e-book/cosnstants';
 import MainPageLayoutButton from '../pages/MainPageLayoutButton';
@@ -10,21 +10,24 @@ interface MenuProps {
   isAuth: boolean;
 }
 
-const SprintMenu: FC<MenuProps> = ({ onClick, isAuth }) => {
+const SprintMenu: FC<MenuProps> = ({ onClick, isAuth, children }) => {
   const [group, setGroup] = useState(0);
   const clickHandler = () => {
     onClick(group);
   };
   return (
-    <LevelSelecContainer color={colors[group]}>
-      <Typography variant="h5">Please select the difficulty</Typography>
-      <SprintSelect setGroup={setGroup} isAuth={isAuth} group={group} />
-      <MainPageLayoutButton
-        onClick={clickHandler}
-        text="Start"
-        color={colors[group]}
-      />
-    </LevelSelecContainer>
+    <Box>
+      {children}
+      <LevelSelecContainer color={colors[group]}>
+        <Typography variant="h5">Please select the difficulty</Typography>
+        <SprintSelect setGroup={setGroup} isAuth={isAuth} group={group} />
+        <MainPageLayoutButton
+          onClick={clickHandler}
+          text="Start"
+          color={colors[group]}
+        />
+      </LevelSelecContainer>
+    </Box>
   );
 };
 

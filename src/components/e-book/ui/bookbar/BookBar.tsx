@@ -30,12 +30,16 @@ const StyledBarContainer = styled(Container)({
 });
 
 const GameButton = styled(Button)`
+  margin-right: 0.5rem;
   color: #202026;
   background-color: white;
   border-radius: 2rem;
   &: hover {
     color: white;
     background-color: #202026;
+  }
+  @media (max-width: 520px) {
+    font-size: 11px;
   }
 `;
 

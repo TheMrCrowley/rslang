@@ -1,7 +1,6 @@
 import React, { FC } from 'react';
 import { Box, CardMedia, styled, Typography } from '@mui/material';
 import CampaignIcon from '@mui/icons-material/Campaign';
-import { darkColors } from '../e-book/cosnstants';
 import getAssetsUrl from '../../helpers/getAssetsUrl';
 
 interface AudiocallInGameUpAssetsProps {
@@ -38,6 +37,10 @@ const StyledCampaignIcon = styled(CampaignIcon)<{ colorhover: string }>(
   &:hover {
     color: ${colorhover};
   }
+  @media (max-width: 410px) {
+    height: 2.5rem;
+    width: 2.5rem;
+  }
 `
 );
 
@@ -49,6 +52,16 @@ const StyledBox = styled(Box)`
   gap: 1rem;
 `;
 
+const StyledWordComponent = styled(Box)`
+  color: white;
+  font-weight: bold;
+  font-size: 6rem;
+  text-transform: capitalize;
+  @media (max-width: 410px) {
+    font-size: 3.75rem;
+  }
+`;
+
 const AudiocallInGameUpAssets: FC<AudiocallInGameUpAssetsProps> = ({
   onClick,
   color,
@@ -58,22 +71,13 @@ const AudiocallInGameUpAssets: FC<AudiocallInGameUpAssetsProps> = ({
 }) => {
   return (
     <StyledBox>
-      {status && (
-        <Typography
-          color="white"
-          fontWeight="bold"
-          variant="h1"
-          sx={{ textTransform: 'capitalize' }}
-        >
-          {word}
-        </Typography>
-      )}
+      {status && <StyledWordComponent>{word}</StyledWordComponent>}
       <StyledAudioCallUpAssetsContainer color={color} onClick={onClick}>
         <StyledCampaignIcon colorhover={color} />
       </StyledAudioCallUpAssetsContainer>
       <CardMedia
         component="img"
-        height="140"
+        height={window.innerHeight < 700 ? '100' : '140'}
         image={getAssetsUrl(image)}
         sx={{
           borderRadius: '2rem',

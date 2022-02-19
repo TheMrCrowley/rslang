@@ -27,6 +27,9 @@ const AudiocallInGameBottomAssets: FC<AudiocallInGameBottomAssetsProps> = ({
       background-color: ${lightColors[group]};
       color: ${darkColors[group]};
     }
+    @media (max-width: 410px) {
+      margin-bottom: 1rem;
+    }
   `;
 
   const StyledTypography = styled(Typography)`
