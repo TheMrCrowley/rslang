@@ -11,6 +11,7 @@ import { colors } from '../e-book/cosnstants';
 import GamePageWrapper from '../ui/GamePageWrapper';
 import SprintQuestion from './SprintQuestion';
 import useSprintGame from './useSprintGame';
+import GameDescription from '../ui/GameDescription';
 
 const StyledBox = styled(Box)<{ group: number }>(({ group }) => ({
   width: '100%',
@@ -29,7 +30,6 @@ const StyledProgress = styled(CircularProgress)`
 
 const SprintPage: FC = () => {
   // TODO switch src to const's
-  // TODO add description to the game
   // TODO remove to hook
   const {
     gameState,
@@ -51,11 +51,14 @@ const SprintPage: FC = () => {
       </StyledBox>
     );
   }
-  console.log('group from game wrapper', group);
   return (
     <GamePageWrapper color={colors[group]}>
       {gameState.gameStatus === SprintGameStatus.PREPARE && (
-        <SprintMenu isAuth={authState.isAuth} onClick={startHandler} />
+        <SprintMenu isAuth={authState.isAuth} onClick={startHandler}>
+          <GameDescription title="Sprint">
+            Choose if the translation matches the suggested word
+          </GameDescription>
+        </SprintMenu>
       )}
       {gameState.gameStatus === SprintGameStatus.INRUN && (
         <SprintQuestion

@@ -8,6 +8,7 @@ import GamePageWrapper from '../ui/GamePageWrapper';
 import AudiocallQuestion from './AudiocallQuestion';
 import AudiocallResults from './AudicallResults';
 import useAudiocallGame from './useAudiocallGame';
+import GameDescription from '../ui/GameDescription';
 
 const StyledProgress = styled(CircularProgress)`
   color: white;
@@ -35,7 +36,11 @@ const AudioCallPage = () => {
   return (
     <GamePageWrapper color={colors[group]}>
       {gameState.gameStatus === AudioCallGameStatus.PREPARE && (
-        <SprintMenu isAuth={authState.isAuth} onClick={startHandler} />
+        <SprintMenu isAuth={authState.isAuth} onClick={startHandler}>
+          <GameDescription title="Audiocall">
+            Choose if the translation matches the suggested word
+          </GameDescription>
+        </SprintMenu>
       )}
       {gameState.gameStatus === AudioCallGameStatus.INRUN && (
         <AudiocallQuestion

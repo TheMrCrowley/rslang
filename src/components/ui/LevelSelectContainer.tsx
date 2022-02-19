@@ -23,6 +23,9 @@ const LevelInnerWrapper = styled(Box)`
   border-radius: 2em;
   background-color: #fff;
   min-width: 400px;
+  @media (max-width: 420px) {
+    min-width: 300px;
+  }
 `;
 
 // TODO  fix BG color
