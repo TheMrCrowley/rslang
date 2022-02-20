@@ -99,6 +99,10 @@ const RegistrationPage: FC = () => {
             variant="outlined"
             type="password"
             required
+            helperText={
+              !password.inputValid &&
+              'Password must be no less than 8 characters'
+            }
           />
           <Button
             onClick={registrationHandler}
