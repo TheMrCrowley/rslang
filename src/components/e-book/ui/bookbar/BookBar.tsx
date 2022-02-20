@@ -6,7 +6,6 @@ import { colors, DIFFICULT_GROUP, mainBgColor } from '../../cosnstants';
 import useBookParams from '../../../../hooks/useBookParams';
 import useSprintFromBook from '../../../sprint/useSprintFromBook';
 import useAudiocallFromBook from '../../../audiocall/useAudiocallFromBook';
-import useWindowScroll from '../../../../hooks/useWindowScroll';
 import PageSelect from '../pagination/PaginationRanges';
 
 interface ResponsiveAppBarProps {
@@ -29,8 +28,8 @@ const StyledBarContainer = styled(Box)({
   justifyContent: 'space-evenly',
   alignItems: 'center',
   height: '4.5em',
-  position: 'sticky',
-
+  position: 'fixed',
+  top: '64px',
   zIndex: 100,
 });
 
@@ -48,6 +47,15 @@ const GameButton = styled(Button)`
   }
 `;
 
+const StyledTypo = styled(Typography)`
+  color: #fff;
+  font-weight: bold;
+  font-size: 2rem;
+  @media (max-width: 500px) {
+    font-size: 1rem;
+  }
+`;
+
 const BookBar: React.FC<ResponsiveAppBarProps> = ({
   isAuth,
   children,
@@ -57,11 +65,9 @@ const BookBar: React.FC<ResponsiveAppBarProps> = ({
   const { group, page } = useBookParams();
   const sprintHandler = useSprintFromBook(isAuth, group, page, userId);
   const audioCallHandler = useAudiocallFromBook(isAuth, group, page, userId);
-  const top = useWindowScroll(64);
   return (
     <StyledBarContainer
       sx={{
-        top: `${top}px`,
         backgroundColor: isPageLearned ? mainBgColor : colors[group],
       }}
     >
@@ -90,14 +96,7 @@ const BookBar: React.FC<ResponsiveAppBarProps> = ({
       )}
       <ThemeProvider theme={theme}>
         {group === DIFFICULT_GROUP ? (
-          <Typography
-            variant="h4"
-            component="h2"
-            color="white"
-            fontWeight="bold"
-          >
-            Difficult words
-          </Typography>
+          <StyledTypo>Difficult words</StyledTypo>
         ) : (
           <PageSelect isLearnedPage={isPageLearned} />
         )}

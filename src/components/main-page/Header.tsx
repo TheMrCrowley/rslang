@@ -12,18 +12,18 @@ const StyledContainer = styled(Container)`
 `;
 
 const StyledHeader = styled('header')({
-  position: 'sticky',
+  position: 'fixed',
   backgroundColor: '#fff',
   minHeight: '64px',
   display: 'flex',
   alignItems: 'center',
+  width: '100%',
   zIndex: 100,
 });
 
 const Header = () => {
-  const top = useWindowScroll(0);
   return (
-    <StyledHeader sx={{ top: `${top}px` }}>
+    <StyledHeader>
       <StyledContainer>
         <Nav />
         <AuthButton />

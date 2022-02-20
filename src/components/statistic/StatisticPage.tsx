@@ -13,6 +13,7 @@ import WordCountStatistic from './WordCountStatistic';
 import LearnedWordsStatisticsProgress from './LearnedWordsStatisticsProgress';
 
 const StatisticsWrapper = styled(Box)`
+  padding-top: 4rem;
   flex: 1 1;
   display: flex;
   flex-flow: row wrap;

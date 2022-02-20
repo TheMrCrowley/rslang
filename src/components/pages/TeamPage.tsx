@@ -17,7 +17,7 @@ const TeamPageWrapper = styled(Box)`
   background-size: cover;
   gap: 1rem;
   @media (max-width: 560px) {
-    padding: 0.5rem;
+    padding: 5rem 0.5rem 0.5rem 0.5rem;
   }
 `;
 
@@ -92,6 +92,7 @@ const TeamPage = () => {
           <Divider
             color="white"
             sx={{
+              width: '100%',
               mb: '0.5rem',
               mt: '0.5rem',
             }}
@@ -133,6 +134,7 @@ const TeamPage = () => {
           <Divider
             color="white"
             sx={{
+              width: '100%',
               mb: '0.5rem',
               mt: '0.5rem',
             }}

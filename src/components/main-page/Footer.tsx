@@ -15,9 +15,6 @@ const Footer = () => {
     ${location.toString() === '/home' && 'filter:invert(1)'};
     transition: 0.2s filter ease-in-out;
     cursor: pointer;
-    &:hover {
-      filter: invert(1t);
-    }
   `;
 
   return (
