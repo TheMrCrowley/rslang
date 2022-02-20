@@ -2,7 +2,7 @@ import { Avatar, Box, Divider, Link, styled, Typography } from '@mui/material';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import React from 'react';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import { darkBgColor, lightBgColor } from '../e-book/cosnstants';
+import { darkBgColor } from '../e-book/cosnstants';
 import Bg from '../../assets/Untitled.png';
 import MrCrowleyAvatar from '../../assets/avatar1.jpg';
 
@@ -40,13 +40,10 @@ const MemberWrapper = styled(Box)`
 
 const StyledTitle = styled(Typography)`
   width: fit-content;
-  padding: 0.4em 1em;
   text-align: center;
   color: rgba(0, 0, 0, 0.87);
   font-weight: bold;
-  font-size: 6rem;
-  background-color: ${lightBgColor};
-  border-radius: 3em;
+  font-size: 4.5rem;
   @media (max-width: 560px) {
     font-size: 3.5rem;
   }
@@ -55,6 +52,30 @@ const StyledTitle = styled(Typography)`
 const TeamPage = () => {
   return (
     <TeamPageWrapper>
+      <StyledTitle variant="h1">About app</StyledTitle>
+      <Box
+        sx={{
+          maxWidth: 'fit-content',
+          backgroundColor: 'white',
+          padding: '2em',
+          borderRadius: '3rem',
+        }}
+      >
+        <Typography fontWeight="bold" gutterBottom>
+          RSLang is an app for easy and fun learning English words. It contains
+          3600 frequently used words.
+        </Typography>
+        <Typography fontWeight="bold" gutterBottom>
+          Detailed statistics help track your learning progress.
+        </Typography>
+        <Typography fontWeight="bold" gutterBottom>
+          Mark words as difficult, then they will be collected on one page.
+        </Typography>
+        <Typography fontWeight="bold" gutterBottom>
+          Play games and memorize new words, during this process you also will
+          be able train your listening skills.
+        </Typography>
+      </Box>
       <StyledTitle variant="h1">About team</StyledTitle>
       <MembersWrapper>
         <MemberWrapper>
@@ -105,11 +126,7 @@ const TeamPage = () => {
             <Avatar alt="AlexanderSus avatar" sx={{ width: 48, height: 48 }}>
               <AccountCircleIcon fontSize="large" />
             </Avatar>
-            <Typography
-              variant="h3"
-              fontWeight="bold"
-              color="white"
-            >
+            <Typography variant="h3" fontWeight="bold" color="white">
               Alexander Suslov
             </Typography>
           </Box>
