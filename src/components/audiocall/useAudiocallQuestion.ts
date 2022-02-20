@@ -4,8 +4,6 @@ import { AuthState } from '../../redux/types/authTypes';
 import useTypedSelector from '../../hooks/useTypedSelector';
 import useAudio from '../../hooks/useAudio';
 import getAssetsUrl from '../../helpers/getAssetsUrl';
-import { isNewWord } from '../../helpers/statisticHandlers';
-import { changeAudioCallNewWordAction } from '../../redux/store/reducers/statisticReducer';
 import {
   audiocallCorrectAction,
   audiocallInCorrectAction,
@@ -149,6 +147,36 @@ const useAudiocallQuestion = (
 
   const giveAnswer = (answerText: string) => answerHandler(answerText);
   // TODO add keyboard events
+  useEffect(() => {
+    const answerByKey = (e: KeyboardEvent) => {
+      if (e.key === '1') {
+        answerHandler(currentQuestion.answers[0]);
+      }
+      if (e.key === '2') {
+        answerHandler(currentQuestion.answers[1]);
+      }
+      if (e.key === '3') {
+        answerHandler(currentQuestion.answers[2]);
+      }
+      if (e.key === '4') {
+        answerHandler(currentQuestion.answers[3]);
+      }
+      if (e.key === '2') {
+        answerHandler(currentQuestion.answers[1]);
+      }
+      if (e.key === ' ' && afterAnswerState) {
+        nextQuestion();
+      }
+      if (e.key === 'r') {
+        currentAudio();
+      }
+    };
+    window.addEventListener('keydown', answerByKey);
+    return () => {
+      window.removeEventListener('keydown', answerByKey);
+    };
+  }, [answerHandler]);
+
   return {
     word: currentQuestion.word || '',
     answers: currentQuestion.answers || [],
