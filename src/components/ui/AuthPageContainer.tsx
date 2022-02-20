@@ -10,7 +10,6 @@ const AuthPageContainer: React.FC = ({ children }) => {
         display: 'flex',
         justifyContent: 'space-around',
         alignItems: 'center',
-        pl: '3.5em',
         bgcolor: mainBgColor,
       }}
     >
