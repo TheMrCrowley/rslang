@@ -21,7 +21,7 @@ const MainPageLayoutButton: FC<MainPageLayoutButtonProps> = ({
     padding: 1em 1em;
     border-radius: 3em;
     background-color: ${color};
-    white-space: nowrap;
+    word-break: break-all;
     &:hover {
       background-color: #ffffff;
       color: ${color};
