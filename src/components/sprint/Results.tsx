@@ -11,7 +11,7 @@ import MainPageLayoutButton from '../pages/MainPageLayoutButton';
 import { SprintQuestionItem } from '../../helpers/gameHelpers';
 
 const ResultsWrapper = styled(Box)`
-  height: 65vh;
+  align-items: center;
   margin-bottom: 1rem;
   padding: 2.5rem 1rem 2.5rem 2.5rem;
   background-color: white;

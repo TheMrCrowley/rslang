@@ -7,7 +7,7 @@ import { SprintGameStatus } from '../../redux/types/sprintTypes';
 
 const SprintTimer = () => {
   // TODO switch to const
-  const [time, status] = useTimer(100);
+  const [time, status] = useTimer(60);
   const dispatch = useDispatch();
   useEffect(() => {
     if (!status) {
@@ -22,7 +22,7 @@ const SprintTimer = () => {
       color="white"
       textAlign="center"
     >
-      Time left: {time}
+      Time left: {time}s
     </Typography>
   );
 };

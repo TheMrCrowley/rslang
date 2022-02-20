@@ -6,6 +6,7 @@ const StyledGamePageWrapper = styled(Box)`
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  align-items: center;
   justify-content: space-evenly;
 `;
 
