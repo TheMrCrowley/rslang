@@ -15,10 +15,6 @@ const Footer = () => {
     ${location.toString() === '/home' && 'filter:invert(1)'};
     transition: 0.2s filter ease-in-out;
     cursor: pointer;
-    &:hover {
-      filter: invert(83%) sepia(64%) saturate(3075%) brightness(97%)
-        contrast(105%);
-    }
   `;
 
   return (
@@ -59,7 +55,7 @@ const Footer = () => {
           AlexanderSUS
         </Link>
       </Box>
-      <Typography>Created in 2022</Typography>
+      <Typography>2022</Typography>
     </Box>
   );
 };

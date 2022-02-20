@@ -9,6 +9,14 @@ interface MainPageLayoutButtonProps {
   disabled?: boolean;
 }
 
+const StyledTypo = styled(Typography)`
+  font-weight: bold;
+  font-size: 2rem;
+  @media (max-width: 420px) {
+    font-size: 1.5rem;
+  }
+`;
+
 const MainPageLayoutButton: FC<MainPageLayoutButtonProps> = ({
   children,
   text,
@@ -21,7 +29,6 @@ const MainPageLayoutButton: FC<MainPageLayoutButtonProps> = ({
     padding: 1em 1em;
     border-radius: 3em;
     background-color: ${color};
-    white-space: nowrap;
     &:hover {
       background-color: #ffffff;
       color: ${color};
@@ -35,14 +42,7 @@ const MainPageLayoutButton: FC<MainPageLayoutButtonProps> = ({
   return (
     <StyledMainPageLayuotButton disabled={disabled} onClick={onClick}>
       {children}
-      <Typography
-        variant="h4"
-        sx={{
-          fontWeight: 'bold',
-        }}
-      >
-        {text}
-      </Typography>
+      <StyledTypo variant="h4">{text}</StyledTypo>
     </StyledMainPageLayuotButton>
   );
 };

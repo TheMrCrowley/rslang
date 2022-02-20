@@ -1,6 +1,7 @@
 import React from 'react';
 import { styled } from '@mui/material/styles';
 import CircularProgress from '@mui/material/CircularProgress';
+import { Typography } from '@mui/material';
 import SprintMenu from '../sprint/SprintMenu';
 import { AudioCallGameStatus } from '../../redux/types/audioCallTypes';
 import { colors } from '../e-book/cosnstants';
@@ -39,6 +40,10 @@ const AudioCallPage = () => {
         <SprintMenu isAuth={authState.isAuth} onClick={startHandler}>
           <GameDescription title="Audiocall">
             Choose if the translation matches the suggested word
+            <Typography>
+              To play with keyboard use keys: 1 2 3 4 for answer,
+              &apos;space&apos; for next word, &apos;r&apos; for repeat word
+            </Typography>
           </GameDescription>
         </SprintMenu>
       )}

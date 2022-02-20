@@ -32,6 +32,10 @@ const AudiocallInGameBottomAssets: FC<AudiocallInGameBottomAssetsProps> = ({
 
   const StyledTypography = styled(Typography)`
     color: ${colors[group]};
+    font-size: 3rem;
+    @media (max-width: 420px) {
+      font-size: 1.5rem;
+    }
   `;
 
   return (

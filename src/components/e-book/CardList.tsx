@@ -5,7 +5,6 @@ import BasicCard from './Card';
 import useBookWords from '../../hooks/useBookWords';
 import { WordWithCustomProps } from '../../services/words/wordsServiceTypes';
 import useAuth from '../../hooks/useAuth';
-import useLearnedPage from '../../hooks/useLearnedPage';
 
 const StyledListBox = styled(Box)({
   flex: '1 1 auto',
@@ -14,7 +13,8 @@ const StyledListBox = styled(Box)({
   justifyContent: 'center',
   alignItems: 'stretch',
   gap: '1em 1em',
-  paddingBottom: '1em',
+  paddingTop: '9.5rem',
+  paddingBottom: '1rem',
 });
 
 const StyledProgress = styled(CircularProgress)`

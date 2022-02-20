@@ -13,7 +13,7 @@ const StyledTitle = styled(Typography)`
 `;
 
 export const StyledBody = styled(Typography)`
-  margin-bottom: 4rem;
+  margin-bottom: 2rem;
   font-size: 2rem;
   font-weight: bold;
   color: white;

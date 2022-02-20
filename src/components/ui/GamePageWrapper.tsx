@@ -8,6 +8,7 @@ const StyledGamePageWrapper = styled(Box)`
   gap: 1rem;
   align-items: center;
   justify-content: space-evenly;
+  padding-top: 4rem;
 `;
 
 interface GamePageWrapperProps {

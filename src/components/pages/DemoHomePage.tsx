@@ -19,6 +19,7 @@ const HomePageWrapper = styled(Box)`
   gap: 1rem;
   background-image: url(${Bg});
   background-size: cover;
+  padding-top: 5rem;
   @media (max-width: 720px) {
     background-image: none;
     background-color: ${mainBgColor};
