@@ -2,7 +2,7 @@
 import React, { FC } from 'react';
 import { styled } from '@mui/material/styles';
 import CircularProgress from '@mui/material/CircularProgress';
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 
 import { SprintGameStatus } from '../../redux/types/sprintTypes';
 import SprintMenu from './SprintMenu';
@@ -57,6 +57,11 @@ const SprintPage: FC = () => {
         <SprintMenu isAuth={authState.isAuth} onClick={startHandler}>
           <GameDescription title="Sprint">
             Choose if the translation matches the suggested word
+            <Typography>
+              To play with keyboard use key &apos;&#8592;&apos; for answer
+              &apos;incorrect&apos; and key &apos;&#8594;&apos; for answer
+              &apos;correct&apos;
+            </Typography>
           </GameDescription>
         </SprintMenu>
       )}
