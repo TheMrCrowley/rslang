@@ -34,8 +34,8 @@ export default class AuthService {
 
   static async refreshTokens(userId: string) {
     const { data } = await axios.get<TokensResponse>(
-      // `https://react-rslang-test.herokuapp.com/users/${userId}/tokens`,
-      `http://localhost:5000/users/${userId}/tokens`,
+      `https://react-rslang-test.herokuapp.com/users/${userId}/tokens`,
+      // `http://localhost:5000/users/${userId}/tokens`,
       {
         headers: {
           Authorization: `Bearer ${getRefreshToken()}`,
