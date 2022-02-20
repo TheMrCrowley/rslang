@@ -16,7 +16,7 @@ const Footer = () => {
     transition: 0.2s filter ease-in-out;
     cursor: pointer;
     &:hover {
-      filter: invert(1);
+      filter: invert(1t);
     }
   `;
 
@@ -58,7 +58,7 @@ const Footer = () => {
           AlexanderSUS
         </Link>
       </Box>
-      <Typography>Created in 2022</Typography>
+      <Typography>2022</Typography>
     </Box>
   );
 };
