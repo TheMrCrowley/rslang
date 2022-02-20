@@ -16,8 +16,7 @@ const Footer = () => {
     transition: 0.2s filter ease-in-out;
     cursor: pointer;
     &:hover {
-      filter: invert(83%) sepia(64%) saturate(3075%) brightness(97%)
-        contrast(105%);
+      filter: invert(1);
     }
   `;
 
