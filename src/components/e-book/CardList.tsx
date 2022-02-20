@@ -5,6 +5,7 @@ import BasicCard from './Card';
 import useBookWords from '../../hooks/useBookWords';
 import { WordWithCustomProps } from '../../services/words/wordsServiceTypes';
 import useAuth from '../../hooks/useAuth';
+import useLearnedPage from '../../hooks/useLearnedPage';
 
 const StyledListBox = styled(Box)({
   flex: '1 1 auto',

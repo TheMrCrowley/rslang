@@ -1,84 +1,119 @@
-import {
-  Button,
-  CircularProgress,
-  TextField,
-  Tooltip,
-  Typography,
-} from '@mui/material';
-import React, { FC, useState } from 'react';
+import { Button, CircularProgress, TextField, Typography } from '@mui/material';
+import React, { ChangeEvent, FC, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import SendIcon from '@mui/icons-material/Send';
 import { useNavigate } from 'react-router-dom';
-import { registrationAction } from '../../redux/store/reducers/authReducer';
+import {
+  authRequestResetAction,
+  registrationAction,
+} from '../../redux/store/reducers/authReducer';
 import AuthPageContainer from '../ui/AuthPageContainer';
 import { RegistrationRequestData } from '../../services/auth/authServiceTypes';
-import useTypedSelector from '../../hooks/useTypedSelector';
+import useInput from '../../hooks/useInput';
+import useAuth from '../../hooks/useAuth';
 
 const RegistrationPage: FC = () => {
   const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { request } = useTypedSelector(store => store.auth);
-
-  const createFormData = (): RegistrationRequestData => ({
-    name,
-    email,
-    password,
+  const { request } = useAuth();
+  // TODO remove this to  hook
+  const email = useInput('', {
+    isEmpty: true,
+    isEmail: true,
+  });
+  const password = useInput('', {
+    isEmpty: true,
+    minLength: 8,
   });
 
-  if (request) {
-    return <CircularProgress />;
-  }
+  useEffect(() => {
+    return () => {
+      dispatch(authRequestResetAction());
+    };
+  }, []);
 
+  const registrationHandler = () => {
+    const userData: RegistrationRequestData = {
+      name,
+      email: email.value,
+      password: password.value,
+    };
+    dispatch(registrationAction(userData));
+  };
+
+  const restartHandler = () => {
+    dispatch(authRequestResetAction());
+  };
+
+  if (request === 'SUCCESS') {
+    navigate(-1);
+  }
   return (
     <AuthPageContainer>
-      <Typography variant="h4">Sign up</Typography>
-      <Typography variant="h5">It&apos;s quick and easy</Typography>
-      <TextField
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          setName(e.target.value)
-        }
-        value={name}
-        label="Name"
-        variant="outlined"
-        type="text"
-        required
-      />
-      <TextField
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          setEmail(e.target.value)
-        }
-        value={email}
-        label="E-mail"
-        variant="outlined"
-        type="email"
-        required
-      />
-      <Tooltip title="Password must be longer than 8 characters">
-        <TextField
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setPassword(e.target.value)
-          }
-          value={password}
-          label="Password"
-          variant="outlined"
-          type="password"
-          required
-        />
-      </Tooltip>
-      <Button
-        onClick={() => {
-          const user = createFormData();
-          dispatch(registrationAction(user));
-          navigate('/home');
-        }}
-        variant="contained"
-        endIcon={<SendIcon />}
-      >
-        Registration
-      </Button>
+      {request === 'EXIST' && <CircularProgress sx={{ alignSelf: 'center' }} />}
+      {request === 'ERROR' && (
+        <>
+          <Typography textAlign="center">
+            User with this e-mail exists
+          </Typography>
+          <Button onClick={restartHandler} variant="contained">
+            Try again
+          </Button>
+        </>
+      )}
+      {request === 'NONE' && (
+        <>
+          <Typography variant="h4" textAlign="center">
+            Sign up
+          </Typography>
+          <Typography variant="h5" textAlign="center">
+            It&apos;s quick and easy
+          </Typography>
+          <TextField
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setName(e.target.value)
+            }
+            value={name}
+            label="Name"
+            variant="outlined"
+            type="text"
+            required
+          />
+          <TextField
+            onChange={(e: ChangeEvent<HTMLInputElement>) => email.onChange(e)}
+            onBlur={email.onBlur}
+            value={email.value}
+            label="E-mail"
+            variant="outlined"
+            type="email"
+            required
+          />
+          <TextField
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              password.onChange(e)
+            }
+            onBlur={password.onBlur}
+            value={password.value}
+            label="Password"
+            variant="outlined"
+            type="password"
+            required
+            helperText={
+              !password.inputValid &&
+              'Password must be no less than 8 characters'
+            }
+          />
+          <Button
+            onClick={registrationHandler}
+            disabled={!(email.inputValid && password.inputValid && name.length)}
+            variant="contained"
+            endIcon={<SendIcon />}
+          >
+            Registration
+          </Button>
+        </>
+      )}
     </AuthPageContainer>
   );
 };

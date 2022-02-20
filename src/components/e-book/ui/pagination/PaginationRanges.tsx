@@ -1,39 +1,54 @@
-import React, { ChangeEvent, FC, useState } from 'react';
-import Pagination from '@mui/material/Pagination';
-import Stack from '@mui/material/Stack';
+import React, { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
-import useWindowWidth from '../../../../hooks/useWindowWidth';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Box from '@mui/material/Box';
+import { MenuItem } from '@mui/material';
 import useBookParams from '../../../../hooks/useBookParams';
+import { darkBgColor, TOTAL_PAGES } from '../../cosnstants';
 
-const enum PageNumberSize {
-  small = 'small',
-  medium = 'medium',
-  large = 'large',
-  string = 'string',
+interface PageSelectProps {
+  isLearnedPage: boolean;
 }
 
-const PaginationRanges: FC = () => {
-  const winWith = useWindowWidth();
+const PageSelect: FC<PageSelectProps> = ({ isLearnedPage }) => {
   const navigate = useNavigate();
   const { group, page } = useBookParams();
-  const TOTAL_PAGES = 30;
 
-  const handleChangePage = (e: ChangeEvent<unknown>, current: number) => {
-    navigate(`${group}/${current - 1}`);
+  const handleChange = (event: SelectChangeEvent) => {
+    navigate(`${group}/${event.target.value}`);
   };
 
+  const selectItems = (() => {
+    const res = [];
+    for (let i = 0; i < TOTAL_PAGES; i += 1) {
+      res.push(
+        <MenuItem key={i} value={i}>
+          {i + 1}
+        </MenuItem>
+      );
+    }
+    return res;
+  })();
+
   return (
-    <Stack spacing={2}>
-      <Pagination
-        count={TOTAL_PAGES}
-        defaultPage={page + 1}
-        siblingCount={2}
-        size={winWith < 780 ? PageNumberSize.small : PageNumberSize.large}
-        color="primary"
-        onChange={handleChangePage}
-      />
-    </Stack>
+    <Box sx={{ minWidth: 100 }}>
+      <FormControl fullWidth variant="standard">
+        <InputLabel id="page-simple-select-label">Page</InputLabel>
+        <Select
+          labelId="page-simple-select-label"
+          id="page-simple-select"
+          value={`${page}`}
+          label="Page"
+          onChange={handleChange}
+          sx={{ backgroundColor: isLearnedPage ? darkBgColor : '' }}
+        >
+          {selectItems}
+        </Select>
+      </FormControl>
+    </Box>
   );
 };
 
-export default PaginationRanges;
+export default PageSelect;

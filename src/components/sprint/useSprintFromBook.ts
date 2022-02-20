@@ -31,7 +31,7 @@ const useSprintFromBook = (
         );
       }
     } else {
-      dispatch(requestSprintDataAction({ group, page }));
+      dispatch(requestSprintDataAction({ group, page, book: true }));
     }
   };
 };

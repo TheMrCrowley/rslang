@@ -20,6 +20,14 @@ interface SprintQuestionProps {
   incorrectAnswer: (answer: SprintQuestionItem) => void;
 }
 
+const SprintQuestionWrapper = styled(Box)`
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  align-items: center;
+  justify-content: space-evenly;
+`;
+
 const StyledButtonWrapper = styled(Box)`
   display: flex;
   flex-flow: row wrap;
@@ -39,15 +47,7 @@ const SprintQuestion: FC<SprintQuestionProps> = ({
   );
 
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-between',
-        height: '70vh',
-        mb: 'auto',
-      }}
-    >
+    <SprintQuestionWrapper>
       <SprintInGameUpAssets color={darkColors[group]}>
         <Typography
           variant="h4"
@@ -73,7 +73,7 @@ const SprintQuestion: FC<SprintQuestionProps> = ({
           text="correct"
         />
       </StyledButtonWrapper>
-    </Box>
+    </SprintQuestionWrapper>
   );
 };
 

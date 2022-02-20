@@ -8,6 +8,7 @@ import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
 import GroupIcon from '@mui/icons-material/Group';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import NavItem from './NavItem';
+import useWindowWidth from '../../hooks/useWindowWidth';
 
 const StyledList = styled(List)`
   display: flex;
@@ -31,7 +32,6 @@ const Nav: FC = () => {
       <NavItem innerText="Statistics">
         <BarChartIcon />
       </NavItem>
-      <Divider />
     </StyledList>
   );
 };

@@ -15,6 +15,16 @@ interface AudiocallQuestionProps {
   incorrectAnswer: (answer: AudioCallQuestionItem) => void;
 }
 
+const QuestionWrapper = styled(Box)`
+  flex: 1 1 auto;
+  display: grid;
+  grid-template-rows: 0.8fr 1fr;
+  justify-content: center;
+  justify-items: center;
+  align-items: center;
+  padding: 1rem;
+`;
+
 const ButtonWrapper = styled(Box)`
   display: flex;
   flex-flow: row wrap;
@@ -52,7 +62,7 @@ const AudiocallQuestion: FC<AudiocallQuestionProps> = ({
     ));
   }, [answers, afterAnswerState, changeButtonColor]);
   return (
-    <>
+    <QuestionWrapper>
       <AudiocallInGameUpAssets
         status={afterAnswerState}
         onClick={currentAudio}
@@ -66,7 +76,7 @@ const AudiocallQuestion: FC<AudiocallQuestionProps> = ({
         onClick={nextQuestion}
         group={group}
       />
-    </>
+    </QuestionWrapper>
   );
 };
 

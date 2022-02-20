@@ -1,39 +1,17 @@
 import React, { FC } from 'react';
 import RecordVoiceOverIcon from '@mui/icons-material/RecordVoiceOver';
+import useCardAudio from '../../hooks/useCardAudio';
 
 interface PlayerProps {
   urls: string[];
 }
 
 const Player: FC<PlayerProps> = ({ urls }) => {
-  const playing = false;
-  let currentTrackNum = 0;
-  let audio = new Audio(urls[currentTrackNum]);
-  audio.onended = () => {
-    // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    playNextTrack();
-  };
-
-  function playAudio() {
-    if (!playing) {
-      audio.play();
-    }
-  }
-
-  function playNextTrack() {
-    currentTrackNum += 1;
-    if (currentTrackNum < urls.length) {
-      audio = new Audio(urls[currentTrackNum]);
-      audio.play();
-      audio.onended = () => {
-        playNextTrack();
-      };
-    }
-  }
+  const audio = useCardAudio(urls);
 
   return (
     <RecordVoiceOverIcon
-     onClick={playAudio}
+      onClick={audio}
       fontSize="large"
       sx={{ ml: '0.5em', verticalAlign: 'bottom' }}
     />

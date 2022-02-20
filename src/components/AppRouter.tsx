@@ -18,19 +18,12 @@ import { darkBgColor } from './e-book/cosnstants';
 import {
   requestStatisticAction,
   saveStatisticAction,
-  setStatisticAction,
 } from '../redux/store/reducers/statisticReducer';
 import AudioCallPage from './audiocall/AudioCallPage';
 import CardList from './e-book/CardList';
 import StatisticPage from './statistic/StatisticPage';
 import useAuth from '../hooks/useAuth';
-import StatisticService from '../services/statistic/statisticService';
-import {
-  getStatisticState,
-  updateStatistic,
-} from '../helpers/statisticHandlers';
 import TeamPage from './pages/TeamPage';
-import WordsService from '../services/words/wordsService';
 
 const AppRouter = () => {
   const dispatch = useDispatch();
@@ -55,7 +48,7 @@ const AppRouter = () => {
       }
     }
   }, [statisticState.saveTracker]);
-  console.log('first', statisticState.wordStatistic);
+
   useEffect(() => {
     if (isAuth) {
       dispatch(getUserWordsAction({ userId }));

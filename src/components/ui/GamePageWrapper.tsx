@@ -2,13 +2,12 @@ import { Box, styled } from '@mui/material';
 import React, { FC } from 'react';
 
 const StyledGamePageWrapper = styled(Box)`
-  min-height: calc(100vh - 4em);
+  flex: 1 1 auto;
   display: flex;
   flex-direction: column;
   gap: 1rem;
   align-items: center;
   justify-content: space-evenly;
-  padding-top: 1rem;
 `;
 
 interface GamePageWrapperProps {

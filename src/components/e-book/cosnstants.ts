@@ -53,3 +53,5 @@ export const EMPTY_ITEM_COLOR = '#d7ccc8';
 export const DIFFICULT_GROUP = 6;
 
 export const MIN_PROGRESS_ITEMS = 3;
+
+export const TOTAL_PAGES = 30;
