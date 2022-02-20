@@ -65,16 +65,29 @@ const BookBar: React.FC<ResponsiveAppBarProps> = ({
         backgroundColor: isPageLearned ? mainBgColor : colors[group],
       }}
     >
-      <Tooltip title="Play game with unstudied words from this page">
-        <GameButton disabled={isPageLearned} onClick={sprintHandler}>
-          Sprint
-        </GameButton>
-      </Tooltip>
-      <Tooltip title="Play game with unstudied words from this page">
-        <GameButton disabled={isPageLearned} onClick={audioCallHandler}>
-          Audiocall
-        </GameButton>
-      </Tooltip>
+      {isPageLearned ? (
+        <>
+          <GameButton disabled={isPageLearned} onClick={sprintHandler}>
+            Sprint
+          </GameButton>
+          <GameButton disabled={isPageLearned} onClick={audioCallHandler}>
+            Audiocall
+          </GameButton>
+        </>
+      ) : (
+        <>
+          <Tooltip title="Play game with unstudied words from this page">
+            <GameButton disabled={isPageLearned} onClick={sprintHandler}>
+              Sprint
+            </GameButton>
+          </Tooltip>
+          <Tooltip title="Play game with unstudied words from this page">
+            <GameButton disabled={isPageLearned} onClick={audioCallHandler}>
+              Audiocall
+            </GameButton>
+          </Tooltip>
+        </>
+      )}
       <ThemeProvider theme={theme}>
         {group === DIFFICULT_GROUP ? (
           <Typography
