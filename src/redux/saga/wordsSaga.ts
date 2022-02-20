@@ -6,8 +6,6 @@ import {
   RequestHardWordsAction,
 } from '../types/wordsTypes';
 import WordsService from '../../services/words/wordsService';
-import { requestActionCreator } from '../store/reducers/requestReducer';
-import { RequestActionTypes } from '../types/requestTypes';
 import {
   setHardWordsAction,
   setWordsAction,
@@ -28,7 +26,7 @@ function* requestWordsWorker(data: RequestWordsAction) {
     yield put(setWordsAction(wordsResponse));
     yield put(wordsRequestEndAction());
   } catch (e) {
-    yield put(requestActionCreator(RequestActionTypes.REQUEST_ERROR));
+    console.log(e);
   }
 }
 
@@ -45,7 +43,7 @@ function* requestWordsWithCustomProps(data: RequestWordsWithPropsAction) {
     yield put(setWordsAction(wordsResponse));
     yield put(wordsRequestEndAction());
   } catch (e) {
-    yield put(requestActionCreator(RequestActionTypes.REQUEST_ERROR));
+    console.log(e);
   }
 }
 

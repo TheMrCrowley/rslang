@@ -26,7 +26,7 @@ const MainPageLayoutButton: FC<MainPageLayoutButtonProps> = ({
       background-color: #ffffff;
       color: ${color};
     }
-    &: disabled {
+    &:disabled {
       background-color: ${color};
       color: white;
     }

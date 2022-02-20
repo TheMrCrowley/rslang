@@ -17,18 +17,16 @@ const AudiocallInGameBottomAssets: FC<AudiocallInGameBottomAssetsProps> = ({
     padding: 0.5rem 1.5rem;
     border-radius: 2rem;
     background-color: white;
-    &: hover {
+    min-width: 300px;
+    &:hover {
       background-color: ${darkColors[group]};
     }
-    &: hover span {
+    &:hover span {
       color: white;
     }
-    &: disabled {
+    &:disabled {
       background-color: ${lightColors[group]};
       color: ${darkColors[group]};
-    }
-    @media (max-width: 410px) {
-      margin-bottom: 1rem;
     }
   `;
 
@@ -38,7 +36,7 @@ const AudiocallInGameBottomAssets: FC<AudiocallInGameBottomAssetsProps> = ({
 
   return (
     <StyledAudioCallBottomAssetsContainer disabled={disabled} onClick={onClick}>
-      <StyledTypography variant="h3" component="span" fontWeight="bold">
+      <StyledTypography variant="h3" fontWeight="bold">
         Next
       </StyledTypography>
     </StyledAudioCallBottomAssetsContainer>
