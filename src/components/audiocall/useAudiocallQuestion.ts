@@ -68,7 +68,9 @@ const useAudiocallQuestion = (
   };
 
   useEffect(() => {
-    dispatch(getUserWordsAction({ userId: auth.userData.userId }));
+    if (auth.isAuth) {
+      dispatch(getUserWordsAction({ userId: auth.userData.userId }));
+    }
     setQuestions(getAudioCallQuestions(words, allAnswers));
     nextQuestion();
   }, []);

@@ -61,7 +61,6 @@ function* requestSprintDataWorker(data: RequestSprintDataAction) {
       page
     );
     if (book && userId) {
-      console.log('from book');
       yield put(setSprintBookAction());
       const notStudiedWords: WordWithCustomProps[] = yield call(
         WordsService.getNotStudiedWords,
@@ -76,7 +75,6 @@ function* requestSprintDataWorker(data: RequestSprintDataAction) {
         })
       );
     } else {
-      console.log('not userId');
       yield put(
         setSprintDataAction({
           wordsForQuestion: wordsResponse,

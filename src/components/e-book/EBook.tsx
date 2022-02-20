@@ -3,9 +3,10 @@ import { Box } from '@mui/material';
 import { Outlet } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import BookBar from './ui/bookbar/BookBar';
-import { colors } from './cosnstants';
+import { colors, mainBgColor } from './cosnstants';
 import useBookParams from '../../hooks/useBookParams';
 import useAuth from '../../hooks/useAuth';
+import useLearnedPage from '../../hooks/useLearnedPage';
 
 const StyledBookBox = styled(Box)({
   display: 'flex',
@@ -16,9 +17,12 @@ const StyledBookBox = styled(Box)({
 const EBook: FC = () => {
   const { isAuth, userId } = useAuth();
   const { group } = useBookParams();
+  const isPageLearned = useLearnedPage(group);
   return (
-    <StyledBookBox sx={{ backgroundColor: colors[group] }}>
-      <BookBar isAuth={isAuth} userId={userId} />
+    <StyledBookBox
+      sx={{ backgroundColor: isPageLearned ? mainBgColor : colors[group] }}
+    >
+      <BookBar isAuth={isAuth} userId={userId} isPageLearned={isPageLearned} />
       <Outlet />
     </StyledBookBox>
   );

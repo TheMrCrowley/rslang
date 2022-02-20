@@ -21,12 +21,12 @@ const BasicSelect: FC<SelectProps> = ({ isAuth }) => {
   return (
     <Box sx={{ minWidth: 100 }}>
       <FormControl fullWidth variant="standard">
-        <InputLabel id="demo-simple-select-label">Difficulty</InputLabel>
+        <InputLabel id="group-simple-select-label">Difficulty</InputLabel>
         <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
+          labelId="group-simple-select-label"
+          id="group-simple-select"
           value={`${group}`}
-          label="Age"
+          label="group"
           onChange={handleChange}
         >
           <MenuItem value={0}>1</MenuItem>

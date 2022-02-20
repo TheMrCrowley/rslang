@@ -56,7 +56,9 @@ const useSprintQuestion = (
   };
 
   useEffect(() => {
-    dispatch(getUserWordsAction({ userId: auth.userData.userId }));
+    if (auth.isAuth) {
+      dispatch(getUserWordsAction({ userId: auth.userData.userId }));
+    }
     setQuestions(getSprintQuestions(words, allAnswers));
     nextQuestion();
   }, [words]);

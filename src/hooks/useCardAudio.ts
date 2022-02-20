@@ -3,10 +3,9 @@ import { useEffect } from 'react';
 const useCardAudio = (src: string[]) => {
   let currentSrc = 0;
   let audio = new Audio(src[currentSrc]);
-  useEffect(() => {
-    audio.addEventListener('ended', playNext);
-    return () => audio.removeEventListener('ended', playNext);
-  }, []);
+  const stop = () => {
+    audio.pause();
+  };
 
   function playNext() {
     currentSrc += 1;
@@ -26,6 +25,13 @@ const useCardAudio = (src: string[]) => {
       audio.play();
     }
   }
+  useEffect(() => {
+    audio.addEventListener('ended', playNext);
+    return () => {
+      audio.removeEventListener('ended', playNext);
+      stop();
+    };
+  }, []);
   return playAudio;
 };
 
