@@ -1,7 +1,10 @@
-import { Box, Divider, styled, Typography } from '@mui/material';
+import { Avatar, Box, Divider, Link, styled, Typography } from '@mui/material';
+import GitHubIcon from '@mui/icons-material/GitHub';
 import React from 'react';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { darkBgColor, lightBgColor } from '../e-book/cosnstants';
 import Bg from '../../assets/Untitled.png';
+import MrCrowleyAvatar from '../../assets/avatar1.jpg';
 
 const TeamPageWrapper = styled(Box)`
   flex: 1;
@@ -13,6 +16,9 @@ const TeamPageWrapper = styled(Box)`
   background-repeat: no-repeat;
   background-size: cover;
   gap: 1rem;
+  @media (max-width: 560px) {
+    padding: 0.5rem;
+  }
 `;
 
 const MembersWrapper = styled(Box)`
@@ -24,38 +30,44 @@ const MembersWrapper = styled(Box)`
 `;
 
 const MemberWrapper = styled(Box)`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   padding: 2rem;
   border-radius: 2rem;
   background-color: ${darkBgColor};
 `;
 
+const StyledTitle = styled(Typography)`
+  width: fit-content;
+  padding: 0.4em 1em;
+  text-align: center;
+  color: rgba(0, 0, 0, 0.87);
+  font-weight: bold;
+  font-size: 6rem;
+  background-color: ${lightBgColor};
+  border-radius: 3em;
+  @media (max-width: 560px) {
+    font-size: 3.5rem;
+  }
+` as typeof Typography;
+
 const TeamPage = () => {
   return (
     <TeamPageWrapper>
-      <Typography
-        variant="h1"
-        fontWeight="bold"
-        sx={{
-          width: 'fit-content',
-          p: '0.4em 1em 0.4em 1em',
-          textAlign: 'center',
-          color: 'rgba(0, 0, 0, 0.87)',
-          backgroundColor: lightBgColor,
-          borderRadius: '3em',
-        }}
-      >
-        About team
-      </Typography>
+      <StyledTitle variant="h1">About team</StyledTitle>
       <MembersWrapper>
         <MemberWrapper>
-          <Typography
-            variant="h3"
-            fontWeight="bold"
-            color="white"
-            textAlign="center"
-          >
-            Denis Mythnik
-          </Typography>
+          <Box sx={{ display: 'flex', gap: '1rem' }}>
+            <Avatar
+              alt="MrCrowley avatar"
+              src={MrCrowleyAvatar}
+              sx={{ width: 48, height: 48 }}
+            />
+            <Typography variant="h3" fontWeight="bold" color="white">
+              Denis Mythnik
+            </Typography>
+          </Box>
           <Divider
             color="white"
             sx={{
@@ -79,16 +91,28 @@ const TeamPage = () => {
           >
             Set authorization, develop both games Sprint and Audiocall
           </Typography>
+          <Link
+            sx={{ color: 'inherit', textDecoration: 'none', mr: '1em' }}
+            href="https://github.com/TheMrCrowley"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <GitHubIcon fontSize="large" />
+          </Link>
         </MemberWrapper>
         <MemberWrapper>
-          <Typography
-            variant="h3"
-            fontWeight="bold"
-            color="white"
-            textAlign="center"
-          >
-            Alexander Suslov
-          </Typography>
+          <Box sx={{ display: 'flex', gap: '1rem' }}>
+            <Avatar alt="AlexanderSus avatar" sx={{ width: 48, height: 48 }}>
+              <AccountCircleIcon fontSize="large" />
+            </Avatar>
+            <Typography
+              variant="h3"
+              fontWeight="bold"
+              color="white"
+            >
+              Alexander Suslov
+            </Typography>
+          </Box>
           <Divider
             color="white"
             sx={{
@@ -112,6 +136,15 @@ const TeamPage = () => {
           >
             Develop book pages and cards
           </Typography>
+          <Link
+            sx={{ color: 'inherit', textDecoration: 'none' }}
+            href="https://github.com/alexandersus"
+            target="_blank"
+            rel="noreferrer"
+            textAlign="center"
+          >
+            <GitHubIcon fontSize="large" />
+          </Link>
         </MemberWrapper>
       </MembersWrapper>
     </TeamPageWrapper>
