@@ -49,6 +49,7 @@ const BasicCard: FC<BasicCardProps> = ({ isAuth, cardData }) => {
         flexDirection: 'column',
         width: 380,
         height: 'auto',
+        maxHeight: '550px',
       }}
     >
       <CardMedia component="img" height="140" image={getAssetsUrl(image)} />

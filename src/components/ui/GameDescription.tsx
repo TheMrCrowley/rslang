@@ -1,4 +1,4 @@
-import { styled, Typography } from '@mui/material';
+import { Box, styled, Typography } from '@mui/material';
 import React, { FC } from 'react';
 
 interface GameDescriptionProps {
@@ -12,7 +12,7 @@ const StyledTitle = styled(Typography)`
   text-align: center;
 `;
 
-export const StyledBody = styled(Typography)`
+export const StyledBody = styled(Box)`
   margin-bottom: 2rem;
   font-size: 2rem;
   font-weight: bold;

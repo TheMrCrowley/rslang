@@ -5,17 +5,15 @@ import { useLocation } from 'react-router-dom';
 import RsLogo from '../../assets/rs.svg';
 import { darkBgColor } from '../e-book/cosnstants';
 
+const StyledRsLogo = styled(RsLogo)`
+  width: 3.5em;
+  height: 3.5em;
+  cursor: pointer;
+`;
+
 const Footer = () => {
   const location = useLocation();
   useEffect(() => {}, [location]);
-
-  const StyledRsLogo = styled(RsLogo)`
-    width: 3.5em;
-    height: 3.5em;
-    ${location.toString() === '/home' && 'filter:invert(1)'};
-    transition: 0.2s filter ease-in-out;
-    cursor: pointer;
-  `;
 
   return (
     <Box

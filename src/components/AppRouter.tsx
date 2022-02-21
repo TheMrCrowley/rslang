@@ -55,6 +55,7 @@ const AppRouter = () => {
       dispatch(requestStatisticAction({ userId }));
     }
   }, [isAuth]);
+
   return (
     <Routes>
       <Route path="/" element={<Layout />}>

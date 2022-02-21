@@ -8,7 +8,7 @@ interface SprintQuestionTextProps {
 }
 
 const StyledText = styled(Typography)`
-  font-weght: bold;
+  font-weight: bold;
   font-size: 4.5rem;
   text-align: center;
   @media (max-width: 520px) {
@@ -32,8 +32,8 @@ const StyledTextWrapper = styled(Box)`
 const SprintQuestionText: FC<SprintQuestionTextProps> = ({ word, answer }) => {
   return (
     <StyledTextWrapper>
-      <StyledText component="p">{word}</StyledText>
-      <StyledText component="p">{answer}</StyledText>
+      <StyledText>{word}</StyledText>
+      <StyledText>{answer}</StyledText>
     </StyledTextWrapper>
   );
 };
