@@ -57,7 +57,6 @@ function* requestHardWordsWorker(data: RequestHardWordsAction) {
     );
     yield put(setHardWordsAction(wordsResponse));
     yield put(wordsRequestEndAction());
-    console.log('here');
   } catch (e) {
     console.log(e);
   }

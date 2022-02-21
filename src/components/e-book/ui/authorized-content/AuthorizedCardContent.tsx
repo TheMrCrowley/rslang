@@ -30,7 +30,6 @@ const AuthorizedCardContent: FC<AuthorizedCardContentProps> = ({
   group,
   wordId,
 }) => {
-  // console.log(isInLearning && !isStudied);
   const dispatch = useDispatch();
   const { userId } = useTypedSelector(store => store.auth.userData);
   const { userWords } = useTypedSelector(store => store.userWords);
