@@ -214,7 +214,6 @@ function* requestAudioCallHardWordsWorker(data: RequestAudiocallHardWords) {
         answers: getAllTranslates(wordsResponse),
       })
     );
-    console.log(hardWordsResponse);
     yield put(audioCallRequestEndAction());
     yield put(changeAudioCallStatusAction(AudioCallGameStatus.INRUN));
   } catch (e) {

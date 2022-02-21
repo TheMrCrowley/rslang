@@ -80,7 +80,6 @@ const WordCountStatistic: FC<NewWordsStatisticsProps> = ({ userId }) => {
   };
 
   const data = [studiedDataItem, difficulltDataItem, restDataItem];
-  console.log(data);
 
   return (
     <Box sx={{ width: '100%', height: '300px' }}>
