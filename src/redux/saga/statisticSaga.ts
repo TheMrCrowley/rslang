@@ -31,7 +31,6 @@ function* requestStatisticWorker(data: RequestStatisticAction) {
 function* updateStatisticWorker(data: SaveStatisticAction) {
   try {
     const { newStatistic, userId } = data.payload;
-    console.log('in redux old', newStatistic.wordStatistic);
     const updatedStatistic: StatisticRequest = yield call(
       updateStatistic,
       newStatistic
@@ -42,7 +41,6 @@ function* updateStatisticWorker(data: SaveStatisticAction) {
       updatedStatistic
     );
     yield put(setStatisticAction(getStatisticState(statisticToSet)));
-    console.log('in redux now', statisticToSet.optional.wordStatistic);
   } catch (e) {
     console.log(e);
   }

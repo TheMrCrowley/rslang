@@ -78,7 +78,7 @@ export default class WordsService {
   static getHardWords = async (
     userId: string
   ): Promise<WordWithCustomProps[]> => {
-    const count = await $api.get<AggregatedWordsItem>(
+    const count = await $api.get<AggregatedWordsItem[]>(
       `/users/${userId}/aggregatedWords`,
       {
         params: {
@@ -86,11 +86,14 @@ export default class WordsService {
         },
       }
     );
+    if (!count?.data[0]?.totalCount[0]?.count) {
+      return [] as WordWithCustomProps[];
+    }
     const response = await $api.get<AggregatedWordsItem[]>(
       `/users/${userId}/aggregatedWords`,
       {
         params: {
-          wordsPerPage: count.data.totalCount,
+          wordsPerPage: count.data[0].totalCount[0].count,
           filter: { $and: [{ 'userWord.difficulty': 'hard' }] },
         },
       }
