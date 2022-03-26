@@ -1,5 +1,5 @@
 # RS Lang
-RS Lang – is an application for learning foreign words, including an electronic textbook with a database of words to learn, mini-games for using them, a statistics page for individual development.
+RS Lang – is an application for learning English words. It is includes an electronic textbook with a database of words for learn, mini-games for using them and statistics page to track your progress.
 # **Technologies used:**
   * React + TypeScript
   * React Router Dom - для роутинга внутри приложения.
